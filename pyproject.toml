@@ -1,0 +1,87 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "brs-kb"
+version = "1.0.0"
+description = "Community-Driven XSS Knowledge Base - Open Security Intelligence"
+readme = "README.md"
+authors = [
+    {name = "Brabus", email = "contact@easypro.tech"}
+]
+maintainers = [
+    {name = "EasyProTech LLC", email = "contact@easypro.tech"}
+]
+license = {text = "MIT"}
+keywords = [
+    "xss",
+    "security",
+    "vulnerability",
+    "knowledge-base",
+    "penetration-testing",
+    "web-security",
+    "owasp",
+    "cwe",
+    "cvss",
+    "red-team",
+    "bug-bounty"
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Information Technology",
+    "Intended Audience :: System Administrators",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Security",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
+]
+requires-python = ">=3.8"
+dependencies = []
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+    "pytest-cov>=4.0",
+    "black>=23.0",
+    "mypy>=1.0",
+    "pylint>=2.15"
+]
+
+[project.urls]
+Homepage = "https://github.com/easypro-tech/BRS-KB"
+Documentation = "https://github.com/easypro-tech/BRS-KB#readme"
+Repository = "https://github.com/easypro-tech/BRS-KB"
+Issues = "https://github.com/easypro-tech/BRS-KB/issues"
+Changelog = "https://github.com/easypro-tech/BRS-KB/blob/main/CHANGELOG.md"
+Contact = "https://t.me/easyprotech"
+
+[tool.setuptools]
+packages = ["brs_kb", "brs_kb.contexts"]
+
+[tool.setuptools.package-data]
+brs_kb = ["schema.json", "contexts/*.yaml"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+addopts = "-v"
+
+[tool.black]
+line-length = 100
+target-version = ['py38', 'py39', 'py310', 'py311']
+
+[tool.mypy]
+python_version = "3.8"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = false
+
