@@ -52,8 +52,7 @@ Project maintainers have the right to:
 
 To report violations:
 - GitHub Issues: For public concerns
-- Email: mail.easypro.tech@gmail.com (for private concerns)
-- Telegram: https://t.me/easyprotech
+- Telegram: https://t.me/easyprotech (for private concerns)
 
 ## Scope
 
@@ -69,7 +68,6 @@ This Code of Conduct is focused on maintaining professional security research st
 
 ## Contact
 
-- **Email**: mail.easypro.tech@gmail.com
 - **Telegram**: https://t.me/easyprotech
 - **GitHub**: https://github.com/EPTLLC/BRS-KB
 
