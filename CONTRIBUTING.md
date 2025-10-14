@@ -280,7 +280,6 @@ If tests don't exist yet, that's okay - the project is growing!
 - **GitHub Issues**: For bugs and feature requests
 - **GitHub Discussions**: For questions and general discussion
 - **Telegram**: https://t.me/easyprotech
-- **Email**: contact@easypro.tech
 
 ## License
 

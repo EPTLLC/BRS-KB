@@ -8,10 +8,10 @@ version = "1.0.0"
 description = "Community-Driven XSS Knowledge Base - Open Security Intelligence"
 readme = "README.md"
 authors = [
-    {name = "Brabus", email = "contact@easypro.tech"}
+    {name = "Brabus"}
 ]
 maintainers = [
-    {name = "EasyProTech LLC", email = "contact@easypro.tech"}
+    {name = "EasyProTech LLC"}
 ]
 license = {text = "MIT"}
 keywords = [
