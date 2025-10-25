@@ -13,7 +13,16 @@ Knowledge Base: Markdown Context XSS
 
 DETAILS = {
     "title": "Cross-Site Scripting (XSS) via Markdown Rendering",
-    
+
+    # Metadata for SIEM/Triage Integration
+    "severity": "medium",
+    "cvss_score": 6.1,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:H/A:L",
+    "reliability": "certain",
+    "cwe": ["CWE-79"],
+    "owasp": ["A03:2021"],
+    "tags": ["xss", "markdown", "html", "stored", "renderer"],
+
     "description": """
 Many web applications allow users to input Markdown for rich text formatting. However, Markdown parsers 
 often support raw HTML and JavaScript execution vectors. Different implementations have varying security 

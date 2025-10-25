@@ -70,11 +70,15 @@ This Code of Conduct is focused on maintaining professional security research st
 
 - **Telegram**: https://t.me/easyprotech
 - **GitHub**: https://github.com/EPTLLC/BRS-KB
+- **BRS-XSS**: https://github.com/EPTLLC/brs-xss
+- **BRS-Recon**: https://github.com/EPTLLC/brs-recon
+- **BRS-GUI**: https://github.com/EPTLLC/BRS-GUI
+- **BRS-GPT**: https://github.com/EPTLLC/brs-gpt
 
 ---
 
-**Project**: BRS-KB  
-**License**: MIT  
+**Project**: BRS-KB 
+**License**: MIT 
 **Status**: Production-Ready
 
 *Professional Security Research • Community Driven • Quality First*

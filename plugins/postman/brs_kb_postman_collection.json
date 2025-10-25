@@ -1,0 +1,231 @@
+{
+  "info": {
+    "name": "BRS-KB XSS Testing Collection",
+    "description": "Comprehensive XSS testing collection using BRS-KB (BRS XSS Knowledge Base) with 27 contexts and 200+ payloads",
+    "version": "2.0.0",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "https://your-target.com",
+      "type": "string"
+    }
+  ],
+  "auth": {
+    "type": "noauth"
+  },
+  "item": [
+    {
+      "name": "BRS-KB System Info",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/brs-kb/info",
+          "host": ["{{base_url}}"],
+          "path": ["api", "brs-kb", "info"]
+        },
+        "description": "Get BRS-KB system information and capabilities"
+      }
+    },
+    {
+      "name": "List XSS Contexts",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/brs-kb/contexts",
+          "host": ["{{base_url}}"],
+          "path": ["api", "brs-kb", "contexts"]
+        },
+        "description": "Get list of all available XSS contexts (27 total)"
+      }
+    },
+    {
+      "name": "Get Context Details",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/brs-kb/contexts/:context",
+          "host": ["{{base_url}}"],
+          "path": ["api", "brs-kb", "contexts", ":context"],
+          "variable": [
+            {
+              "key": "context",
+              "value": "html_content"
+            }
+          ]
+        },
+        "description": "Get detailed information about specific XSS context"
+      }
+    },
+    {
+      "name": "Analyze Payload",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"payload\": \"<script>alert('XSS')</script>\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/brs-kb/analyze",
+          "host": ["{{base_url}}"],
+          "path": ["api", "brs-kb", "analyze"]
+        },
+        "description": "Analyze XSS payload with BRS-KB intelligence"
+      }
+    },
+    {
+      "name": "Test Payload Effectiveness",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"payload\": \"<script>alert(1)</script>\",\n  \"context\": \"html_content\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/brs-kb/test",
+          "host": ["{{base_url}}"],
+          "path": ["api", "brs-kb", "test"]
+        },
+        "description": "Test payload effectiveness in specific context"
+      }
+    },
+    {
+      "name": "Search Payloads",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/brs-kb/search?q=script&limit=10",
+          "host": ["{{base_url}}"],
+          "path": ["api", "brs-kb", "search"],
+          "query": [
+            {
+              "key": "q",
+              "value": "script"
+            },
+            {
+              "key": "limit",
+              "value": "10"
+            }
+          ]
+        },
+        "description": "Search BRS-KB payload database"
+      }
+    },
+    {
+      "name": "Generate Report",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/brs-kb/report",
+          "host": ["{{base_url}}"],
+          "path": ["api", "brs-kb", "report"]
+        },
+        "description": "Generate comprehensive BRS-KB security report"
+      }
+    },
+    {
+      "name": "Export Data",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/brs-kb/export/contexts?format=json",
+          "host": ["{{base_url}}"],
+          "path": ["api", "brs-kb", "export", "contexts"],
+          "query": [
+            {
+              "key": "format",
+              "value": "json"
+            }
+          ]
+        },
+        "description": "Export BRS-KB data in various formats"
+      }
+    },
+    {
+      "name": "Validate Database",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/brs-kb/validate",
+          "host": ["{{base_url}}"],
+          "path": ["api", "brs-kb", "validate"]
+        },
+        "description": "Validate BRS-KB payload database integrity"
+      }
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Pre-request script for BRS-KB integration",
+          "// Add BRS-KB headers and validation",
+          "pm.request.headers.add({",
+          "    key: 'X-BRS-KB-Version',",
+          "    value: '2.0.0'",
+          "});",
+          "",
+          "// Log BRS-KB request",
+          "console.log('BRS-KB API request:', pm.request.url.toString());"
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Test script for BRS-KB response validation",
+          "// Validate BRS-KB API responses",
+          "",
+          "pm.test('BRS-KB API Response Valid', function () {",
+          "    pm.response.to.have.status(200);",
+          "    const jsonData = pm.response.json();",
+          "    ",
+          "    // Validate BRS-KB response structure",
+          "    if (pm.request.url.toString().includes('/info')) {",
+          "        pm.expect(jsonData).to.have.property('version');",
+          "        pm.expect(jsonData).to.have.property('total_contexts');",
+          "        pm.expect(jsonData.total_contexts).to.be.at.least(25);",
+          "    }",
+          "    ",
+          "    if (pm.request.url.toString().includes('/analyze')) {",
+          "        pm.expect(jsonData).to.have.property('contexts');",
+          "        pm.expect(jsonData).to.have.property('confidence');",
+          "        pm.expect(jsonData.confidence).to.be.at.least(0);",
+          "    }",
+          "});",
+          "",
+          "pm.test('BRS-KB Performance Check', function () {",
+          "    pm.expect(pm.response.responseTime).to.be.below(5000); // < 5s",
+          "});",
+          "",
+          "console.log('BRS-KB test completed:', pm.response.code);"
+        ]
+      }
+    }
+  ]
+}
+

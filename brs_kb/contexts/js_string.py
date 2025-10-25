@@ -13,7 +13,16 @@ Knowledge Base: JavaScript String Context - Comprehensive Guide
 
 DETAILS = {
     "title": "Cross-Site Scripting (XSS) in JavaScript String",
-    
+
+    # Metadata for SIEM/Triage Integration
+    "severity": "critical",
+    "cvss_score": 8.8,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:H/I:H/A:N",
+    "reliability": "certain",
+    "cwe": ["CWE-79"],
+    "owasp": ["A03:2021"],
+    "tags": ["xss", "javascript", "string", "escape", "injection"],
+
     "description": """
 User input is placed inside a JavaScript string literal without proper escaping. This is EXTREMELY 
 common in legacy applications and server-side rendering. Attackers can break out of the string context 

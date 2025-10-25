@@ -13,7 +13,16 @@ Knowledge Base: HTML Comment Context
 
 DETAILS = {
     "title": "Cross-Site Scripting (XSS) in HTML Comment",
-    
+
+    # Metadata for SIEM/Triage Integration
+    "severity": "medium",
+    "cvss_score": 5.4,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "reliability": "certain",
+    "cwe": ["CWE-79"],
+    "owasp": ["A03:2021"],
+    "tags": ["xss", "html", "comment", "breakout", "parser"],
+
     "description": """
 User input is reflected inside an HTML comment. While browsers don't execute scripts within comments, 
 attackers can break out using comment terminators or exploit edge cases in HTML parsers. This is 

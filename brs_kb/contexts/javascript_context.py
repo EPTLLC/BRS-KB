@@ -13,7 +13,16 @@ Knowledge Base: JavaScript Context - Comprehensive Guide
 
 DETAILS = {
     "title": "Cross-Site Scripting (XSS) in JavaScript Context",
-    
+
+    # Metadata for SIEM/Triage Integration
+    "severity": "critical",
+    "cvss_score": 9.0,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:H/I:H/A:H",
+    "reliability": "certain",
+    "cwe": ["CWE-79"],
+    "owasp": ["A03:2021"],
+    "tags": ["xss", "javascript", "code-injection", "critical", "direct-execution"],
+
     "description": """
 User input is placed directly into a JavaScript block, outside of a string literal. This is one of the 
 most CRITICAL XSS contexts because it allows direct code injection without needing to break out of strings 

@@ -13,7 +13,16 @@ Knowledge Base: JSON Value Context
 
 DETAILS = {
     "title": "Cross-Site Scripting (XSS) in JSON Context",
-    
+
+    # Metadata for SIEM/Triage Integration
+    "severity": "medium",
+    "cvss_score": 6.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:L/A:L",
+    "reliability": "certain",
+    "cwe": ["CWE-79"],
+    "owasp": ["A03:2021"],
+    "tags": ["xss", "json", "api", "ajax", "modern-web"],
+
     "description": """
 User input is embedded within JSON data that is later parsed and rendered by JavaScript. While JSON 
 itself is safe, improper handling after parsing can lead to XSS. Common in REST APIs, AJAX responses, 

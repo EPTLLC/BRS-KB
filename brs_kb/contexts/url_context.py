@@ -13,7 +13,16 @@ Knowledge Base: URL/URI Context - Comprehensive Guide
 
 DETAILS = {
     "title": "Cross-Site Scripting (XSS) in URL/URI Context",
-    
+
+    # Metadata for SIEM/Triage Integration
+    "severity": "high",
+    "cvss_score": 7.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:L",
+    "reliability": "certain",
+    "cwe": ["CWE-79"],
+    "owasp": ["A03:2021"],
+    "tags": ["xss", "url", "protocol", "javascript", "data-uri"],
+
     "description": """
 User input is reflected within a URL, typically in href, src, action, formaction, or data attributes. 
 This enables protocol-based attacks and is particularly dangerous because users may be socially engineered 

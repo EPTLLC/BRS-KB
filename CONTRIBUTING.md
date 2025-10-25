@@ -50,19 +50,19 @@ Knowledge Base: Your Context Name
 """
 
 DETAILS = {
-    "title": "Cross-Site Scripting in Your Context",
-    
-    # Metadata (highly recommended)
-    "severity": "high",  # low, medium, high, critical
-    "cvss_score": 7.5,   # 0.0 to 10.0
-    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:H/I:H/A:N",
-    "reliability": "firm",  # tentative, firm, certain
-    "cwe": ["CWE-79"],
-    "owasp": ["A03:2021"],
-    "tags": ["xss", "your-context", "custom-tag"],
-    
-    # Required fields
-    "description": """
+ "title": "Cross-Site Scripting in Your Context",
+ 
+ # Metadata (highly recommended)
+ "severity": "high", # low, medium, high, critical
+ "cvss_score": 7.5, # 0.0 to 10.0
+ "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:H/I:H/A:N",
+ "reliability": "firm", # tentative, firm, certain
+ "cwe": ["CWE-79"],
+ "owasp": ["A03:2021"],
+ "tags": ["xss", "your-context", "custom-tag"],
+ 
+ # Required fields
+ "description": """
 Detailed explanation of the vulnerability context.
 
 Include:
@@ -74,49 +74,49 @@ Include:
 Minimum 50 characters.
 """,
 
-    "attack_vector": """
+ "attack_vector": """
 ATTACK TECHNIQUES:
 
 1. BASIC ATTACKS:
-   <your payload examples>
-   
+ <your payload examples>
+ 
 2. ADVANCED BYPASSES:
-   <bypass techniques>
-   
+ <bypass techniques>
+ 
 3. FRAMEWORK-SPECIFIC:
-   <framework-related vectors>
+ <framework-related vectors>
 
 Include real, working payloads with explanations.
 Minimum 50 characters.
 """,
 
-    "remediation": """
+ "remediation": """
 SECURITY MEASURES:
 
 1. PRIMARY DEFENSE:
-   - Step-by-step remediation
-   - Code examples
-   
+ - Step-by-step remediation
+ - Code examples
+ 
 2. DEFENSE IN DEPTH:
-   - Additional security layers
-   - Best practices
-   
+ - Additional security layers
+ - practices
+ 
 3. TESTING:
-   - How to verify the fix
-   
+ - How to verify the fix
+ 
 Include practical, actionable advice.
 Minimum 50 characters.
 """,
 
-    # Optional: Add practical examples
-    "examples": [
-        {
-            "name": "Basic Attack Example",
-            "payload": "<your payload>",
-            "poc_url": "https://example.com/?param=<payload>",
-            "screenshot": "path/to/screenshot.png"  # optional
-        }
-    ]
+ # Optional: Add practical examples
+ "examples": [
+ {
+ "name": "Basic Attack Example",
+ "payload": "<your payload>",
+ "poc_url": "https://example.com/?param=<payload>",
+ "screenshot": "path/to/screenshot.png" # optional
+ }
+ ]
 }
 ```
 
@@ -207,47 +207,47 @@ If tests don't exist yet, that's okay - the project is growing!
 ## Pull Request Process
 
 1. **Fork the repository**
-   ```bash
-   git clone https://github.com/YOUR-USERNAME/BRS-KB.git
-   ```
+ ```bash
+ git clone https://github.com/YOUR-USERNAME/BRS-KB.git
+ ```
 
 2. **Create a feature branch**
-   ```bash
-   git checkout -b feature/your-feature-name
-   ```
+ ```bash
+ git checkout -b feature/your-feature-name
+ ```
 
 3. **Make your changes**
-   - Add or update context modules
-   - Follow coding guidelines
-   - Test your changes
+ - Add or update context modules
+ - Follow coding guidelines
+ - Test your changes
 
 4. **Commit your changes**
-   ```bash
-   git add .
-   git commit -m "Add: Description of your contribution"
-   ```
-   
-   Use meaningful commit messages:
-   - `Add: New context for WebRTC XSS`
-   - `Update: HTML attribute context with new bypasses`
-   - `Fix: Typo in JavaScript context description`
-   - `Improve: Documentation for reverse mapping`
+ ```bash
+ git add .
+ git commit -m "Add: Description of your contribution"
+ ```
+ 
+ Use meaningful commit messages:
+ - `Add: New context for WebRTC XSS`
+ - `Update: HTML attribute context with new bypasses`
+ - `Fix: Typo in JavaScript context description`
+ - `Improve: Documentation for reverse mapping`
 
 5. **Push to your fork**
-   ```bash
-   git push origin feature/your-feature-name
-   ```
+ ```bash
+ git push origin feature/your-feature-name
+ ```
 
 6. **Open a Pull Request**
-   - Provide a clear description
-   - Reference any related issues
-   - Explain what you've added/changed
-   - List any breaking changes
+ - Provide a clear description
+ - Reference any related issues
+ - Explain what you've added/changed
+ - List any breaking changes
 
 7. **Wait for review**
-   - Maintainers will review your PR
-   - Be responsive to feedback
-   - Make requested changes if needed
+ - Maintainers will review your PR
+ - Be responsive to feedback
+ - Make requested changes if needed
 
 ## Community Guidelines
 

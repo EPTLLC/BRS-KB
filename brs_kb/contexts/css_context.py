@@ -13,7 +13,16 @@ Knowledge Base: CSS Context - Comprehensive Guide
 
 DETAILS = {
     "title": "Cross-Site Scripting (XSS) in CSS Context",
-    
+
+    # Metadata for SIEM/Triage Integration
+    "severity": "high",
+    "cvss_score": 7.1,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:L/A:L",
+    "reliability": "certain",
+    "cwe": ["CWE-79"],
+    "owasp": ["A03:2021"],
+    "tags": ["xss", "css", "style", "injection", "modern-web"],
+
     "description": """
 User input is reflected within a stylesheet or a style attribute. While modern browsers have mitigated 
 many classic CSS attack vectors, new techniques continue to emerge. CSS injection can lead to data 

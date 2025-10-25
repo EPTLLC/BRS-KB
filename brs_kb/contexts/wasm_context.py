@@ -13,7 +13,16 @@ Knowledge Base: WebAssembly Context XSS
 
 DETAILS = {
     "title": "Cross-Site Scripting in WebAssembly Context",
-    
+
+    # Metadata for SIEM/Triage Integration
+    "severity": "medium",
+    "cvss_score": 6.8,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:L/A:L",
+    "reliability": "certain",
+    "cwe": ["CWE-79"],
+    "owasp": ["A03:2021"],
+    "tags": ["xss", "wasm", "webassembly", "binary", "modern-web"],
+
     "description": """
 WebAssembly (WASM) is used for high-performance web applications. While WASM itself is sandboxed and 
 cannot directly access the DOM, XSS vulnerabilities can occur when WASM modules interact with JavaScript 

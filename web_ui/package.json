@@ -1,0 +1,45 @@
+{
+  "name": "brs-kb-web-ui",
+  "version": "2.0.0",
+  "description": "Web UI for BRS-KB XSS Knowledge Base",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "deploy": "npm run build && gh-pages -d build"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-scripts": "5.0.1",
+    "axios": "^1.6.0",
+    "react-router-dom": "^6.8.0",
+    "chart.js": "^4.2.0",
+    "react-chartjs-2": "^5.2.0",
+    "monaco-editor": "^0.36.0",
+    "react-monaco-editor": "^0.52.0",
+    "prismjs": "^1.29.0",
+    "react-syntax-highlighter": "^15.5.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.0.28",
+    "@types/react-dom": "^18.0.11",
+    "gh-pages": "^5.0.0"
+  },
+  "homepage": "https://EPTLLC.github.io/BRS-KB",
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
+

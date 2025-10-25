@@ -13,7 +13,16 @@ Knowledge Base: Template Injection (Client-Side)
 
 DETAILS = {
     "title": "Client-Side Template Injection Leading to XSS",
-    
+
+    # Metadata for SIEM/Triage Integration
+    "severity": "critical",
+    "cvss_score": 8.6,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H",
+    "reliability": "certain",
+    "cwe": ["CWE-79", "CWE-94"],
+    "owasp": ["A03:2021"],
+    "tags": ["xss", "template", "injection", "sandbox-escape", "modern-web"],
+
     "description": """
 Client-Side Template Injection (CSTI) occurs when user input is embedded into client-side templates 
 and evaluated as template code rather than text. This allows attackers to break out of the template 

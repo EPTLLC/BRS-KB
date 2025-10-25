@@ -4,18 +4,20 @@
 Project: BRS-KB (BRS XSS Knowledge Base)
 Company: EasyProTech LLC (www.easypro.tech)
 Dev: Brabus
-Date: 2025-10-14 22:53:00 MSK
-Status: Created
+Date: Sat 25 Oct 2025 12:00:00 UTC
+Status: Enhanced
 Telegram: https://t.me/easyprotech
 
-Example: Reverse Mapping - Payload to Context to Defense
+Example: Enhanced Reverse Mapping - Automatic Context Detection with ML-ready features
 """
 
 from brs_kb.reverse_map import (
     find_contexts_for_payload,
     get_defenses_for_context,
     get_defense_info,
-    reverse_lookup
+    reverse_lookup,
+    predict_contexts_ml_ready,
+    get_reverse_map_info
 )
 
 
@@ -23,27 +25,41 @@ def main():
     """Demonstrate reverse mapping capabilities."""
     
     print("=" * 80)
-    print("BRS-KB Reverse Mapping Example")
+    print("BRS-KB Enhanced Reverse Mapping Example")
     print("=" * 80)
     print()
-    
-    # Example 1: Find contexts for a specific payload
-    print("1. Finding Contexts for Payload")
+
+    # Show system information
+    info = get_reverse_map_info()
+    print(f"System Version: {info['version']}")
+    print(f"Total Patterns: {info['total_patterns']}")
+    print(f"Supported Contexts: {len(info['supported_contexts'])}")
+    print(f"ML Ready: {info['ml_ready']}")
+    print()
+
+    # Example 1: Enhanced automatic context detection
+    print("1. Enhanced Automatic Context Detection")
     print("-" * 80)
-    
-    payload = "<script>alert(1)</script>"
-    print(f"Payload: {payload}")
-    print()
-    
-    result = find_contexts_for_payload(payload)
-    
-    if result['contexts']:
-        print(f"Effective in contexts: {', '.join(result['contexts'])}")
-        print(f"Severity: {result['severity'].upper()}")
-        print(f"Defenses needed: {', '.join(result['defenses'])}")
-    else:
-        print("No specific context mapping found")
-    print()
+
+    test_payloads = [
+        '<script>alert(1)</script>',
+        'javascript:alert(1)',
+        'WebSocket("wss://evil.com")',
+        '{{constructor.constructor("alert(1)")()}}',
+        '<svg onload=alert(1)>',
+        '<img src=x onerror=alert(1)>'
+    ]
+
+    for payload in test_payloads:
+        print(f"Payload: {payload}")
+        result = find_contexts_for_payload(payload)
+
+        print(f"  Contexts: {', '.join(result['contexts'])}")
+        print(f"  Severity: {result['severity'].upper()}")
+        print(f"  Confidence: {result['confidence']}")
+        print(f"  Method: {result['analysis_method']}")
+        print(f"  Matched patterns: {result['matched_patterns']}")
+        print()
     
     # Example 2: Get defenses for a context
     print("2. Getting Defenses for Context")
@@ -142,9 +158,58 @@ def main():
     for defense in sorted(all_defenses - critical_defenses):
         print(f"  - {defense}")
     
+    # Example 6: ML-Ready analysis with feature extraction
+    print("6. ML-Ready Analysis with Feature Extraction")
+    print("-" * 80)
+
+    ml_payload = '<script>alert(document.cookie)</script>'
+    print(f"Payload: {ml_payload}")
     print()
+
+    ml_result = predict_contexts_ml_ready(ml_payload)
+    print(f"Contexts: {', '.join(ml_result['contexts'])}")
+    print(f"Severity: {ml_result['severity']}")
+    print(f"Confidence: {ml_result['confidence']}")
+    print(f"ML Ready: {ml_result['ml_ready']}")
+    print()
+
+    print("Extracted features for ML training:")
+    features = ml_result['features']
+    for feature, value in features.items():
+        print(f"  {feature}: {value}")
+    print()
+
+    # Example 7: Pattern-based lookup
+    print("7. Pattern-Based Lookup System")
+    print("-" * 80)
+
+    # Find all patterns related to script injection
+    script_patterns = reverse_lookup('pattern', 'script')
+    print(f"Found {script_patterns['count']} patterns related to 'script':")
+    for pattern in script_patterns['patterns'][:3]:  # Show top 3
+        print(f"  Pattern: {pattern['pattern']}")
+        print(f"  Contexts: {', '.join(pattern['contexts'])}")
+        print(f"  Confidence: {pattern['confidence']}")
+        print()
+
+    # Example 8: Modern context defenses
+    print("8. Modern Web Context Defenses")
+    print("-" * 80)
+
+    modern_contexts = ['websocket_xss', 'service_worker_xss', 'webrtc_xss', 'webgl_xss']
+
+    for context in modern_contexts:
+        defenses = get_defenses_for_context(context)
+        print(f"{context}:")
+        for defense in defenses:
+            tags = ', '.join(defense.get('tags', []))
+            required = "REQUIRED" if defense['required'] else "optional"
+            print(f"  [{defense['priority']}] {defense['defense']} ({required}) - {tags}")
+        print()
+
     print("=" * 80)
-    print("Reverse mapping demonstration complete!")
+    print("Enhanced reverse mapping demonstration complete!")
+    print("New features: automatic detection, confidence scoring, ML-ready data")
     print("=" * 80)
 
 

@@ -13,7 +13,16 @@ Knowledge Base: SVG Context
 
 DETAILS = {
     "title": "Cross-Site Scripting (XSS) in SVG Context",
-    
+
+    # Metadata for SIEM/Triage Integration
+    "severity": "high",
+    "cvss_score": 7.3,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:L",
+    "reliability": "certain",
+    "cwe": ["CWE-79"],
+    "owasp": ["A03:2021"],
+    "tags": ["xss", "svg", "vector", "html", "injection"],
+
     "description": """
 SVG (Scalable Vector Graphics) files can contain embedded JavaScript and are increasingly used in 
 modern web applications. SVG XSS is particularly dangerous because SVG can be embedded inline in HTML, 
