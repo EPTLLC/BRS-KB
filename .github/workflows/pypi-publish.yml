@@ -44,17 +44,14 @@ jobs:
     
     - name: Create GitHub Release
       if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      uses: softprops/action-gh-release@v1
       with:
-        tag_name: ${{ github.ref }}
-        release_name: Release ${{ github.ref }}
+        files: dist/*
         body: |
-          ## BRS-KB Release ${{ github.ref }}
+          ## BRS-KB Release ${{ github.ref_name }}
           
           ### What's New
-          - Updated to version ${{ github.ref }}
+          - Updated to version ${{ github.ref_name }}
           - Full XSS vulnerability coverage
           - Enhanced payload testing capabilities
           
