@@ -13,7 +13,7 @@ authors = [
 maintainers = [
     {name = "EasyProTech LLC"}
 ]
-license = "MIT"
+license = {text = "MIT"}
 keywords = [
     "xss",
     "security",
