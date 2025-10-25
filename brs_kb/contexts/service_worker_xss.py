@@ -13,7 +13,6 @@ Knowledge Base: Service Worker XSS Context - Comprehensive Guide
 
 DETAILS = {
     "title": "Cross-Site Scripting (XSS) in Service Worker Context",
-
     # Metadata for SIEM/Triage Integration
     "severity": "high",
     "cvss_score": 7.8,
@@ -22,7 +21,6 @@ DETAILS = {
     "cwe": ["CWE-79"],
     "owasp": ["A03:2021"],
     "tags": ["xss", "service-worker", "pwa", "background-script", "modern-web"],
-
     "description": """
 Service Worker XSS occurs when user input is reflected into Service Worker scripts without proper
 sanitization. Service Workers are background scripts that run independently of web pages, intercepting
@@ -53,7 +51,6 @@ SEVERITY: HIGH
 Service Workers run in the background with elevated privileges, can intercept all network requests,
 manipulate cache, and persist malicious code across browser sessions and even offline usage.
 """,
-
     "attack_vector": """
 SERVICE WORKER XSS ATTACK VECTORS:
 
@@ -295,7 +292,6 @@ SERVICE WORKER DETECTION:
     - Payload injection testing
     - Offline behavior analysis
 """,
-
     "remediation": """
 SERVICE WORKER XSS DEFENSE STRATEGY:
 
@@ -553,5 +549,5 @@ OWASP REFERENCES:
 - OWASP Service Worker Security
 - Service Workers 1 Specification
 - Progressive Web Apps Security
-"""
+""",
 }

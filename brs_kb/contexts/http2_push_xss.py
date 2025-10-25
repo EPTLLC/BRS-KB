@@ -13,7 +13,6 @@ Knowledge Base: HTTP/2 Push XSS Context - Comprehensive Guide
 
 DETAILS = {
     "title": "Cross-Site Scripting (XSS) in HTTP/2 Push Context",
-
     # Metadata for SIEM/Triage Integration
     "severity": "medium",
     "cvss_score": 6.8,
@@ -22,7 +21,6 @@ DETAILS = {
     "cwe": ["CWE-79"],
     "owasp": ["A03:2021"],
     "tags": ["xss", "http2", "server-push", "resource-injection", "modern-web"],
-
     "description": """
 HTTP/2 Push XSS occurs when user input is reflected into HTTP/2 Server Push resources or when
 push promises contain malicious content. HTTP/2 Server Push allows servers to proactively send
@@ -53,7 +51,6 @@ HTTP/2 Push XSS requires specific server configuration and user interaction. How
 exploitation can lead to persistent attacks through cached resources and affect multiple users
 through server-initiated content delivery.
 """,
-
     "attack_vector": """
 HTTP/2 PUSH XSS ATTACK VECTORS:
 
@@ -249,7 +246,6 @@ HTTP/2 PUSH XSS DETECTION:
     - Content validation
     - Compression analysis
 """,
-
     "remediation": """
 HTTP/2 PUSH XSS DEFENSE STRATEGY:
 
@@ -554,5 +550,5 @@ OWASP REFERENCES:
 - HTTP/2 Server Push Security
 - Web Performance Optimization Security
 - CDN Security Best Practices
-"""
+""",
 }

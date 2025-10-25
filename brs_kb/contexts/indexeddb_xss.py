@@ -13,7 +13,6 @@ Knowledge Base: IndexedDB XSS Context - Comprehensive Guide
 
 DETAILS = {
     "title": "Cross-Site Scripting (XSS) in IndexedDB Context",
-
     # Metadata for SIEM/Triage Integration
     "severity": "medium",
     "cvss_score": 6.5,
@@ -22,7 +21,6 @@ DETAILS = {
     "cwe": ["CWE-79"],
     "owasp": ["A03:2021"],
     "tags": ["xss", "indexeddb", "client-storage", "offline-storage", "persistent"],
-
     "description": """
 IndexedDB XSS occurs when user input is stored in IndexedDB and later reflected into the DOM
 without proper sanitization. IndexedDB is a powerful client-side storage system that allows
@@ -52,7 +50,6 @@ SEVERITY: MEDIUM
 IndexedDB XSS provides persistence across sessions and can survive cache clearing in some cases.
 However, it requires user interaction and is generally less immediate than other XSS types.
 """,
-
     "attack_vector": """
 INDEXEDDB XSS ATTACK VECTORS:
 
@@ -305,7 +302,6 @@ INDEXEDDB XSS DETECTION:
     - Content inspection tools
     - Storage manipulation detection
 """,
-
     "remediation": """
 INDEXEDDB XSS DEFENSE STRATEGY:
 
@@ -573,5 +569,5 @@ OWASP REFERENCES:
 - OWASP HTML5 Security Cheat Sheet
 - IndexedDB Security Best Practices
 - Browser Storage Security Guide
-"""
+""",
 }

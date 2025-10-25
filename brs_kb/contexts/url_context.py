@@ -13,7 +13,6 @@ Knowledge Base: URL/URI Context - Comprehensive Guide
 
 DETAILS = {
     "title": "Cross-Site Scripting (XSS) in URL/URI Context",
-
     # Metadata for SIEM/Triage Integration
     "severity": "high",
     "cvss_score": 7.5,
@@ -22,7 +21,6 @@ DETAILS = {
     "cwe": ["CWE-79"],
     "owasp": ["A03:2021"],
     "tags": ["xss", "url", "protocol", "javascript", "data-uri"],
-
     "description": """
 User input is reflected within a URL, typically in href, src, action, formaction, or data attributes. 
 This enables protocol-based attacks and is particularly dangerous because users may be socially engineered 
@@ -62,7 +60,6 @@ Common in:
 SEVERITY: HIGH to CRITICAL
 Can lead to phishing, credential theft, CSRF, malware delivery, and full account compromise.
 """,
-
     "attack_vector": """
 JAVASCRIPT PROTOCOL ATTACKS:
 
@@ -347,7 +344,6 @@ navigator.registerProtocolHandler(
   'XSS Handler'
 );
 """,
-
     "remediation": """
 DEFENSE-IN-DEPTH STRATEGY:
 
@@ -550,5 +546,5 @@ OWASP REFERENCES:
 - OWASP Unvalidated Redirects and Forwards
 - CWE-79: Cross-site Scripting
 - CWE-601: URL Redirection to Untrusted Site
-"""
+""",
 }

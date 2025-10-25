@@ -13,7 +13,6 @@ Knowledge Base: GraphQL XSS Context - Comprehensive Guide
 
 DETAILS = {
     "title": "Cross-Site Scripting (XSS) in GraphQL Context",
-
     # Metadata for SIEM/Triage Integration
     "severity": "high",
     "cvss_score": 7.4,
@@ -22,7 +21,6 @@ DETAILS = {
     "cwe": ["CWE-79"],
     "owasp": ["A03:2021"],
     "tags": ["xss", "graphql", "api-injection", "query-manipulation", "modern-web"],
-
     "description": """
 GraphQL XSS occurs when user input is reflected into GraphQL queries, mutations, or responses
 without proper sanitization. GraphQL is a query language for APIs that provides flexible data
@@ -52,7 +50,6 @@ GraphQL XSS can affect multiple clients consuming the same API and can lead to p
 through cached responses and subscriptions. The flexible nature of GraphQL makes comprehensive
 sanitization challenging.
 """,
-
     "attack_vector": """
 GRAPHQL XSS ATTACK VECTORS:
 
@@ -331,7 +328,6 @@ GRAPHQL XSS DETECTION:
     - Schema validation
     - Error message inspection
 """,
-
     "remediation": """
 GRAPHQL XSS DEFENSE STRATEGY:
 
@@ -638,5 +634,5 @@ OWASP REFERENCES:
 - OWASP API Security Top 10
 - GraphQL Security Best Practices
 - API Security Testing Guide
-"""
+""",
 }

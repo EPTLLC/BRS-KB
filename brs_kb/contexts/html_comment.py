@@ -13,7 +13,6 @@ Knowledge Base: HTML Comment Context
 
 DETAILS = {
     "title": "Cross-Site Scripting (XSS) in HTML Comment",
-
     # Metadata for SIEM/Triage Integration
     "severity": "medium",
     "cvss_score": 5.4,
@@ -22,7 +21,6 @@ DETAILS = {
     "cwe": ["CWE-79"],
     "owasp": ["A03:2021"],
     "tags": ["xss", "html", "comment", "breakout", "parser"],
-
     "description": """
 User input is reflected inside an HTML comment. While browsers don't execute scripts within comments, 
 attackers can break out using comment terminators or exploit edge cases in HTML parsers. This is 
@@ -31,7 +29,6 @@ particularly dangerous in server-side templates, debugging information, or condi
 SEVERITY: MEDIUM
 Can lead to XSS if comment breakout is possible. Common in debugging code left in production.
 """,
-
     "attack_vector": """
 BASIC BREAKOUT:
 <!-- USER_INPUT -->
@@ -53,7 +50,6 @@ May be evaluated before HTML rendering
 NESTED COMMENTS:
 Legacy parsers may have issues with nested comment structures
 """,
-
     "remediation": """
 DEFENSE:
 
@@ -73,5 +69,5 @@ BEST PRACTICES:
 OWASP REFERENCES:
 - CWE-79: Cross-site Scripting
 - OWASP XSS Prevention Cheat Sheet
-"""
+""",
 }

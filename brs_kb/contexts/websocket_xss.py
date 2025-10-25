@@ -13,7 +13,6 @@ Knowledge Base: WebSocket XSS Context - Comprehensive Guide
 
 DETAILS = {
     "title": "Cross-Site Scripting (XSS) in WebSocket Context",
-
     # Metadata for SIEM/Triage Integration
     "severity": "high",
     "cvss_score": 7.5,
@@ -22,7 +21,6 @@ DETAILS = {
     "cwe": ["CWE-79"],
     "owasp": ["A03:2021"],
     "tags": ["xss", "websocket", "real-time", "injection", "modern-web"],
-
     "description": """
 WebSocket XSS occurs when user input is reflected into WebSocket messages without proper sanitization.
 WebSockets provide full-duplex communication channels over a single TCP connection, making them ideal
@@ -56,7 +54,6 @@ SEVERITY: HIGH
 WebSocket XSS allows real-time code execution across all connected clients, potentially affecting
 multiple users simultaneously. The real-time nature makes detection and response challenging.
 """,
-
     "attack_vector": """
 WEBSOCKET XSS ATTACK VECTORS:
 
@@ -206,7 +203,6 @@ WEBSOCKET XSS DETECTION:
     - Modify messages in transit
     - Test for XSS vulnerabilities
 """,
-
     "remediation": """
 WEBSOCKET XSS DEFENSE STRATEGY:
 
@@ -427,5 +423,5 @@ OWASP REFERENCES:
 - OWASP Testing Guide: Testing WebSockets
 - CWE-79: Improper Neutralization of Input
 - Real-time Web Application Security
-"""
+""",
 }

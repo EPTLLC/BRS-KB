@@ -13,7 +13,6 @@ Knowledge Base: XML Content Context
 
 DETAILS = {
     "title": "Cross-Site Scripting (XSS) in XML Context",
-
     # Metadata for SIEM/Triage Integration
     "severity": "high",
     "cvss_score": 7.1,
@@ -22,7 +21,6 @@ DETAILS = {
     "cwe": ["CWE-79"],
     "owasp": ["A03:2021"],
     "tags": ["xss", "xml", "xhtml", "svg", "rss", "soap"],
-
     "description": """
 User input is reflected within XML or XHTML documents without proper encoding. XML-based XSS can 
 occur in RSS feeds, SOAP web services, SVG files, or XHTML pages. The attack surface includes XML 
@@ -31,7 +29,6 @@ attributes, CDATA sections, and entity references.
 SEVERITY: MEDIUM to HIGH
 Common in RSS feeds, SOAP APIs, and XHTML applications.
 """,
-
     "attack_vector": """
 BASIC XML INJECTION:
 <item><title>USER_INPUT</title></item>
@@ -55,7 +52,6 @@ XML in SOAP messages can target both structure and embedded HTML
 RSS FEED XSS:
 <description>USER_INPUT</description>
 """,
-
     "remediation": """
 DEFENSE:
 
@@ -86,5 +82,5 @@ OWASP REFERENCES:
 - CWE-79: Cross-site Scripting
 - CWE-611: XXE
 - OWASP XML Security Cheat Sheet
-"""
+""",
 }

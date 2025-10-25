@@ -16,6 +16,7 @@ import re
 from typing import Dict, List, Any, Optional, Tuple
 from brs_kb.payloads_db import PAYLOAD_DATABASE, PayloadEntry
 
+
 class PayloadTester:
     """Advanced XSS payload testing framework"""
 
@@ -30,24 +31,16 @@ class PayloadTester:
                 r"ModSecurity",
                 r"mod_security",
                 r"ModSecurity Rules",
-                r"Request Denied"
+                r"Request Denied",
             ],
             "cloudflare": [
                 r"Cloudflare",
                 r"Ray ID",
                 r"Attention Required",
-                r"Checking your browser"
+                r"Checking your browser",
             ],
-            "aws_waf": [
-                r"AWS WAF",
-                r"Blocked by AWS WAF",
-                r"Forbidden: Access Denied"
-            ],
-            "akamai": [
-                r"Akamai",
-                r"Access Denied",
-                r"Reference ID"
-            ]
+            "aws_waf": [r"AWS WAF", r"Blocked by AWS WAF", r"Forbidden: Access Denied"],
+            "akamai": [r"Akamai", r"Access Denied", r"Reference ID"],
         }
 
     def test_payload_in_context(self, payload: str, context: str) -> Dict[str, Any]:
@@ -68,7 +61,7 @@ class PayloadTester:
             "waf_detected": waf_detected,
             "effectiveness_score": effectiveness,
             "risk_level": self._get_risk_level(effectiveness),
-            "recommendations": self._get_recommendations(payload, context, effectiveness)
+            "recommendations": self._get_recommendations(payload, context, effectiveness),
         }
 
     def _simulate_browser_parsing(self, payload: str, context: str) -> Dict[str, Any]:
@@ -78,23 +71,23 @@ class PayloadTester:
             "html_injection": False,
             "event_execution": False,
             "css_injection": False,
-            "parsing_errors": []
+            "parsing_errors": [],
         }
 
         # Check for script execution
-        if re.search(r'<script[^>]*>.*?</script>', payload, re.IGNORECASE):
+        if re.search(r"<script[^>]*>.*?</script>", payload, re.IGNORECASE):
             result["script_execution"] = True
 
         # Check for HTML injection
-        if re.search(r'<[^>]*>', payload):
+        if re.search(r"<[^>]*>", payload):
             result["html_injection"] = True
 
         # Check for event handlers
-        if re.search(r'on\w+\s*=', payload):
+        if re.search(r"on\w+\s*=", payload):
             result["event_execution"] = True
 
         # Check for CSS injection
-        if re.search(r'(background|src)\s*:\s*[^;]+', payload):
+        if re.search(r"(background|src)\s*:\s*[^;]+", payload):
             result["css_injection"] = True
 
         return result
@@ -131,7 +124,7 @@ class PayloadTester:
             score *= 1.1
 
         # WAF bypass capability
-        if any(char in payload for char in ["<", ">", "\"", "'"]):
+        if any(char in payload for char in ["<", ">", '"', "'"]):
             score *= 1.1  # Likely to be filtered
 
         return min(score, 1.0)
@@ -152,7 +145,9 @@ class PayloadTester:
         recommendations = []
 
         if effectiveness >= 0.8:
-            recommendations.append("CRITICAL: This payload is highly effective - implement strict input validation")
+            recommendations.append(
+                "CRITICAL: This payload is highly effective - implement strict input validation"
+            )
             recommendations.append("Consider implementing Content Security Policy (CSP)")
 
         if "<script" in payload.lower():
@@ -172,6 +167,7 @@ class PayloadTester:
 
         return recommendations
 
+
 def test_all_payloads() -> Dict[str, Any]:
     """Test all payloads in database"""
     tester = PayloadTester()
@@ -189,10 +185,11 @@ def test_all_payloads() -> Dict[str, Any]:
             "test_results": context_results,
             "overall_effectiveness": max(
                 r["effectiveness_score"] for r in context_results.values()
-            )
+            ),
         }
 
     return results
+
 
 def validate_payload_database() -> Dict[str, Any]:
     """Validate payload database integrity"""
@@ -202,7 +199,7 @@ def validate_payload_database() -> Dict[str, Any]:
         "severities_found": set(),
         "tags_found": set(),
         "waf_bypass_count": 0,
-        "errors": []
+        "errors": [],
     }
 
     for payload_id, payload in PAYLOAD_DATABASE.items():
@@ -224,6 +221,7 @@ def validate_payload_database() -> Dict[str, Any]:
 
     return validation_results
 
+
 def generate_payload_report() -> str:
     """Generate comprehensive payload analysis report"""
     validation = validate_payload_database()
@@ -243,14 +241,15 @@ def generate_payload_report() -> str:
     report.append("")
 
     report.append("CONTEXT COVERAGE:")
-    for context in validation['contexts_covered']:
+    for context in validation["contexts_covered"]:
         payload_count = len([p for p in PAYLOAD_DATABASE.values() if context in p.contexts])
         report.append(f"  {context}: {payload_count} payloads")
     report.append("")
 
     # Show top risk payloads from database
     from brs_kb.payloads_db import get_payloads_by_severity
-    critical_payloads = get_payloads_by_severity('critical')
+
+    critical_payloads = get_payloads_by_severity("critical")
 
     report.append("TOP CRITICAL PAYLOADS:")
     for i, payload in enumerate(critical_payloads[:10], 1):
@@ -268,40 +267,48 @@ def generate_payload_report() -> str:
 
     return "\n".join(report)
 
-def find_best_payloads_for_context(context: str, min_effectiveness: float = 0.5) -> List[Dict[str, Any]]:
+
+def find_best_payloads_for_context(
+    context: str, min_effectiveness: float = 0.5
+) -> List[Dict[str, Any]]:
     """Find best payloads for a specific context"""
     tester = PayloadTester()
     results = []
 
     relevant_payloads = [
-        payload for payload in PAYLOAD_DATABASE.values()
-        if context in payload.contexts
+        payload for payload in PAYLOAD_DATABASE.values() if context in payload.contexts
     ]
 
     for payload in relevant_payloads:
         test_result = tester.test_payload_in_context(payload.payload, context)
 
         if test_result["effectiveness_score"] >= min_effectiveness:
-            results.append({
-                "payload_id": payload.payload[:50] + "..." if len(payload.payload) > 50 else payload.payload,
-                "payload": payload.payload,
-                "effectiveness": test_result["effectiveness_score"],
-                "risk_level": test_result["risk_level"],
-                "waf_evasion": payload.waf_evasion,
-                "tags": payload.tags,
-                "description": payload.description
-            })
+            results.append(
+                {
+                    "payload_id": (
+                        payload.payload[:50] + "..."
+                        if len(payload.payload) > 50
+                        else payload.payload
+                    ),
+                    "payload": payload.payload,
+                    "effectiveness": test_result["effectiveness_score"],
+                    "risk_level": test_result["risk_level"],
+                    "waf_evasion": payload.waf_evasion,
+                    "tags": payload.tags,
+                    "description": payload.description,
+                }
+            )
 
     # Sort by effectiveness
     results.sort(key=lambda x: x["effectiveness"], reverse=True)
     return results
 
+
 # Export functions
 __all__ = [
-    'PayloadTester',
-    'test_payload_in_context',
-    'test_all_payloads',
-    'validate_payload_database',
-    'generate_payload_report',
-    'find_best_payloads_for_context'
+    "PayloadTester",
+    "test_all_payloads",
+    "validate_payload_database",
+    "generate_payload_report",
+    "find_best_payloads_for_context",
 ]

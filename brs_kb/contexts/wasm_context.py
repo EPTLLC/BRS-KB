@@ -13,7 +13,6 @@ Knowledge Base: WebAssembly Context XSS
 
 DETAILS = {
     "title": "Cross-Site Scripting in WebAssembly Context",
-
     # Metadata for SIEM/Triage Integration
     "severity": "medium",
     "cvss_score": 6.8,
@@ -22,7 +21,6 @@ DETAILS = {
     "cwe": ["CWE-79"],
     "owasp": ["A03:2021"],
     "tags": ["xss", "wasm", "webassembly", "binary", "modern-web"],
-
     "description": """
 WebAssembly (WASM) is used for high-performance web applications. While WASM itself is sandboxed and 
 cannot directly access the DOM, XSS vulnerabilities can occur when WASM modules interact with JavaScript 
@@ -31,7 +29,6 @@ through imports/exports, especially when processing user input or generating dyn
 SEVERITY: MEDIUM to HIGH
 Emerging threat as WASM adoption increases. Complex attack surface.
 """,
-
     "attack_vector": """
 WASM EXPORTING STRINGS TO JAVASCRIPT:
 WasmModule.exports.getUserData() returns raw HTML
@@ -61,7 +58,6 @@ Leading to JavaScript heap manipulation
 PROTOTYPE POLLUTION:
 Via WASM-JS boundary
 """,
-
     "remediation": """
 DEFENSE:
 
@@ -115,5 +111,5 @@ TOOLS:
 OWASP REFERENCES:
 - CWE-79: Cross-site Scripting
 - WebAssembly Security
-"""
+""",
 }

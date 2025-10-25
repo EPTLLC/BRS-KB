@@ -13,7 +13,6 @@ Knowledge Base: Custom Elements XSS Context - Comprehensive Guide
 
 DETAILS = {
     "title": "Cross-Site Scripting (XSS) in Custom Elements Context",
-
     # Metadata for SIEM/Triage Integration
     "severity": "high",
     "cvss_score": 7.1,
@@ -22,7 +21,6 @@ DETAILS = {
     "cwe": ["CWE-79"],
     "owasp": ["A03:2021"],
     "tags": ["xss", "custom-elements", "web-components", "html-injection", "modern-web"],
-
     "description": """
 Custom Elements XSS occurs when user input is reflected into Custom Element definitions, attributes,
 or lifecycle callbacks without proper sanitization. Custom Elements are part of the Web Components
@@ -53,7 +51,6 @@ Custom Elements XSS can affect multiple instances of components and persist acro
 The dynamic nature of custom elements makes detection challenging, and attacks can spread
 through component libraries and frameworks.
 """,
-
     "attack_vector": """
 CUSTOM ELEMENTS XSS ATTACK VECTORS:
 
@@ -281,7 +278,6 @@ CUSTOM ELEMENTS XSS DETECTION:
     - Component analysis tools
     - Registry inspection extensions
 """,
-
     "remediation": """
 CUSTOM ELEMENTS XSS DEFENSE STRATEGY:
 
@@ -586,5 +582,5 @@ OWASP REFERENCES:
 - OWASP Custom Elements Cheat Sheet
 - Web Components Security Best Practices
 - HTML5 Custom Elements Security
-"""
+""",
 }

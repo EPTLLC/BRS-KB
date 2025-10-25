@@ -13,7 +13,6 @@ Knowledge Base: HTML Attribute Context - Comprehensive Guide
 
 DETAILS = {
     "title": "Cross-Site Scripting (XSS) in HTML Attribute",
-
     # Metadata for SIEM/Triage Integration
     "severity": "critical",
     "cvss_score": 8.8,
@@ -22,7 +21,6 @@ DETAILS = {
     "cwe": ["CWE-79"],
     "owasp": ["A03:2021"],
     "tags": ["xss", "html", "attribute", "reflected", "stored", "injection"],
-
     "description": """
 User input is reflected inside an HTML tag's attribute without proper escaping. This is one of the most 
 common XSS vectors in modern web applications. Attackers can break out of the attribute context to inject 
@@ -50,7 +48,6 @@ Special risk exists with attributes that can execute JavaScript:
 SEVERITY: HIGH to CRITICAL
 Depends on the specific attribute and quoting style. Unquoted attributes are most dangerous.
 """,
-
     "attack_vector": """
 BREAKING OUT OF QUOTED ATTRIBUTES:
 
@@ -331,7 +328,6 @@ Link prefetch:
 Payload:
 //evil.com/track
 """,
-
     "remediation": """
 DEFENSE-IN-DEPTH STRATEGY:
 
@@ -534,5 +530,5 @@ OWASP REFERENCES:
 - CWE-79: Improper Neutralization of Input During Web Page Generation
 - OWASP Testing Guide: Testing for Reflected XSS
 - HTML5 Security Cheatsheet: https://html5sec.org
-"""
+""",
 }

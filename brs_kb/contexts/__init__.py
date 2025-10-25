@@ -13,4 +13,3 @@ Vulnerability Contexts Package
 
 # This package contains all vulnerability context modules
 # Each module exports a DETAILS dictionary with vulnerability information
-

@@ -13,7 +13,6 @@ Knowledge Base: Shadow DOM XSS Context - Comprehensive Guide
 
 DETAILS = {
     "title": "Cross-Site Scripting (XSS) in Shadow DOM Context",
-
     # Metadata for SIEM/Triage Integration
     "severity": "high",
     "cvss_score": 7.3,
@@ -22,7 +21,6 @@ DETAILS = {
     "cwe": ["CWE-79"],
     "owasp": ["A03:2021"],
     "tags": ["xss", "shadow-dom", "web-components", "encapsulation", "modern-web"],
-
     "description": """
 Shadow DOM XSS occurs when user input is reflected into Shadow DOM elements or when Shadow DOM
 boundaries are manipulated to break encapsulation. Shadow DOM provides encapsulation for web
@@ -51,7 +49,6 @@ SEVERITY: HIGH
 Shadow DOM XSS can bypass traditional XSS protections and Content Security Policies in some cases.
 The encapsulation makes detection challenging, and attacks can persist within component boundaries.
 """,
-
     "attack_vector": """
 SHADOW DOM XSS ATTACK VECTORS:
 
@@ -272,7 +269,6 @@ SHADOW DOM XSS DETECTION:
     - Component analysis extensions
     - DOM tree visualization
 """,
-
     "remediation": """
 SHADOW DOM XSS DEFENSE STRATEGY:
 
@@ -535,5 +531,5 @@ OWASP REFERENCES:
 - OWASP Shadow DOM Cheat Sheet
 - Web Components Security Best Practices
 - DOM Encapsulation Security
-"""
+""",
 }

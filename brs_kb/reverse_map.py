@@ -16,147 +16,223 @@ import re
 from typing import List, Dict, Set, Tuple, Optional
 from dataclasses import dataclass, field
 
+
 # Enhanced payload patterns for automatic context detection
 @dataclass
 class ContextPattern:
     """Pattern for automatic context detection"""
+
     pattern: str
     contexts: List[str]
     severity: str
     confidence: float = 1.0
     tags: List[str] = field(default_factory=list)
 
+
 # Automatic context detection patterns
 CONTEXT_PATTERNS = [
     # HTML Content patterns
-    ContextPattern(r'<script[^>]*>.*?</script>', ['html_content'], 'critical',
-                   tags=['script_injection', 'direct_execution']),
-    ContextPattern(r'on\w+\s*=', ['html_content', 'html_attribute'], 'high',
-                   tags=['event_handler', 'attribute_injection']),
-    ContextPattern(r'<img[^>]*onerror[^>]*>', ['html_attribute'], 'high',
-                   tags=['image_error', 'event_injection']),
-    ContextPattern(r'<svg[^>]*on\w+[^>]*>', ['svg_context'], 'high',
-                   tags=['svg_injection', 'event_handler']),
-    ContextPattern(r'<iframe[^>]*src\s*=\s*["\']?\s*javascript:', ['html_attribute'], 'high',
-                   tags=['iframe_injection', 'protocol_injection']),
-    ContextPattern(r'<body[^>]*on\w+[^>]*>', ['html_content'], 'medium',
-                   tags=['body_event', 'dom_injection']),
-
+    ContextPattern(
+        r"<script[^>]*>.*?</script>",
+        ["html_content"],
+        "critical",
+        tags=["script_injection", "direct_execution"],
+    ),
+    ContextPattern(
+        r"on\w+\s*=",
+        ["html_content", "html_attribute"],
+        "high",
+        tags=["event_handler", "attribute_injection"],
+    ),
+    ContextPattern(
+        r"<img[^>]*onerror[^>]*>",
+        ["html_attribute"],
+        "high",
+        tags=["image_error", "event_injection"],
+    ),
+    ContextPattern(
+        r"<svg[^>]*on\w+[^>]*>", ["svg_context"], "high", tags=["svg_injection", "event_handler"]
+    ),
+    ContextPattern(
+        r'<iframe[^>]*src\s*=\s*["\']?\s*javascript:',
+        ["html_attribute"],
+        "high",
+        tags=["iframe_injection", "protocol_injection"],
+    ),
+    ContextPattern(
+        r"<body[^>]*on\w+[^>]*>", ["html_content"], "medium", tags=["body_event", "dom_injection"]
+    ),
     # JavaScript Context patterns
-    ContextPattern(r'^\s*[a-zA-Z_][a-zA-Z0-9_]*\s*[:=]\s*[^;]+;\s*alert\(', ['javascript_context'], 'critical',
-                   tags=['variable_injection', 'code_injection']),
-    ContextPattern(r'javascript:', ['url_context'], 'high',
-                   tags=['protocol_injection', 'url_manipulation']),
-    ContextPattern(r'vbscript:', ['url_context'], 'medium',
-                   tags=['vbscript_injection', 'legacy_protocol']),
-    ContextPattern(r'data:text/html,<script', ['url_context'], 'high',
-                   tags=['data_uri', 'html_injection']),
-    ContextPattern(r'[\'"`]?\s*\+\s*[^\'"`]*alert\(', ['js_string'], 'critical',
-                   tags=['string_concatenation', 'expression_injection']),
-
+    ContextPattern(
+        r"^\s*[a-zA-Z_][a-zA-Z0-9_]*\s*[:=]\s*[^;]+;\s*alert\(",
+        ["javascript_context"],
+        "critical",
+        tags=["variable_injection", "code_injection"],
+    ),
+    ContextPattern(
+        r"javascript:", ["url_context"], "high", tags=["protocol_injection", "url_manipulation"]
+    ),
+    ContextPattern(
+        r"vbscript:", ["url_context"], "medium", tags=["vbscript_injection", "legacy_protocol"]
+    ),
+    ContextPattern(
+        r"data:text/html,<script", ["url_context"], "high", tags=["data_uri", "html_injection"]
+    ),
+    ContextPattern(
+        r'[\'"`]?\s*\+\s*[^\'"`]*alert\(',
+        ["js_string"],
+        "critical",
+        tags=["string_concatenation", "expression_injection"],
+    ),
     # Template injection patterns
-    ContextPattern(r'\{\{.*constructor\.constructor.*\}\}', ['template_injection'], 'critical',
-                   tags=['template_sandbox_escape', 'code_execution']),
-    ContextPattern(r'#\{.*\}', ['template_injection'], 'high',
-                   tags=['ruby_template', 'erb_injection']),
-    ContextPattern(r'<%.*%>', ['template_injection'], 'high',
-                   tags=['asp_template', 'server_injection']),
-    ContextPattern(r'\$\{.*\}', ['template_injection'], 'high',
-                   tags=['java_template', 'el_injection']),
-
+    ContextPattern(
+        r"\{\{.*constructor\.constructor.*\}\}",
+        ["template_injection"],
+        "critical",
+        tags=["template_sandbox_escape", "code_execution"],
+    ),
+    ContextPattern(
+        r"#\{.*\}", ["template_injection"], "high", tags=["ruby_template", "erb_injection"]
+    ),
+    ContextPattern(
+        r"<%.*%>", ["template_injection"], "high", tags=["asp_template", "server_injection"]
+    ),
+    ContextPattern(
+        r"\$\{.*\}", ["template_injection"], "high", tags=["java_template", "el_injection"]
+    ),
     # Modern web patterns
-    ContextPattern(r'WebSocket\(.*\)', ['websocket_xss'], 'high',
-                   tags=['websocket_injection', 'real_time']),
-    ContextPattern(r'serviceWorker\.register\(.*\)', ['service_worker_xss'], 'high',
-                   tags=['service_worker', 'background_script']),
-    ContextPattern(r'RTCPeerConnection\(.*\)', ['webrtc_xss'], 'high',
-                   tags=['webrtc_injection', 'media_injection']),
-    ContextPattern(r'indexedDB\.open\(.*\)', ['indexeddb_xss'], 'medium',
-                   tags=['storage_injection', 'database_xss']),
-    ContextPattern(r'WebGL.*shader', ['webgl_xss'], 'medium',
-                   tags=['shader_injection', 'gpu_xss']),
-
+    ContextPattern(
+        r"WebSocket\(.*\)", ["websocket_xss"], "high", tags=["websocket_injection", "real_time"]
+    ),
+    ContextPattern(
+        r"serviceWorker\.register\(.*\)",
+        ["service_worker_xss"],
+        "high",
+        tags=["service_worker", "background_script"],
+    ),
+    ContextPattern(
+        r"RTCPeerConnection\(.*\)",
+        ["webrtc_xss"],
+        "high",
+        tags=["webrtc_injection", "media_injection"],
+    ),
+    ContextPattern(
+        r"indexedDB\.open\(.*\)",
+        ["indexeddb_xss"],
+        "medium",
+        tags=["storage_injection", "database_xss"],
+    ),
+    ContextPattern(r"WebGL.*shader", ["webgl_xss"], "medium", tags=["shader_injection", "gpu_xss"]),
     # Protocol and encoding patterns
-    ContextPattern(r'&#\d+;', ['html_content'], 'medium', 0.7,
-                   tags=['html_entity', 'encoding_bypass']),
-    ContextPattern(r'%[0-9a-fA-F][0-9a-fA-F]', ['url_context'], 'medium', 0.8,
-                   tags=['url_encoding', 'protocol_injection']),
-    ContextPattern(r'\\x[0-9a-fA-F][0-9a-fA-F]', ['javascript_context'], 'medium', 0.8,
-                   tags=['hex_encoding', 'js_injection']),
-    ContextPattern(r'\\u[0-9a-fA-F]{4}', ['javascript_context'], 'medium', 0.7,
-                   tags=['unicode_encoding', 'js_injection']),
-
+    ContextPattern(
+        r"&#\d+;", ["html_content"], "medium", 0.7, tags=["html_entity", "encoding_bypass"]
+    ),
+    ContextPattern(
+        r"%[0-9a-fA-F][0-9a-fA-F]",
+        ["url_context"],
+        "medium",
+        0.8,
+        tags=["url_encoding", "protocol_injection"],
+    ),
+    ContextPattern(
+        r"\\x[0-9a-fA-F][0-9a-fA-F]",
+        ["javascript_context"],
+        "medium",
+        0.8,
+        tags=["hex_encoding", "js_injection"],
+    ),
+    ContextPattern(
+        r"\\u[0-9a-fA-F]{4}",
+        ["javascript_context"],
+        "medium",
+        0.7,
+        tags=["unicode_encoding", "js_injection"],
+    ),
     # CSS Context patterns
-    ContextPattern(r'<style>.*expression\(.*\)</style>', ['css_context'], 'high',
-                   tags=['css_expression', 'legacy_ie']),
-    ContextPattern(r'background\s*:\s*url\(.*javascript:', ['css_context'], 'high',
-                   tags=['css_url', 'background_injection']),
-    ContextPattern(r'@import.*javascript:', ['css_context'], 'high',
-                   tags=['css_import', 'external_injection']),
-
+    ContextPattern(
+        r"<style>.*expression\(.*\)</style>",
+        ["css_context"],
+        "high",
+        tags=["css_expression", "legacy_ie"],
+    ),
+    ContextPattern(
+        r"background\s*:\s*url\(.*javascript:",
+        ["css_context"],
+        "high",
+        tags=["css_url", "background_injection"],
+    ),
+    ContextPattern(
+        r"@import.*javascript:", ["css_context"], "high", tags=["css_import", "external_injection"]
+    ),
     # Comment-based patterns
-    ContextPattern(r'<!--.*?-->.*?alert\(', ['html_comment'], 'medium', 0.6,
-                   tags=['comment_injection', 'hidden_injection']),
-    ContextPattern(r'/\*.*\*/.*?alert\(', ['css_context'], 'low', 0.4,
-                   tags=['css_comment', 'hidden_injection']),
+    ContextPattern(
+        r"<!--.*?-->.*?alert\(",
+        ["html_comment"],
+        "medium",
+        0.6,
+        tags=["comment_injection", "hidden_injection"],
+    ),
+    ContextPattern(
+        r"/\*.*\*/.*?alert\(", ["css_context"], "low", 0.4, tags=["css_comment", "hidden_injection"]
+    ),
 ]
 
 # Enhanced Defense → Effectiveness mapping with modern techniques
 DEFENSE_TO_EFFECTIVENESS = {
     "html_encoding": {
-        "effective_against": [
-            "html_content", "html_attribute", "html_comment"
-        ],
+        "effective_against": ["html_content", "html_attribute", "html_comment"],
         "implementation": [
             "htmlspecialchars($input, ENT_QUOTES, 'UTF-8')",  # PHP
             "html.escape(input, quote=True)",  # Python
-            "element.textContent = input"  # JavaScript
+            "element.textContent = input",  # JavaScript
         ],
         "bypass_difficulty": "high",
-        "tags": ["encoding", "output_sanitization"]
+        "tags": ["encoding", "output_sanitization"],
     },
     "csp": {
         "effective_against": [
-            "html_content", "javascript_context", "css_context",
-            "svg_context", "template_injection", "websocket_xss"
+            "html_content",
+            "javascript_context",
+            "css_context",
+            "svg_context",
+            "template_injection",
+            "websocket_xss",
         ],
         "implementation": [
             "Content-Security-Policy: default-src 'self'; script-src 'nonce-{random}'; object-src 'none'"
         ],
         "bypass_difficulty": "very_high",
-        "tags": ["policy", "browser_enforcement"]
+        "tags": ["policy", "browser_enforcement"],
     },
     "javascript_encoding": {
         "effective_against": ["js_string", "javascript_context"],
         "implementation": [
             "JSON.stringify(input)",
             "json.dumps(input)",
-            "json_encode($input, JSON_HEX_TAG)"
+            "json_encode($input, JSON_HEX_TAG)",
         ],
         "bypass_difficulty": "high",
-        "tags": ["serialization", "json_security"]
+        "tags": ["serialization", "json_security"],
     },
     "url_validation": {
         "effective_against": ["url_context", "html_attribute"],
         "implementation": [
             "new URL(input, base)",  # JavaScript
             "urllib.parse.urlparse(input)",  # Python
-            "parse_url($input)"  # PHP
+            "parse_url($input)",  # PHP
         ],
         "bypass_difficulty": "medium",
-        "tags": ["url_parsing", "protocol_validation"]
+        "tags": ["url_parsing", "protocol_validation"],
     },
     "sanitization": {
-        "effective_against": [
-            "html_content", "svg_context", "markdown_context", "xml_content"
-        ],
+        "effective_against": ["html_content", "svg_context", "markdown_context", "xml_content"],
         "implementation": [
             "DOMPurify.sanitize(input)",  # JavaScript
             "bleach.clean(input)",  # Python
-            "HTMLPurifier"  # PHP
+            "HTMLPurifier",  # PHP
         ],
         "bypass_difficulty": "medium",
-        "tags": ["html_sanitization", "dom_cleaning"]
+        "tags": ["html_sanitization", "dom_cleaning"],
     },
     # New modern defenses
     "trusted_types": {
@@ -165,27 +241,27 @@ DEFENSE_TO_EFFECTIVENESS = {
             "trustedTypes.createPolicy('default', { createHTML: (s) => DOMPurify.sanitize(s) })"
         ],
         "bypass_difficulty": "very_high",
-        "tags": ["browser_api", "modern_security"]
+        "tags": ["browser_api", "modern_security"],
     },
     "csp_nonce": {
         "effective_against": ["html_content", "javascript_context"],
         "implementation": [
             "<script nonce='{random}'>...</script>",
-            "Content-Security-Policy: script-src 'nonce-{random}'"
+            "Content-Security-Policy: script-src 'nonce-{random}'",
         ],
         "bypass_difficulty": "very_high",
-        "tags": ["csp_enhancement", "inline_script_control"]
+        "tags": ["csp_enhancement", "inline_script_control"],
     },
     "waf_rules": {
         "effective_against": "all",
         "implementation": [
             "ModSecurity rules for XSS detection",
             "AWS WAF XSS protection",
-            "Cloudflare XSS detection"
+            "Cloudflare XSS detection",
         ],
         "bypass_difficulty": "high",
-        "tags": ["waf", "perimeter_security"]
-    }
+        "tags": ["waf", "perimeter_security"],
+    },
 }
 
 # Enhanced Context → Recommended defenses with modern contexts
@@ -193,64 +269,74 @@ CONTEXT_TO_DEFENSES = {
     "html_content": [
         {"defense": "html_encoding", "priority": 1, "required": True, "tags": ["primary"]},
         {"defense": "csp", "priority": 1, "required": True, "tags": ["policy"]},
-        {"defense": "sanitization", "priority": 2, "required": False, "tags": ["fallback"]}
+        {"defense": "sanitization", "priority": 2, "required": False, "tags": ["fallback"]},
     ],
     "html_attribute": [
         {"defense": "html_encoding", "priority": 1, "required": True, "tags": ["encoding"]},
         {"defense": "url_validation", "priority": 1, "required": True, "tags": ["validation"]},
-        {"defense": "csp", "priority": 2, "required": True, "tags": ["policy"]}
+        {"defense": "csp", "priority": 2, "required": True, "tags": ["policy"]},
     ],
     "javascript_context": [
         {"defense": "csp_nonce", "priority": 1, "required": True, "tags": ["modern", "inline"]},
         {"defense": "javascript_encoding", "priority": 1, "required": True, "tags": ["encoding"]},
-        {"defense": "csp", "priority": 1, "required": True, "tags": ["policy"]}
+        {"defense": "csp", "priority": 1, "required": True, "tags": ["policy"]},
     ],
     "js_string": [
         {"defense": "javascript_encoding", "priority": 1, "required": True, "tags": ["primary"]},
         {"defense": "json_serialization", "priority": 1, "required": True, "tags": ["json"]},
-        {"defense": "csp", "priority": 2, "required": True, "tags": ["policy"]}
+        {"defense": "csp", "priority": 2, "required": True, "tags": ["policy"]},
     ],
     "url_context": [
         {"defense": "url_validation", "priority": 1, "required": True, "tags": ["primary"]},
         {"defense": "protocol_whitelist", "priority": 1, "required": True, "tags": ["whitelist"]},
-        {"defense": "csp", "priority": 2, "required": True, "tags": ["policy"]}
+        {"defense": "csp", "priority": 2, "required": True, "tags": ["policy"]},
     ],
     # New modern contexts
     "websocket_xss": [
         {"defense": "input_validation", "priority": 1, "required": True, "tags": ["websocket"]},
         {"defense": "csp", "priority": 1, "required": True, "tags": ["policy"]},
-        {"defense": "message_filtering", "priority": 1, "required": True, "tags": ["real-time"]}
+        {"defense": "message_filtering", "priority": 1, "required": True, "tags": ["real-time"]},
     ],
     "service_worker_xss": [
         {"defense": "service_worker_validation", "priority": 1, "required": True, "tags": ["sw"]},
         {"defense": "csp", "priority": 1, "required": True, "tags": ["policy"]},
-        {"defense": "registration_control", "priority": 1, "required": True, "tags": ["registration"]}
+        {
+            "defense": "registration_control",
+            "priority": 1,
+            "required": True,
+            "tags": ["registration"],
+        },
     ],
     "webrtc_xss": [
         {"defense": "webrtc_validation", "priority": 1, "required": True, "tags": ["webrtc"]},
         {"defense": "media_control", "priority": 1, "required": True, "tags": ["media"]},
-        {"defense": "csp", "priority": 2, "required": True, "tags": ["policy"]}
+        {"defense": "csp", "priority": 2, "required": True, "tags": ["policy"]},
     ],
     "indexeddb_xss": [
         {"defense": "storage_validation", "priority": 1, "required": True, "tags": ["storage"]},
         {"defense": "data_sanitization", "priority": 1, "required": True, "tags": ["sanitization"]},
-        {"defense": "access_control", "priority": 2, "required": False, "tags": ["permissions"]}
+        {"defense": "access_control", "priority": 2, "required": False, "tags": ["permissions"]},
     ],
     "webgl_xss": [
         {"defense": "shader_validation", "priority": 1, "required": True, "tags": ["shader"]},
         {"defense": "webgl_sandbox", "priority": 1, "required": True, "tags": ["sandbox"]},
-        {"defense": "csp", "priority": 2, "required": True, "tags": ["policy"]}
+        {"defense": "csp", "priority": 2, "required": True, "tags": ["policy"]},
     ],
     "template_injection": [
         {"defense": "template_sandboxing", "priority": 1, "required": True, "tags": ["sandbox"]},
         {"defense": "aot_compilation", "priority": 1, "required": True, "tags": ["compilation"]},
-        {"defense": "csp", "priority": 1, "required": True, "tags": ["policy"]}
+        {"defense": "csp", "priority": 1, "required": True, "tags": ["policy"]},
     ],
     "dom_xss": [
-        {"defense": "trusted_types", "priority": 1, "required": True, "tags": ["modern", "browser"]},
+        {
+            "defense": "trusted_types",
+            "priority": 1,
+            "required": True,
+            "tags": ["modern", "browser"],
+        },
         {"defense": "dom_sanitization", "priority": 1, "required": True, "tags": ["dom"]},
-        {"defense": "csp", "priority": 2, "required": True, "tags": ["policy"]}
-    ]
+        {"defense": "csp", "priority": 2, "required": True, "tags": ["policy"]},
+    ],
 }
 
 
@@ -298,7 +384,7 @@ def find_contexts_for_payload(payload: str) -> Dict:
             "severity": "unknown",
             "defenses": [],
             "confidence": 0.0,
-            "analysis_method": "none"
+            "analysis_method": "none",
         }
 
     # First, check payload database for exact or similar matches
@@ -318,15 +404,17 @@ def find_contexts_for_payload(payload: str) -> Dict:
             "analysis_method": "payload_database",
             "matched_patterns": 1,
             "matched_payload_id": payload_entry.payload[:50] + "...",
-            "pattern_details": [{
-                "pattern": payload_entry.payload,
-                "contexts": payload_entry.contexts,
-                "confidence": relevance,
-                "tags": payload_entry.tags
-            }],
+            "pattern_details": [
+                {
+                    "pattern": payload_entry.payload,
+                    "contexts": payload_entry.contexts,
+                    "confidence": relevance,
+                    "tags": payload_entry.tags,
+                }
+            ],
             "tags": payload_entry.tags,
             "waf_evasion": payload_entry.waf_evasion,
-            "browser_support": payload_entry.browser_support
+            "browser_support": payload_entry.browser_support,
         }
 
     # Fallback to pattern matching
@@ -336,18 +424,14 @@ def find_contexts_for_payload(payload: str) -> Dict:
         # Final fallback to legacy exact matching
         legacy_result = PAYLOAD_TO_CONTEXT.get(payload.strip(), None)
         if legacy_result:
-            return {
-                **legacy_result,
-                "confidence": 0.9,
-                "analysis_method": "legacy_exact"
-            }
+            return {**legacy_result, "confidence": 0.9, "analysis_method": "legacy_exact"}
         else:
             return {
                 "contexts": ["default"],
                 "severity": "medium",
                 "defenses": ["input_validation", "sanitization"],
                 "confidence": 0.3,
-                "analysis_method": "fallback"
+                "analysis_method": "fallback",
             }
 
     # Extract best matches from patterns
@@ -378,14 +462,9 @@ def find_contexts_for_payload(payload: str) -> Dict:
         "analysis_method": "pattern_matching",
         "matched_patterns": len(pattern_matches),
         "pattern_details": [
-            {
-                "pattern": p.pattern,
-                "contexts": p.contexts,
-                "confidence": conf,
-                "tags": p.tags
-            }
+            {"pattern": p.pattern, "contexts": p.contexts, "confidence": conf, "tags": p.tags}
             for p, conf in best_patterns
-        ]
+        ],
     }
 
 
@@ -397,12 +476,14 @@ def get_defenses_for_context(context: str) -> List[Dict]:
     enhanced_defenses = []
     for defense in defenses:
         defense_info = DEFENSE_TO_EFFECTIVENESS.get(defense["defense"], {})
-        enhanced_defenses.append({
-            **defense,
-            "bypass_difficulty": defense_info.get("bypass_difficulty", "unknown"),
-            "implementation": defense_info.get("implementation", []),
-            "tags": defense_info.get("tags", [])
-        })
+        enhanced_defenses.append(
+            {
+                **defense,
+                "bypass_difficulty": defense_info.get("bypass_difficulty", "unknown"),
+                "implementation": defense_info.get("implementation", []),
+                "tags": defense_info.get("tags", []),
+            }
+        )
 
     return enhanced_defenses
 
@@ -423,7 +504,7 @@ def find_payload_bypasses(payload: str) -> List[str]:
         "csp": ["nonce_reuse", "hash_collision", "unsafe_eval"],
         "sanitization": ["dom_clobbering", "mutation_xss", "parser_differential"],
         "url_validation": ["protocol_relative", "encoding_bypass", "null_byte"],
-        "waf_rules": ["fragmented_payload", "case_variation", "comment_obfuscation"]
+        "waf_rules": ["fragmented_payload", "case_variation", "comment_obfuscation"],
     }
 
     suggested_bypasses = []
@@ -450,17 +531,12 @@ def predict_contexts_ml_ready(payload: str) -> Dict:
         "has_comments": any(c in payload for c in ["<!--", "/*", "//"]),
         "context_switches": payload.count('"') + payload.count("'") + payload.count("`"),
         "special_chars": sum(1 for c in payload if c in "<>\"'&"),
-        "uppercase_ratio": sum(1 for c in payload if c.isupper()) / len(payload) if payload else 0
+        "uppercase_ratio": sum(1 for c in payload if c.isupper()) / len(payload) if payload else 0,
     }
 
     analysis = find_contexts_for_payload(payload)
 
-    return {
-        **analysis,
-        "features": features,
-        "ml_ready": True,
-        "timestamp": "2025-10-25T12:00:00Z"
-    }
+    return {**analysis, "features": features, "ml_ready": True, "timestamp": "2025-10-25T12:00:00Z"}
 
 
 def reverse_lookup(query_type: str, query: str) -> Dict:
@@ -470,22 +546,22 @@ def reverse_lookup(query_type: str, query: str) -> Dict:
     query_type: 'payload', 'context', 'defense', 'pattern'
     query: the actual query string
     """
-    if query_type == 'payload':
+    if query_type == "payload":
         return find_contexts_for_payload(query)
-    elif query_type == 'context':
+    elif query_type == "context":
         return {
             "defenses": get_defenses_for_context(query),
             "context": query,
-            "defense_count": len(get_defenses_for_context(query))
+            "defense_count": len(get_defenses_for_context(query)),
         }
-    elif query_type == 'defense':
+    elif query_type == "defense":
         return get_defense_info(query)
-    elif query_type == 'pattern':
+    elif query_type == "pattern":
         # Find patterns matching the query
         matching_patterns = [
-            p for p in CONTEXT_PATTERNS
-            if query.lower() in p.pattern.lower() or
-               query.lower() in ' '.join(p.tags).lower()
+            p
+            for p in CONTEXT_PATTERNS
+            if query.lower() in p.pattern.lower() or query.lower() in " ".join(p.tags).lower()
         ]
         return {
             "patterns": [
@@ -494,11 +570,11 @@ def reverse_lookup(query_type: str, query: str) -> Dict:
                     "contexts": p.contexts,
                     "severity": p.severity,
                     "confidence": p.confidence,
-                    "tags": p.tags
+                    "tags": p.tags,
                 }
                 for p in matching_patterns
             ],
-            "count": len(matching_patterns)
+            "count": len(matching_patterns),
         }
     else:
         return {}
@@ -509,33 +585,33 @@ PAYLOAD_TO_CONTEXT = {
     "<script>alert(1)</script>": {
         "contexts": ["html_content", "html_comment", "svg_context"],
         "severity": "critical",
-        "defenses": ["html_encoding", "csp", "sanitization"]
+        "defenses": ["html_encoding", "csp", "sanitization"],
     },
     "<img src=x onerror=alert(1)>": {
         "contexts": ["html_content", "markdown_context", "xml_content"],
         "severity": "high",
-        "defenses": ["html_encoding", "attribute_sanitization", "csp"]
+        "defenses": ["html_encoding", "attribute_sanitization", "csp"],
     },
     "javascript:alert(1)": {
         "contexts": ["url_context", "html_attribute"],
         "severity": "high",
-        "defenses": ["url_validation", "protocol_whitelist"]
+        "defenses": ["url_validation", "protocol_whitelist"],
     },
     "{{constructor.constructor('alert(1)')()}}": {
         "contexts": ["template_injection"],
         "severity": "critical",
-        "defenses": ["template_sandboxing", "aot_compilation", "csp"]
+        "defenses": ["template_sandboxing", "aot_compilation", "csp"],
     },
     "'; alert(1); var x='": {
         "contexts": ["js_string"],
         "severity": "critical",
-        "defenses": ["javascript_encoding", "json_serialization", "csp"]
+        "defenses": ["javascript_encoding", "json_serialization", "csp"],
     },
     "<svg onload=alert(1)>": {
         "contexts": ["svg_context", "html_content"],
         "severity": "high",
-        "defenses": ["svg_sanitization", "csp", "content_type_headers"]
-    }
+        "defenses": ["svg_sanitization", "csp", "content_type_headers"],
+    },
 }
 
 # Statistics and metadata
@@ -546,12 +622,28 @@ for pattern in CONTEXT_PATTERNS:
     SUPPORTED_CONTEXTS.update(pattern.contexts)
 
 # Add legacy contexts to supported set
-SUPPORTED_CONTEXTS.update(['html_content', 'html_attribute', 'html_comment',
-                          'javascript_context', 'js_string', 'js_object',
-                          'css_context', 'svg_context', 'markdown_context',
-                          'json_value', 'xml_content', 'url_context',
-                          'dom_xss', 'template_injection', 'postmessage_xss',
-                          'wasm_context', 'default'])
+SUPPORTED_CONTEXTS.update(
+    [
+        "html_content",
+        "html_attribute",
+        "html_comment",
+        "javascript_context",
+        "js_string",
+        "js_object",
+        "css_context",
+        "svg_context",
+        "markdown_context",
+        "json_value",
+        "xml_content",
+        "url_context",
+        "dom_xss",
+        "template_injection",
+        "postmessage_xss",
+        "wasm_context",
+        "default",
+    ]
+)
+
 
 def get_reverse_map_info() -> Dict:
     """Get reverse mapping system information"""
@@ -562,35 +654,31 @@ def get_reverse_map_info() -> Dict:
         "analysis_methods": ["pattern_matching", "legacy_exact", "fallback"],
         "ml_ready": True,
         "confidence_scoring": True,
-        "bypass_analysis": True
+        "bypass_analysis": True,
     }
+
 
 # Export all functions and variables
 __all__ = [
     # Core functions
-    'find_contexts_for_payload',
-    'get_defenses_for_context',
-    'get_defense_info',
-    'find_payload_bypasses',
-    'reverse_lookup',
-    'predict_contexts_ml_ready',
-    'analyze_payload_with_patterns',
-
+    "find_contexts_for_payload",
+    "get_defenses_for_context",
+    "get_defense_info",
+    "find_payload_bypasses",
+    "reverse_lookup",
+    "predict_contexts_ml_ready",
+    "analyze_payload_with_patterns",
     # Information functions
-    'get_reverse_map_info',
-
+    "get_reverse_map_info",
     # Data structures (for backward compatibility)
-    'PAYLOAD_TO_CONTEXT',
-    'DEFENSE_TO_EFFECTIVENESS',
-    'CONTEXT_TO_DEFENSES',
-    'CONTEXT_PATTERNS',
-
+    "PAYLOAD_TO_CONTEXT",
+    "DEFENSE_TO_EFFECTIVENESS",
+    "CONTEXT_TO_DEFENSES",
+    "CONTEXT_PATTERNS",
     # Classes
-    'ContextPattern',
-
+    "ContextPattern",
     # Constants
-    'REVERSE_MAP_VERSION',
-    'TOTAL_PATTERNS',
-    'SUPPORTED_CONTEXTS'
+    "REVERSE_MAP_VERSION",
+    "TOTAL_PATTERNS",
+    "SUPPORTED_CONTEXTS",
 ]
-

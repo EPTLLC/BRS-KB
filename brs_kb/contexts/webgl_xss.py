@@ -13,7 +13,6 @@ Knowledge Base: WebGL XSS Context - Comprehensive Guide
 
 DETAILS = {
     "title": "Cross-Site Scripting (XSS) in WebGL Context",
-
     # Metadata for SIEM/Triage Integration
     "severity": "medium",
     "cvss_score": 6.1,
@@ -22,7 +21,6 @@ DETAILS = {
     "cwe": ["CWE-79"],
     "owasp": ["A03:2021"],
     "tags": ["xss", "webgl", "shader-injection", "gpu", "3d-graphics"],
-
     "description": """
 WebGL XSS occurs when user input is reflected into WebGL shaders, textures, or rendering contexts
 without proper sanitization. WebGL (Web Graphics Library) is a JavaScript API for rendering 3D
@@ -54,7 +52,6 @@ WebGL XSS requires specific conditions and GPU processing, making it less common
 However, successful exploitation can lead to GPU-based code execution and information disclosure
 through rendering channels.
 """,
-
     "attack_vector": """
 WEBGL XSS ATTACK VECTORS:
 
@@ -300,7 +297,6 @@ WEBGL XSS DETECTION:
     - Shader inspection tools
     - GPU memory analyzers
 """,
-
     "remediation": """
 WEBGL XSS DEFENSE STRATEGY:
 
@@ -607,5 +603,5 @@ OWASP REFERENCES:
 - WebGL Security Best Practices
 - GPU Security Considerations
 - 3D Graphics Security Guide
-"""
+""",
 }

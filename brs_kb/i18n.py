@@ -59,7 +59,7 @@ class I18nManager:
             for lang in self.supported_languages:
                 file_path = os.path.join(self.locales_dir, f"{lang}.json")
                 try:
-                    with open(file_path, 'r', encoding='utf-8') as f:
+                    with open(file_path, "r", encoding="utf-8") as f:
                         translations[lang] = json.load(f)
                 except FileNotFoundError:
                     print(f"Warning: Translation file not found: {file_path}")
@@ -82,7 +82,7 @@ class I18nManager:
                     "error": "Error",
                     "success": "Success",
                     "warning": "Warning",
-                    "info": "Information"
+                    "info": "Information",
                 },
                 "navigation": {
                     "home": "Home",
@@ -90,7 +90,7 @@ class I18nManager:
                     "payloads": "Payloads",
                     "playground": "Playground",
                     "dashboard": "Dashboard",
-                    "api_docs": "API Docs"
+                    "api_docs": "API Docs",
                 },
                 "contexts": {
                     "title": "XSS Vulnerability Contexts",
@@ -101,7 +101,7 @@ class I18nManager:
                     "attack_vector": "Attack Vector",
                     "remediation": "Remediation",
                     "examples": "Examples",
-                    "payload_count": "Payload Count"
+                    "payload_count": "Payload Count",
                 },
                 "common": {
                     "loading": "Loading...",
@@ -111,8 +111,8 @@ class I18nManager:
                     "info": "Information",
                     "total": "Total",
                     "yes": "Yes",
-                    "no": "No"
-                }
+                    "no": "No",
+                },
             },
             "ru": {
                 "app": {
@@ -123,7 +123,7 @@ class I18nManager:
                     "error": "Ошибка",
                     "success": "Успех",
                     "warning": "Предупреждение",
-                    "info": "Информация"
+                    "info": "Информация",
                 },
                 "navigation": {
                     "home": "Главная",
@@ -131,7 +131,7 @@ class I18nManager:
                     "payloads": "Payloads",
                     "playground": "Площадка",
                     "dashboard": "Панель",
-                    "api_docs": "API Документация"
+                    "api_docs": "API Документация",
                 },
                 "contexts": {
                     "title": "Контексты XSS Уязвимостей",
@@ -142,7 +142,7 @@ class I18nManager:
                     "attack_vector": "Вектор Атаки",
                     "remediation": "Исправление",
                     "examples": "Примеры",
-                    "payload_count": "Количество Payloads"
+                    "payload_count": "Количество Payloads",
                 },
                 "common": {
                     "loading": "Загрузка...",
@@ -152,8 +152,8 @@ class I18nManager:
                     "info": "Информация",
                     "total": "Всего",
                     "yes": "Да",
-                    "no": "Нет"
-                }
+                    "no": "Нет",
+                },
             },
             "zh": {
                 "app": {
@@ -164,7 +164,7 @@ class I18nManager:
                     "error": "错误",
                     "success": "成功",
                     "warning": "警告",
-                    "info": "信息"
+                    "info": "信息",
                 },
                 "navigation": {
                     "home": "主页",
@@ -172,7 +172,7 @@ class I18nManager:
                     "payloads": "Payloads",
                     "playground": "测试场",
                     "dashboard": "仪表板",
-                    "api_docs": "API 文档"
+                    "api_docs": "API 文档",
                 },
                 "contexts": {
                     "title": "XSS 漏洞上下文",
@@ -183,7 +183,7 @@ class I18nManager:
                     "attack_vector": "攻击向量",
                     "remediation": "修复",
                     "examples": "示例",
-                    "payload_count": "Payload 数量"
+                    "payload_count": "Payload 数量",
                 },
                 "common": {
                     "loading": "加载中...",
@@ -193,8 +193,8 @@ class I18nManager:
                     "info": "信息",
                     "total": "总计",
                     "yes": "是",
-                    "no": "否"
-                }
+                    "no": "否",
+                },
             },
             "es": {
                 "app": {
@@ -205,7 +205,7 @@ class I18nManager:
                     "error": "Error",
                     "success": "Éxito",
                     "warning": "Advertencia",
-                    "info": "Información"
+                    "info": "Información",
                 },
                 "navigation": {
                     "home": "Inicio",
@@ -213,7 +213,7 @@ class I18nManager:
                     "payloads": "Payloads",
                     "playground": "Terreno de Pruebas",
                     "dashboard": "Panel",
-                    "api_docs": "Documentación API"
+                    "api_docs": "Documentación API",
                 },
                 "contexts": {
                     "title": "Contextos de Vulnerabilidades XSS",
@@ -224,7 +224,7 @@ class I18nManager:
                     "attack_vector": "Vector de Ataque",
                     "remediation": "Remediación",
                     "examples": "Ejemplos",
-                    "payload_count": "Número de Payloads"
+                    "payload_count": "Número de Payloads",
                 },
                 "common": {
                     "loading": "Cargando...",
@@ -234,9 +234,9 @@ class I18nManager:
                     "info": "Información",
                     "total": "Total",
                     "yes": "Sí",
-                    "no": "No"
-                }
-            }
+                    "no": "No",
+                },
+            },
         }
 
     def set_language(self, language: str) -> bool:
@@ -266,7 +266,7 @@ class I18nManager:
             Translated and interpolated string
         """
         translation = self.translations.get(self.current_language, {})
-        keys = key.split('.')
+        keys = key.split(".")
 
         # Navigate through nested structure
         value = translation
@@ -371,14 +371,13 @@ def get_navigation() -> Dict[str, str]:
 
 # Export functions
 __all__ = [
-    'I18nManager',
-    'set_language',
-    'get_current_language',
-    'get_supported_languages',
-    't',
-    'get_context_details',
-    'get_app_info',
-    'get_common_strings',
-    'get_navigation'
+    "I18nManager",
+    "set_language",
+    "get_current_language",
+    "get_supported_languages",
+    "t",
+    "get_context_details",
+    "get_app_info",
+    "get_common_strings",
+    "get_navigation",
 ]
-

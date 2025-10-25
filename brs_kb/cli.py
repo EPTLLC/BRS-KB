@@ -28,7 +28,7 @@ from brs_kb import (
     analyze_payload_context,
     get_database_info,
     generate_payload_report,
-    validate_payload_database
+    validate_payload_database,
 )
 from brs_kb.reverse_map import find_contexts_for_payload
 from brs_kb.i18n import set_language, get_current_language, get_supported_languages, t
@@ -56,51 +56,59 @@ Examples:
   brs-kb info                             # Show system information
   brs-kb language ru                      # Set language to Russian
   brs-kb language --list                  # List supported languages
-            """
+            """,
         )
 
-        subparsers = parser.add_subparsers(dest='command', help='Available commands')
+        subparsers = parser.add_subparsers(dest="command", help="Available commands")
 
         # list-contexts command
-        subparsers.add_parser('list-contexts', help='List all available XSS contexts')
+        subparsers.add_parser("list-contexts", help="List all available XSS contexts")
 
         # get-context command
-        get_context_parser = subparsers.add_parser('get-context', help='Get vulnerability details for a context')
-        get_context_parser.add_argument('context', help='Context name (e.g., html_content)')
+        get_context_parser = subparsers.add_parser(
+            "get-context", help="Get vulnerability details for a context"
+        )
+        get_context_parser.add_argument("context", help="Context name (e.g., html_content)")
 
         # analyze-payload command
-        analyze_parser = subparsers.add_parser('analyze-payload', help='Analyze XSS payload')
-        analyze_parser.add_argument('payload', help='Payload to analyze')
+        analyze_parser = subparsers.add_parser("analyze-payload", help="Analyze XSS payload")
+        analyze_parser.add_argument("payload", help="Payload to analyze")
 
         # search-payloads command
-        search_parser = subparsers.add_parser('search-payloads', help='Search payloads in database')
-        search_parser.add_argument('query', help='Search query')
-        search_parser.add_argument('--limit', type=int, default=10, help='Maximum results (default: 10)')
+        search_parser = subparsers.add_parser("search-payloads", help="Search payloads in database")
+        search_parser.add_argument("query", help="Search query")
+        search_parser.add_argument(
+            "--limit", type=int, default=10, help="Maximum results (default: 10)"
+        )
 
         # test-payload command
-        test_parser = subparsers.add_parser('test-payload', help='Test payload effectiveness')
-        test_parser.add_argument('payload', help='Payload to test')
-        test_parser.add_argument('context', help='Context to test in')
+        test_parser = subparsers.add_parser("test-payload", help="Test payload effectiveness")
+        test_parser.add_argument("payload", help="Payload to test")
+        test_parser.add_argument("context", help="Context to test in")
 
         # generate-report command
-        subparsers.add_parser('generate-report', help='Generate comprehensive system report')
+        subparsers.add_parser("generate-report", help="Generate comprehensive system report")
 
         # info command
-        subparsers.add_parser('info', help='Show system information')
+        subparsers.add_parser("info", help="Show system information")
 
         # validate command
-        subparsers.add_parser('validate', help='Validate payload database integrity')
+        subparsers.add_parser("validate", help="Validate payload database integrity")
 
         # export command
-        export_parser = subparsers.add_parser('export', help='Export data in various formats')
-        export_parser.add_argument('type', choices=['payloads', 'contexts', 'report'], help='Data type to export')
-        export_parser.add_argument('--format', '-f', choices=['json', 'text'], default='json', help='Export format')
-        export_parser.add_argument('--output', '-o', help='Output file (default: stdout)')
+        export_parser = subparsers.add_parser("export", help="Export data in various formats")
+        export_parser.add_argument(
+            "type", choices=["payloads", "contexts", "report"], help="Data type to export"
+        )
+        export_parser.add_argument(
+            "--format", "-f", choices=["json", "text"], default="json", help="Export format"
+        )
+        export_parser.add_argument("--output", "-o", help="Output file (default: stdout)")
 
         # language command
-        lang_parser = subparsers.add_parser('language', help='Set or show current language')
-        lang_parser.add_argument('lang', nargs='?', help='Language code (en, ru, zh, es)')
-        lang_parser.add_argument('--list', action='store_true', help='List supported languages')
+        lang_parser = subparsers.add_parser("language", help="Set or show current language")
+        lang_parser.add_argument("lang", nargs="?", help="Language code (en, ru, zh, es)")
+        lang_parser.add_argument("--list", action="store_true", help="List supported languages")
 
         return parser
 
@@ -114,25 +122,25 @@ Examples:
                 return 1
 
             # Execute command
-            if parsed_args.command == 'list-contexts':
+            if parsed_args.command == "list-contexts":
                 return self._list_contexts()
-            elif parsed_args.command == 'get-context':
+            elif parsed_args.command == "get-context":
                 return self._get_context(parsed_args.context)
-            elif parsed_args.command == 'analyze-payload':
+            elif parsed_args.command == "analyze-payload":
                 return self._analyze_payload(parsed_args.payload)
-            elif parsed_args.command == 'search-payloads':
+            elif parsed_args.command == "search-payloads":
                 return self._search_payloads(parsed_args.query, parsed_args.limit)
-            elif parsed_args.command == 'test-payload':
+            elif parsed_args.command == "test-payload":
                 return self._test_payload(parsed_args.payload, parsed_args.context)
-            elif parsed_args.command == 'generate-report':
+            elif parsed_args.command == "generate-report":
                 return self._generate_report()
-            elif parsed_args.command == 'info':
+            elif parsed_args.command == "info":
                 return self._show_info()
-            elif parsed_args.command == 'validate':
+            elif parsed_args.command == "validate":
                 return self._validate_database()
-            elif parsed_args.command == 'export':
+            elif parsed_args.command == "export":
                 return self._export_data(parsed_args.type, parsed_args.format, parsed_args.output)
-            elif parsed_args.command == 'language':
+            elif parsed_args.command == "language":
                 return self._handle_language(parsed_args.lang, parsed_args.list)
 
             return 0
@@ -146,7 +154,7 @@ Examples:
 
     def _list_contexts(self) -> int:
         """List all available contexts with localization"""
-        print(t('contexts.title'))
+        print(t("contexts.title"))
         print("=" * 50)
 
         contexts = list_contexts()
@@ -156,30 +164,46 @@ Examples:
         print()
 
         # Group contexts by type
-        modern_contexts = [c for c in contexts if any(x in c for x in ['websocket', 'service', 'webrtc', 'graphql', 'shadow', 'custom', 'http2', 'iframe'])]
-        legacy_contexts = [c for c in contexts if c not in modern_contexts and c != 'default']
+        modern_contexts = [
+            c
+            for c in contexts
+            if any(
+                x in c
+                for x in [
+                    "websocket",
+                    "service",
+                    "webrtc",
+                    "graphql",
+                    "shadow",
+                    "custom",
+                    "http2",
+                    "iframe",
+                ]
+            )
+        ]
+        legacy_contexts = [c for c in contexts if c not in modern_contexts and c != "default"]
 
         if modern_contexts:
-            print("🔥 Modern Web Technologies:")
+            print("Modern Modern Web Technologies:")
             for context in sorted(modern_contexts):
                 details = get_vulnerability_details(context)
-                severity = details.get('severity', 'unknown')
-                cvss = details.get('cvss_score', 0.0)
-                print(f"   📍 {context} ({severity}, CVSS: {cvss})")
+                severity = details.get("severity", "unknown")
+                cvss = details.get("cvss_score", 0.0)
+                print(f"   - {context} ({severity}, CVSS: {cvss})")
             print()
 
         if legacy_contexts:
             print("📜 Legacy/Classic Contexts:")
             for context in sorted(legacy_contexts):
                 details = get_vulnerability_details(context)
-                severity = details.get('severity', 'unknown')
-                cvss = details.get('cvss_score', 0.0)
-                print(f"   📍 {context} ({severity}, CVSS: {cvss})")
+                severity = details.get("severity", "unknown")
+                cvss = details.get("cvss_score", 0.0)
+                print(f"   - {context} ({severity}, CVSS: {cvss})")
             print()
 
-        if 'default' in contexts:
+        if "default" in contexts:
             print("Fallback Context:")
-            print("   📍 default (generic XSS information)")
+            print("   - default (generic XSS information)")
             print()
 
         return 0
@@ -199,18 +223,18 @@ Examples:
             print(f"Reliability: {details.get('reliability', 'unknown')}")
             print()
 
-            if 'cwe' in details and details['cwe']:
+            if "cwe" in details and details["cwe"]:
                 print(f"CWE: {', '.join(details['cwe'])}")
-            if 'owasp' in details and details['owasp']:
+            if "owasp" in details and details["owasp"]:
                 print(f"OWASP: {', '.join(details['owasp'])}")
-            if 'tags' in details and details['tags']:
-                print(f"🏷️  Tags: {', '.join(details['tags'])}")
+            if "tags" in details and details["tags"]:
+                print(f"Tags:  Tags: {', '.join(details['tags'])}")
             print()
 
             print("📝 Description:")
             print("-" * 30)
             # Truncate long descriptions
-            description = details['description'].strip()
+            description = details["description"].strip()
             if len(description) > 500:
                 print(description[:500] + "...")
                 print("   [truncated - use 'brs-kb get-context --full' for complete description]")
@@ -250,28 +274,28 @@ Examples:
         print()
 
         print("Effective Contexts:")
-        if analysis['contexts']:
-            for context in analysis['contexts']:
+        if analysis["contexts"]:
+            for context in analysis["contexts"]:
                 details = get_vulnerability_details(context)
-                print(f"   📍 {context} ({details['severity']}, CVSS: {details['cvss_score']})")
+                print(f"   - {context} ({details['severity']}, CVSS: {details['cvss_score']})")
         else:
             print("   No contexts found")
         print()
 
-        if 'defenses' in analysis and analysis['defenses']:
-            print("🛡️ Required Defenses:")
-            for defense in analysis['defenses']:
-                print(f"   🛡️ {defense}")
+        if "defenses" in analysis and analysis["defenses"]:
+            print("Defense: Required Defenses:")
+            for defense in analysis["defenses"]:
+                print(f"   Defense: {defense}")
             print()
 
-        if 'waf_evasion' in analysis:
-            print(f"🚨 WAF Evasion: {'Yes' if analysis['waf_evasion'] else 'No'}")
+        if "waf_evasion" in analysis:
+            print(f"WAF: WAF Evasion: {'Yes' if analysis['waf_evasion'] else 'No'}")
 
-        if 'browser_support' in analysis:
+        if "browser_support" in analysis:
             print(f"🌐 Browser Support: {', '.join(analysis['browser_support'])}")
 
-        if 'tags' in analysis:
-            print(f"🏷️  Tags: {', '.join(analysis['tags'])}")
+        if "tags" in analysis:
+            print(f"Tags:  Tags: {', '.join(analysis['tags'])}")
 
         return 0
 
@@ -306,7 +330,7 @@ Examples:
     def _test_payload(self, payload: str, context: str) -> int:
         """Test payload in specific context"""
         print(f"🧪 Testing Payload: {payload}")
-        print(f"🎯 Context: {context}")
+        print(f"Target: Context: {context}")
         print("=" * 50)
 
         try:
@@ -317,21 +341,21 @@ Examples:
             print()
 
             print("🔍 Browser Parsing Results:")
-            parsing = test_result['browser_parsing']
+            parsing = test_result["browser_parsing"]
             print(f"   Script Execution: {'✅' if parsing['script_execution'] else '❌'}")
             print(f"   HTML Injection: {'✅' if parsing['html_injection'] else '❌'}")
             print(f"   Event Execution: {'✅' if parsing['event_execution'] else '❌'}")
             print(f"   CSS Injection: {'✅' if parsing['css_injection'] else '❌'}")
             print()
 
-            if test_result['waf_detected']:
-                print(f"🚨 WAF Detection: {', '.join(test_result['waf_detected'])}")
+            if test_result["waf_detected"]:
+                print(f"WAF: WAF Detection: {', '.join(test_result['waf_detected'])}")
             else:
-                print("🚨 WAF Detection: None")
+                print("WAF: WAF Detection: None")
             print()
 
             print("💡 Security Recommendations:")
-            for rec in test_result['recommendations']:
+            for rec in test_result["recommendations"]:
                 print(f"   • {rec}")
 
             return 0
@@ -376,7 +400,7 @@ Examples:
         print(f"   Unique Tags: {len(db_info['tags'])}")
         print()
 
-        print("🎯 Available Commands:")
+        print("Target: Available Commands:")
         print("   list-contexts    - Show all XSS contexts")
         print("   get-context      - Get context details")
         print("   analyze-payload  - Analyze XSS payload")
@@ -406,9 +430,9 @@ Examples:
         print(f"   Unique Tags: {len(validation['tags_found'])}")
         print()
 
-        if validation['errors']:
+        if validation["errors"]:
             print("❌ Validation Errors:")
-            for error in validation['errors']:
+            for error in validation["errors"]:
                 print(f"   • {error}")
             return 1
         else:
@@ -421,25 +445,27 @@ Examples:
         print("=" * 50)
 
         try:
-            if data_type == 'payloads':
+            if data_type == "payloads":
                 from brs_kb import get_all_payloads
+
                 data = get_all_payloads()
-            elif data_type == 'contexts':
+            elif data_type == "contexts":
                 from brs_kb import get_all_contexts
+
                 data = get_all_contexts()
-            elif data_type == 'report':
+            elif data_type == "report":
                 data = generate_payload_report()
             else:
                 print(f"❌ Unknown data type: {data_type}")
                 return 1
 
-            if format == 'json':
+            if format == "json":
                 output = json.dumps(data, indent=2, ensure_ascii=False)
             else:
                 output = str(data)
 
             if output_file:
-                with open(output_file, 'w', encoding='utf-8') as f:
+                with open(output_file, "w", encoding="utf-8") as f:
                     f.write(output)
                 print(f"✅ Exported to: {output_file}")
             else:

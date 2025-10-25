@@ -13,7 +13,6 @@ Knowledge Base: JavaScript Context - Comprehensive Guide
 
 DETAILS = {
     "title": "Cross-Site Scripting (XSS) in JavaScript Context",
-
     # Metadata for SIEM/Triage Integration
     "severity": "critical",
     "cvss_score": 9.0,
@@ -22,7 +21,6 @@ DETAILS = {
     "cwe": ["CWE-79"],
     "owasp": ["A03:2021"],
     "tags": ["xss", "javascript", "code-injection", "critical", "direct-execution"],
-
     "description": """
 User input is placed directly into a JavaScript block, outside of a string literal. This is one of the 
 most CRITICAL XSS contexts because it allows direct code injection without needing to break out of strings 
@@ -52,7 +50,6 @@ SEVERITY: CRITICAL
 Direct JavaScript injection is the most dangerous XSS vector - no encoding bypasses needed.
 Immediate arbitrary code execution with no user interaction required.
 """,
-
     "attack_vector": """
 DIRECT CODE INJECTION:
 
@@ -405,7 +402,6 @@ setInterval(() => {
 var x = null;
 </script>
 """,
-
     "remediation": """
 DEFENSE-IN-DEPTH STRATEGY:
 
@@ -641,5 +637,5 @@ OWASP REFERENCES:
 - Content Security Policy Level 3
 - Trusted Types API Specification
 - OWASP Testing Guide: Testing for JavaScript Execution
-"""
+""",
 }

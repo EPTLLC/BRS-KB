@@ -13,7 +13,6 @@ Knowledge Base: WebRTC XSS Context - Comprehensive Guide
 
 DETAILS = {
     "title": "Cross-Site Scripting (XSS) in WebRTC Context",
-
     # Metadata for SIEM/Triage Integration
     "severity": "high",
     "cvss_score": 7.6,
@@ -22,7 +21,6 @@ DETAILS = {
     "cwe": ["CWE-79"],
     "owasp": ["A03:2021"],
     "tags": ["xss", "webrtc", "p2p", "media-injection", "real-time"],
-
     "description": """
 WebRTC XSS occurs when user input is reflected into WebRTC data channels, media streams, or
 signaling messages without proper sanitization. WebRTC (Web Real-Time Communication) enables
@@ -54,7 +52,6 @@ WebRTC XSS allows real-time code execution across multiple participants simultan
 The peer-to-peer nature makes it difficult to detect and prevent, and attacks can spread
 rapidly through video calls and conferences.
 """,
-
     "attack_vector": """
 WEBRTC XSS ATTACK VECTORS:
 
@@ -289,7 +286,6 @@ WEBRTC XSS DETECTION:
     - Message content analysis
     - Connection pattern monitoring
 """,
-
     "remediation": """
 WEBRTC XSS DEFENSE STRATEGY:
 
@@ -561,5 +557,5 @@ OWASP REFERENCES:
 - OWASP Testing Guide: Testing WebRTC
 - WebRTC Security Considerations
 - RFC 8825: WebRTC Security
-"""
+""",
 }

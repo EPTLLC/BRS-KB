@@ -13,7 +13,6 @@ Knowledge Base: iframe Sandbox Bypass XSS Context - Comprehensive Guide
 
 DETAILS = {
     "title": "Cross-Site Scripting (XSS) via iframe Sandbox Bypass",
-
     # Metadata for SIEM/Triage Integration
     "severity": "medium",
     "cvss_score": 6.3,
@@ -22,7 +21,6 @@ DETAILS = {
     "cwe": ["CWE-79"],
     "owasp": ["A03:2021"],
     "tags": ["xss", "iframe", "sandbox-bypass", "isolation-bypass", "modern-web"],
-
     "description": """
 iframe Sandbox Bypass XSS occurs when iframe sandbox restrictions are bypassed or when sandbox
 policies are insufficiently configured, allowing XSS attacks through embedded content. The iframe
@@ -52,7 +50,6 @@ iframe Sandbox Bypass XSS requires specific conditions and user interaction. How
 bypasses can lead to full site compromise and the sandbox nature makes detection challenging.
 Modern browsers have improved sandbox security, but legacy support and misconfigurations remain risks.
 """,
-
     "attack_vector": """
 IFRAME SANDBOX BYPASS XSS ATTACK VECTORS:
 
@@ -267,7 +264,6 @@ IFRAME SANDBOX BYPASS DETECTION:
     - Content validation
     - Isolation breach detection
 """,
-
     "remediation": """
 IFRAME SANDBOX BYPASS XSS DEFENSE STRATEGY:
 
@@ -587,5 +583,5 @@ OWASP REFERENCES:
 - OWASP Sandbox Bypass Techniques
 - HTML5 iframe Security
 - Content Security Policy Guide
-"""
+""",
 }

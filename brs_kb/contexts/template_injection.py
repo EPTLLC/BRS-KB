@@ -13,7 +13,6 @@ Knowledge Base: Template Injection (Client-Side)
 
 DETAILS = {
     "title": "Client-Side Template Injection Leading to XSS",
-
     # Metadata for SIEM/Triage Integration
     "severity": "critical",
     "cvss_score": 8.6,
@@ -22,7 +21,6 @@ DETAILS = {
     "cwe": ["CWE-79", "CWE-94"],
     "owasp": ["A03:2021"],
     "tags": ["xss", "template", "injection", "sandbox-escape", "modern-web"],
-
     "description": """
 Client-Side Template Injection (CSTI) occurs when user input is embedded into client-side templates 
 and evaluated as template code rather than text. This allows attackers to break out of the template 
@@ -34,7 +32,6 @@ Affects: Angular/AngularJS, Vue.js, React, Handlebars, Mustache, Pug, EJS, and o
 SEVERITY: CRITICAL
 Direct code execution in modern JavaScript frameworks. Increasingly common in SPAs.
 """,
-
     "attack_vector": """
 FRAMEWORK-SPECIFIC ATTACKS:
 
@@ -78,7 +75,6 @@ TWIG:
 {{7*7}}
 {{_self.env.registerUndefinedFilterCallback("exec")}}{{_self.env.getFilter("alert(1)")}}
 """,
-
     "remediation": """
 DEFENSE:
 
@@ -112,5 +108,5 @@ TOOLS:
 OWASP REFERENCES:
 - CWE-94: Code Injection
 - OWASP Template Injection
-"""
+""",
 }

@@ -13,7 +13,6 @@ Knowledge Base: Markdown Context XSS
 
 DETAILS = {
     "title": "Cross-Site Scripting (XSS) via Markdown Rendering",
-
     # Metadata for SIEM/Triage Integration
     "severity": "medium",
     "cvss_score": 6.1,
@@ -22,7 +21,6 @@ DETAILS = {
     "cwe": ["CWE-79"],
     "owasp": ["A03:2021"],
     "tags": ["xss", "markdown", "html", "stored", "renderer"],
-
     "description": """
 Many web applications allow users to input Markdown for rich text formatting. However, Markdown parsers 
 often support raw HTML and JavaScript execution vectors. Different implementations have varying security 
@@ -31,7 +29,6 @@ properties. Improperly configured renderers can lead to stored XSS in comments, 
 SEVERITY: HIGH
 Very common in GitHub-style applications, forums, wikis, and comment systems.
 """,
-
     "attack_vector": """
 RAW HTML IN MARKDOWN:
 [Click me](javascript:alert(1))
@@ -60,7 +57,6 @@ If parser doesn't properly escape
 MUTATION XSS:
 Payloads that look safe but become dangerous after parsing
 """,
-
     "remediation": """
 DEFENSE:
 
@@ -106,5 +102,5 @@ clean = bleach.clean(html,
 OWASP REFERENCES:
 - CWE-79: Cross-site Scripting
 - OWASP Markdown Security
-"""
+""",
 }
