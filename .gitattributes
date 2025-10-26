@@ -1,0 +1,16 @@
+# License files
+LICENSE* linguist-detectable=true
+COPYING* linguist-detectable=true
+
+# Documentation
+README* linguist-detectable=true
+CHANGELOG* linguist-detectable=true
+*.md linguist-detectable=true
+
+# Python files
+*.py linguist-detectable=true
+
+# Configuration files
+pyproject.toml linguist-detectable=true
+.gitattributes export-ignore
+.github/ export-ignore

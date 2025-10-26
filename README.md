@@ -8,7 +8,7 @@
 
 _Advanced XSS Intelligence Database for Researchers and Scanners_
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![PyPI](https://img.shields.io/pypi/v/brs-kb.svg)](https://pypi.org/project/brs-kb/)
 [![Version](https://img.shields.io/badge/version-2.0.0-green.svg)](https://github.com/EPTLLC/BRS-KB)
@@ -96,11 +96,7 @@ python3 scripts/test_publish.py
 
 ### Publishing New Version
 ```bash
-# Build and publish to PyPI
-python3 scripts/publish.py
-
-# Or manually:
-python3 -m build
+python -m build
 twine check dist/*
 twine upload dist/*
 ```
@@ -110,18 +106,12 @@ twine upload dist/*
 ```python
 from brs_kb import get_vulnerability_details, list_contexts
 
-# Get detailed XSS context information
+# Context details
 details = get_vulnerability_details('html_content')
+print(details['title'], details['severity'], details['cvss_score'])
 
-print(details['title']) # Cross-Site Scripting (XSS) in HTML Content
-print(details['severity']) # critical
-print(details['cvss_score']) # 8.8
-print(details['cwe']) # ['CWE-79']
-print(details['owasp']) # ['A03:2021']
-
-# List all available contexts
+# Available contexts
 contexts = list_contexts()
-# ['css_context', 'default', 'dom_xss', 'html_attribute', ...]
 ```
 
 ## Available Contexts
@@ -194,20 +184,11 @@ Each context includes security metadata:
 
 ```python
 {
- # Core Information
- "title": "Cross-Site Scripting (XSS) in HTML Content",
- "description": "Detailed vulnerability explanation...",
- "attack_vector": "Real-world attack techniques...",
- "remediation": "Actionable security measures...",
- 
- # Security Metadata
- "severity": "critical", # low | medium | high | critical
- "cvss_score": 8.8, # CVSS 3.1 base score
- "cvss_vector": "CVSS:3.1/...", # Full CVSS vector string
- "reliability": "certain", # tentative | firm | certain
- "cwe": ["CWE-79"], # CWE identifiers
- "owasp": ["A03:2021"], # OWASP Top 10 mapping
- "tags": ["xss", "html", "reflected"] # Classification tags
+  "title": "Cross-Site Scripting (XSS) in HTML Content",
+  "severity": "critical",
+  "cvss_score": 8.8,
+  "cwe": ["CWE-79"],
+  "owasp": ["A03:2021"]
 }
 ```
 
