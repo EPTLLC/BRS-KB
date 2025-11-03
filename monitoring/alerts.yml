@@ -1,0 +1,29 @@
+groups:
+  - name: brs-kb
+    rules:
+    - alert: BRSDBHighErrorRate
+      expr: rate(brs_kb_errors_total[5m]) > 0.1
+      for: 2m
+      labels:
+        severity: warning
+      annotations:
+        summary: "High error rate in BRS-KB"
+        description: "BRS-KB is experiencing {{ $value }} errors per second"
+
+    - alert: BRSDBCriticalErrorRate
+      expr: rate(brs_kb_errors_total[5m]) > 0.5
+      for: 1m
+      labels:
+        severity: critical
+      annotations:
+        summary: "Critical error rate in BRS-KB"
+        description: "BRS-KB is experiencing {{ $value }} errors per second"
+
+    - alert: BRSDBLowPayloadDatabase
+      expr: brs_kb_payloads_total < 100
+      for: 5m
+      labels:
+        severity: warning
+      annotations:
+        summary: "Low payload database count"
+        description: "BRS-KB payload database has {{ $value }} payloads (minimum 100)"

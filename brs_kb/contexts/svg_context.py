@@ -13,7 +13,14 @@ Knowledge Base: SVG Context
 
 DETAILS = {
     "title": "Cross-Site Scripting (XSS) in SVG Context",
-    
+    # Metadata for SIEM/Triage Integration
+    "severity": "high",
+    "cvss_score": 7.3,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:L",
+    "reliability": "certain",
+    "cwe": ["CWE-79"],
+    "owasp": ["A03:2021"],
+    "tags": ["xss", "svg", "vector", "html", "injection"],
     "description": """
 SVG (Scalable Vector Graphics) files can contain embedded JavaScript and are increasingly used in 
 modern web applications. SVG XSS is particularly dangerous because SVG can be embedded inline in HTML, 
@@ -26,7 +33,6 @@ foreignObject. This makes SVG a powerful but dangerous format for user-generated
 SEVERITY: HIGH
 Common in file upload functionality, profile pictures, and user-generated graphics.
 """,
-
     "attack_vector": """
 SVG XSS ATTACK VECTORS:
 
@@ -116,7 +122,6 @@ SVG XSS ATTACK VECTORS:
       <script>alert(document.cookie)</script>
     </svg>
 """,
-
     "remediation": """
 DEFENSE STRATEGY:
 
@@ -283,6 +288,5 @@ REFERENCES:
 - OWASP XSS Prevention Cheat Sheet
 - SVG Security: https://www.w3.org/TR/SVG/security.html
 - CWE-79: Cross-site Scripting
-"""
+""",
 }
-

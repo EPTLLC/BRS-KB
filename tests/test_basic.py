@@ -2,13 +2,13 @@
 
 """
 Project: BRS-KB (BRS XSS Knowledge Base)
-Company: EasyProTech LLC (www.easypro.tech)
+Company: EasyProTech LLC (www.easyprotech)
 Dev: Brabus
-Date: 2025-10-14 22:53:00 MSK
-Status: Created
+Date: Sat 25 Oct 2025 12:00:00 UTC
+Status: Enhanced
 Telegram: https://t.me/easyprotech
 
-Basic Tests for BRS-KB
+Enhanced Tests for BRS-KB - including reverse mapping functionality
 """
 
 import pytest
@@ -19,6 +19,11 @@ from brs_kb import (
     get_kb_version,
     get_all_contexts,
     __version__
+)
+from brs_kb.reverse_map import (
+    find_contexts_for_payload,
+    get_reverse_map_info,
+    predict_contexts_ml_ready
 )
 
 
@@ -163,6 +168,110 @@ class TestContextCoverage:
         """Test that we have minimum expected number of contexts."""
         contexts = list_contexts()
         assert len(contexts) >= 10  # Should have at least 10 contexts
+
+
+class TestReverseMapping:
+    """Test enhanced reverse mapping functionality."""
+
+    def test_get_reverse_map_info(self):
+        """Test reverse mapping system information."""
+        info = get_reverse_map_info()
+
+        assert isinstance(info, dict)
+        assert 'version' in info
+        assert 'total_patterns' in info
+        assert 'supported_contexts' in info
+        assert 'ml_ready' in info
+
+        assert info['version'] == "2.0.0"
+        assert info['total_patterns'] > 20
+        assert info['ml_ready'] is True
+        assert len(info['supported_contexts']) > 15
+
+    def test_enhanced_payload_analysis(self):
+        """Test enhanced payload analysis with confidence scoring."""
+        # Test script payload
+        result = find_contexts_for_payload('<script>alert(1)</script>')
+
+        assert isinstance(result, dict)
+        assert 'contexts' in result
+        assert 'confidence' in result
+        assert 'analysis_method' in result
+        assert 'matched_patterns' in result
+
+        # The payload exists in database, so it should find exact match
+        assert len(result['contexts']) > 0
+        assert result['confidence'] > 0.8
+        assert result['analysis_method'] in ['payload_database', 'pattern_matching']
+        assert result['matched_patterns'] > 0
+
+    def test_modern_contexts_detection(self):
+        """Test detection of modern XSS contexts."""
+        modern_payloads = [
+            'WebSocket("wss://evil.com")',
+            'serviceWorker.register("evil.js")',
+            'RTCPeerConnection({iceServers: []})',
+            '{{constructor.constructor("alert(1)")()}}'
+        ]
+
+        for payload in modern_payloads:
+            result = find_contexts_for_payload(payload)
+
+            assert len(result['contexts']) > 0
+            assert result['confidence'] > 0.8
+            assert result['analysis_method'] == 'pattern_matching'
+
+    def test_ml_ready_features(self):
+        """Test ML-ready feature extraction."""
+        payload = '<script>alert(document.cookie)</script>'
+        result = predict_contexts_ml_ready(payload)
+
+        assert 'features' in result
+        assert 'ml_ready' in result
+        assert 'timestamp' in result
+
+        features = result['features']
+        assert 'length' in features
+        assert 'has_script' in features
+        assert 'special_chars' in features
+
+        assert features['length'] > 0
+        assert features['has_script'] is True
+        assert features['special_chars'] > 0
+
+        assert result['ml_ready'] is True
+
+    def test_fallback_behavior(self):
+        """Test fallback behavior for unknown payloads."""
+        # Test empty payload
+        result = find_contexts_for_payload('')
+
+        assert result['contexts'] == []
+        assert result['analysis_method'] == 'none'
+
+        # Test whitespace only
+        result = find_contexts_for_payload('   ')
+
+        assert result['contexts'] == []
+        assert result['analysis_method'] == 'none'
+
+    def test_context_defense_mapping(self):
+        """Test that new contexts have proper defense mappings."""
+        new_contexts = ['websocket_xss', 'service_worker_xss', 'webrtc_xss', 'webgl_xss']
+
+        for context in new_contexts:
+            from brs_kb.reverse_map import get_defenses_for_context
+            defenses = get_defenses_for_context(context)
+
+            assert isinstance(defenses, list)
+            assert len(defenses) > 0
+
+            # Check that defenses have required structure
+            for defense in defenses:
+                assert 'defense' in defense
+                assert 'priority' in defense
+                assert 'required' in defense
+                assert 'tags' in defense
 
 
 if __name__ == '__main__':

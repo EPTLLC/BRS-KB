@@ -81,16 +81,16 @@ print(details['severity'])
 from brs_kb import get_vulnerability_details
 
 def enrich_finding(context_type, url, payload):
-    kb_data = get_vulnerability_details(context_type)
-    
-    return {
-        'url': url,
-        'payload': payload,
-        'title': kb_data['title'],
-        'severity': kb_data['severity'],
-        'cvss': kb_data['cvss_score'],
-        'remediation': kb_data['remediation']
-    }
+ kb_data = get_vulnerability_details(context_type)
+ 
+ return {
+ 'url': url,
+ 'payload': payload,
+ 'title': kb_data['title'],
+ 'severity': kb_data['severity'],
+ 'cvss': kb_data['cvss_score'],
+ 'remediation': kb_data['remediation']
+ }
 ```
 
 ### Pattern 3: Defense Strategy Builder
@@ -102,8 +102,8 @@ contexts = ['html_content', 'javascript_context', 'css_context']
 all_defenses = []
 
 for context in contexts:
-    defenses = get_defenses_for_context(context)
-    all_defenses.extend(defenses)
+ defenses = get_defenses_for_context(context)
+ all_defenses.extend(defenses)
 
 # Prioritize and implement defenses
 critical = [d for d in all_defenses if d['required']]
@@ -151,25 +151,25 @@ Develop an extension that:
 After implementing your integration:
 
 1. **Functional Testing**
-   ```python
-   from brs_kb import list_contexts
-   assert len(list_contexts()) > 0
-   ```
+ ```python
+ from brs_kb import list_contexts
+ assert len(list_contexts()) > 0
+ ```
 
 2. **Data Validation**
-   ```python
-   from brs_kb import get_vulnerability_details
-   details = get_vulnerability_details('html_content')
-   assert 'title' in details
-   assert 'severity' in details
-   ```
+ ```python
+ from brs_kb import get_vulnerability_details
+ details = get_vulnerability_details('html_content')
+ assert 'title' in details
+ assert 'severity' in details
+ ```
 
 3. **Error Handling**
-   ```python
-   # Should gracefully handle unknown contexts
-   details = get_vulnerability_details('unknown_context')
-   assert details is not None
-   ```
+ ```python
+ # Should gracefully handle unknown contexts
+ details = get_vulnerability_details('unknown_context')
+ assert details is not None
+ ```
 
 ## Performance Considerations
 
@@ -188,12 +188,12 @@ all_contexts = get_all_contexts()
 
 # Use cached data
 for context_name, details in all_contexts.items():
-    process(details)
+ process(details)
 ```
 
 ## Contributing Examples
 
-Have a great integration example? Share it!
+Have a integration example? Share it!
 
 1. Create your example file
 2. Add clear comments and documentation

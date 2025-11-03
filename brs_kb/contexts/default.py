@@ -13,7 +13,14 @@ Knowledge Base: Default Fallback
 
 DETAILS = {
     "title": "Cross-Site Scripting (XSS) Vulnerability",
-    
+    # Metadata for SIEM/Triage Integration
+    "severity": "high",
+    "cvss_score": 7.1,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:L",
+    "reliability": "firm",
+    "cwe": ["CWE-79"],
+    "owasp": ["A03:2021"],
+    "tags": ["xss", "generic", "fallback", "injection"],
     "description": """
 A Cross-Site Scripting (XSS) vulnerability was detected where user-controlled input is reflected or 
 stored in the application without proper sanitization. XSS remains one of the most prevalent web 
@@ -26,7 +33,6 @@ injection, and advanced encoding techniques to bypass filters and WAFs.
 SEVERITY: HIGH to CRITICAL
 Depends on context and exploitability. Can lead to full account takeover.
 """,
-
     "attack_vector": """
 COMMON XSS VECTORS:
 
@@ -75,7 +81,6 @@ IMPACT:
 - CSRF token exfiltration
 - Persistent backdoors
 """,
-
     "remediation": """
 COMPREHENSIVE DEFENSE STRATEGY:
 
@@ -152,5 +157,5 @@ OWASP REFERENCES:
 - CWE-79: Improper Neutralization
 - OWASP XSS Prevention Cheat Sheet
 - OWASP Testing Guide
-"""
+""",
 }

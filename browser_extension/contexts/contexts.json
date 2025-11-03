@@ -1,0 +1,75 @@
+{
+  "html_content": {
+    "title": "Cross-Site Scripting (XSS) in HTML Content",
+    "severity": "critical",
+    "cvss_score": 8.8,
+    "description": "User input is reflected directly into the HTML body without proper sanitization",
+    "attack_vector": "Direct script injection in HTML content",
+    "remediation": "Use HTML entity encoding and Content Security Policy"
+  },
+  "html_attribute": {
+    "title": "Cross-Site Scripting (XSS) in HTML Attributes",
+    "severity": "critical",
+    "cvss_score": 8.8,
+    "description": "User input is reflected in HTML tag attributes",
+    "attack_vector": "Attribute injection and event handler exploitation",
+    "remediation": "Validate and encode all attribute values"
+  },
+  "javascript_context": {
+    "title": "Cross-Site Scripting (XSS) in JavaScript Context",
+    "severity": "critical",
+    "cvss_score": 8.8,
+    "description": "User input is injected directly into JavaScript code",
+    "attack_vector": "Direct code execution in JavaScript context",
+    "remediation": "Use JSON serialization and avoid eval"
+  },
+  "websocket_xss": {
+    "title": "Cross-Site Scripting (XSS) in WebSocket Context",
+    "severity": "high",
+    "cvss_score": 7.5,
+    "description": "User input is reflected in WebSocket messages",
+    "attack_vector": "Real-time message injection",
+    "remediation": "Sanitize all WebSocket message content"
+  },
+  "service_worker_xss": {
+    "title": "Cross-Site Scripting (XSS) in Service Worker Context",
+    "severity": "high",
+    "cvss_score": 7.8,
+    "description": "User input is reflected in Service Worker scripts",
+    "attack_vector": "Background script injection",
+    "remediation": "Validate Service Worker registration URLs"
+  },
+  "webrtc_xss": {
+    "title": "Cross-Site Scripting (XSS) in WebRTC Context",
+    "severity": "high",
+    "cvss_score": 7.6,
+    "description": "User input is reflected in WebRTC data channels",
+    "attack_vector": "Peer-to-peer communication injection",
+    "remediation": "Sanitize WebRTC message content"
+  },
+  "graphql_xss": {
+    "title": "Cross-Site Scripting (XSS) in GraphQL Context",
+    "severity": "high",
+    "cvss_score": 7.4,
+    "description": "User input is reflected in GraphQL queries",
+    "attack_vector": "API query parameter injection",
+    "remediation": "Validate all GraphQL inputs"
+  },
+  "shadow_dom_xss": {
+    "title": "Cross-Site Scripting (XSS) in Shadow DOM Context",
+    "severity": "high",
+    "cvss_score": 7.3,
+    "description": "User input is reflected in Shadow DOM elements",
+    "attack_vector": "Component encapsulation bypass",
+    "remediation": "Sanitize all Shadow DOM content"
+  },
+  "custom_elements_xss": {
+    "title": "Cross-Site Scripting (XSS) in Custom Elements Context",
+    "severity": "high",
+    "cvss_score": 7.1,
+    "description": "User input is reflected in custom element definitions",
+    "attack_vector": "Element name and attribute injection",
+    "remediation": "Validate custom element names and attributes"
+  }
+}
+

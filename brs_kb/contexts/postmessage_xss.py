@@ -13,7 +13,14 @@ Knowledge Base: PostMessage XSS
 
 DETAILS = {
     "title": "Cross-Site Scripting via PostMessage API",
-    
+    # Metadata for SIEM/Triage Integration
+    "severity": "high",
+    "cvss_score": 7.4,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:L",
+    "reliability": "certain",
+    "cwe": ["CWE-79"],
+    "owasp": ["A03:2021"],
+    "tags": ["xss", "postmessage", "cross-origin", "api", "modern-web"],
     "description": """
 The postMessage API enables cross-origin communication between windows. Vulnerabilities occur when 
 applications receive postMessage data without validating the origin or sanitizing content before using 
@@ -23,7 +30,6 @@ third-party integrations.
 SEVERITY: HIGH
 Common in OAuth flows, embedded widgets, and cross-origin integrations.
 """,
-
     "attack_vector": """
 MISSING ORIGIN VALIDATION:
 window.addEventListener('message', function(e) {
@@ -53,7 +59,6 @@ element.innerHTML = obj.html; // Unsafe
 OAUTH TOKEN THEFT:
 parent.postMessage(accessToken, '*'); // Leaks to any origin
 """,
-
     "remediation": """
 DEFENSE:
 
@@ -121,5 +126,5 @@ OWASP REFERENCES:
 - CWE-79: Cross-site Scripting
 - CWE-940: Improper Verification of Source
 - Web Messaging Security
-"""
+""",
 }

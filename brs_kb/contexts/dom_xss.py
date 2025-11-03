@@ -13,7 +13,14 @@ Knowledge Base: DOM-based XSS
 
 DETAILS = {
     "title": "DOM-based Cross-Site Scripting (DOM XSS)",
-    
+    # Metadata for SIEM/Triage Integration
+    "severity": "high",
+    "cvss_score": 7.4,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:L",
+    "reliability": "certain",
+    "cwe": ["CWE-79"],
+    "owasp": ["A03:2021"],
+    "tags": ["xss", "dom", "client-side", "javascript", "modern-web"],
     "description": """
 DOM-based XSS occurs when JavaScript code processes user-controllable data from sources like 
 location.hash, location.search, postMessage, or Web Storage, and passes it to dangerous sinks like 
@@ -26,7 +33,6 @@ Modern web applications (SPAs, PWAs) are particularly vulnerable due to heavy cl
 SEVERITY: HIGH to CRITICAL
 Bypasses server-side protections. Increasingly common in modern JavaScript-heavy applications.
 """,
-
     "attack_vector": """
 DOM XSS SOURCE-TO-SINK ANALYSIS:
 
@@ -185,7 +191,6 @@ Angular:
 Svelte:
 {@html userInput}
 """,
-
     "remediation": """
 DEFENSE STRATEGY:
 
@@ -345,6 +350,5 @@ OWASP REFERENCES:
 - OWASP DOM XSS Prevention Cheat Sheet
 - CWE-79: Cross-site Scripting
 - Trusted Types: https://w3c.github.io/webappsec-trusted-types/
-"""
+""",
 }
-

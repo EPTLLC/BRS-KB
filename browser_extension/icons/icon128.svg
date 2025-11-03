@@ -1,0 +1,9 @@
+<svg width="128" height="128" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+  <rect width="128" height="128" fill="#d32f2f" rx="12"/>
+  <text x="64" y="60" font-family="Arial" font-size="32" fill="white" text-anchor="middle">BRS</text>
+  <text x="64" y="85" font-family="Arial" font-size="20" fill="white" text-anchor="middle">KB</text>
+  <rect x="90" y="15" width="25" height="25" fill="white" rx="3"/>
+  <text x="102" y="30" font-family="Arial" font-size="12" fill="#d32f2f" text-anchor="middle">XSS</text>
+  <text x="102" y="40" font-family="Arial" font-size="8" fill="#d32f2f" text-anchor="middle">Analyzer</text>
+</svg>
+

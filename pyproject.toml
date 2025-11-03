@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "brs-kb"
-version = "1.0.0"
+version = "2.0.0"
 description = "Community-Driven XSS Knowledge Base - Open Security Intelligence"
 readme = "README.md"
 authors = [
@@ -13,7 +13,7 @@ authors = [
 maintainers = [
     {name = "EasyProTech LLC", email = "contact@easypro.tech"}
 ]
-license = {text = "MIT"}
+license = {file = "LICENSE"}
 keywords = [
     "xss",
     "security",
@@ -32,7 +32,6 @@ classifiers = [
     "Intended Audience :: Developers",
     "Intended Audience :: Information Technology",
     "Intended Audience :: System Administrators",
-    "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.8",
@@ -57,18 +56,26 @@ dev = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/easypro-tech/BRS-KB"
-Documentation = "https://github.com/easypro-tech/BRS-KB#readme"
-Repository = "https://github.com/easypro-tech/BRS-KB"
-Issues = "https://github.com/easypro-tech/BRS-KB/issues"
-Changelog = "https://github.com/easypro-tech/BRS-KB/blob/main/CHANGELOG.md"
+Homepage = "https://github.com/EPTLLC/BRS-KB"
+Documentation = "https://github.com/EPTLLC/BRS-KB#readme"
+Repository = "https://github.com/EPTLLC/BRS-KB"
+Issues = "https://github.com/EPTLLC/BRS-KB/issues"
+Changelog = "https://github.com/EPTLLC/BRS-KB/blob/main/CHANGELOG.md"
 Contact = "https://t.me/easyprotech"
 
 [tool.setuptools]
 packages = ["brs_kb", "brs_kb.contexts"]
 
 [tool.setuptools.package-data]
-brs_kb = ["schema.json", "contexts/*.yaml"]
+brs_kb = [
+    "schema.json",
+    "contexts/*.py",
+    "contexts/*.yaml",
+    "i18n/locales/*.json"
+]
+
+[project.scripts]
+brs-kb = "brs_kb.cli:main"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
@@ -80,7 +87,7 @@ line-length = 100
 target-version = ['py38', 'py39', 'py310', 'py311']
 
 [tool.mypy]
-python_version = "3.8"
+python_version = "3.9"
 warn_return_any = true
 warn_unused_configs = true
 disallow_untyped_defs = false

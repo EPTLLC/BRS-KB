@@ -13,7 +13,14 @@ Knowledge Base: CSS Context - Comprehensive Guide
 
 DETAILS = {
     "title": "Cross-Site Scripting (XSS) in CSS Context",
-    
+    # Metadata for SIEM/Triage Integration
+    "severity": "high",
+    "cvss_score": 7.1,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:L/A:L",
+    "reliability": "certain",
+    "cwe": ["CWE-79"],
+    "owasp": ["A03:2021"],
+    "tags": ["xss", "css", "style", "injection", "modern-web"],
     "description": """
 User input is reflected within a stylesheet or a style attribute. While modern browsers have mitigated 
 many classic CSS attack vectors, new techniques continue to emerge. CSS injection can lead to data 
@@ -46,7 +53,6 @@ SEVERITY: MEDIUM to HIGH
 Can lead to credential theft, data exfiltration, phishing, and UI-based attacks.
 Growing threat with modern CSS features and attribute selectors.
 """,
-
     "attack_vector": """
 LEGACY ATTACK VECTORS (Still work in old browsers):
 
@@ -458,7 +464,6 @@ body::after {
 }
 </style>
 """,
-
     "remediation": """
 DEFENSE-IN-DEPTH STRATEGY:
 
@@ -671,5 +676,5 @@ OWASP REFERENCES:
 - OWASP XSS Prevention Cheat Sheet: Rule #4
 - CWE-79: Cross-site Scripting
 - CWE-1275: Sensitive Cookie with Improper SameSite Attribute
-"""
+""",
 }

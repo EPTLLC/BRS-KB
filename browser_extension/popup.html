@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BRS-KB XSS Analyzer</title>
+    <style>
+        body {
+            width: 350px;
+            padding: 15px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            background: #f5f5f5;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+        }
+
+        .logo {
+            font-size: 18px;
+            font-weight: bold;
+            color: #d32f2f;
+            margin-bottom: 5px;
+        }
+
+        .version {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .context-detector {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 15px;
+        }
+
+        .context-detector h3 {
+            margin: 0 0 10px 0;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            font-size: 12px;
+            box-sizing: border-box;
+        }
+
+        .analyze-btn {
+            width: 100%;
+            padding: 8px;
+            background: #d32f2f;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            margin-top: 8px;
+            font-size: 12px;
+        }
+
+        .analyze-btn:hover {
+            background: #b71c1c;
+        }
+
+        .results {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            margin-top: 10px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .result-item {
+            margin-bottom: 8px;
+            padding: 5px;
+            border-radius: 3px;
+            font-size: 11px;
+        }
+
+        .context-detected {
+            background: #e8f5e8;
+            border-left: 3px solid #4caf50;
+        }
+
+        .payload-suggestion {
+            background: #fff3e0;
+            border-left: 3px solid #ff9800;
+        }
+
+        .severity-critical {
+            color: #d32f2f;
+            font-weight: bold;
+        }
+
+        .severity-high {
+            color: #f57c00;
+            font-weight: bold;
+        }
+
+        .severity-medium {
+            color: #fbc02d;
+        }
+
+        .severity-low {
+            color: #388e3c;
+        }
+
+        .payload-list {
+            max-height: 150px;
+            overflow-y: auto;
+            margin-top: 5px;
+        }
+
+        .payload-item {
+            padding: 3px 5px;
+            margin: 2px 0;
+            background: #f5f5f5;
+            border-radius: 3px;
+            font-family: monospace;
+            font-size: 10px;
+            cursor: pointer;
+        }
+
+        .payload-item:hover {
+            background: #e0e0e0;
+        }
+
+        .quick-actions {
+            display: flex;
+            gap: 5px;
+            margin-top: 10px;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 6px;
+            border: 1px solid #ddd;
+            background: white;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 10px;
+        }
+
+        .action-btn:hover {
+            background: #f0f0f0;
+        }
+
+        .status-bar {
+            margin-top: 10px;
+            padding: 5px;
+            background: #e3f2fd;
+            border-radius: 3px;
+            font-size: 10px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">BRS-KB XSS Analyzer</div>
+        <div class="version">v1.1.0</div>
+    </div>
+
+    <div class="context-detector">
+        <h3>🔍 Context Detection</h3>
+        <input type="text" id="inputField" class="input-field" placeholder="Enter text to analyze...">
+        <button id="analyzeBtn" class="analyze-btn">Analyze</button>
+    </div>
+
+    <div id="results" class="results" style="display: none;">
+        <div id="contextResults"></div>
+        <div id="payloadSuggestions"></div>
+    </div>
+
+    <div class="quick-actions">
+        <button id="testCurrentPageBtn" class="action-btn">Test Current Page</button>
+        <button id="clearBtn" class="action-btn">Clear</button>
+    </div>
+
+    <div class="status-bar" id="statusBar">
+        Ready for XSS analysis
+    </div>
+
+    <script src="popup.js"></script>
+</body>
+</html>
+

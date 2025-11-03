@@ -1,0 +1,63 @@
+/* BRS-KB Browser Extension - Content Styles */
+
+.brs-kb-indicator {
+    position: absolute !important;
+    font-size: 10px !important;
+    background: #d32f2f !important;
+    color: white !important;
+    padding: 2px 4px !important;
+    border-radius: 2px !important;
+    margin-left: 5px !important;
+    z-index: 9999 !important;
+    pointer-events: none !important;
+    font-family: monospace !important;
+}
+
+.brs-kb-analysis {
+    position: absolute !important;
+    background: #fff !important;
+    border: 1px solid #ddd !important;
+    border-radius: 4px !important;
+    padding: 8px !important;
+    font-size: 11px !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+    z-index: 10000 !important;
+    min-width: 200px !important;
+    margin-top: 5px !important;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+}
+
+.brs-kb-analysis strong {
+    color: #333 !important;
+}
+
+.brs-kb-analysis .severity-critical {
+    color: #d32f2f !important;
+    font-weight: bold !important;
+}
+
+.brs-kb-analysis .severity-high {
+    color: #f57c00 !important;
+    font-weight: bold !important;
+}
+
+.brs-kb-analysis .severity-medium {
+    color: #fbc02d !important;
+}
+
+.brs-kb-analysis .severity-low {
+    color: #388e3c !important;
+}
+
+/* Hide indicators on small screens */
+@media (max-width: 768px) {
+    .brs-kb-indicator {
+        display: none !important;
+    }
+
+    .brs-kb-analysis {
+        font-size: 10px !important;
+        min-width: 150px !important;
+    }
+}
+

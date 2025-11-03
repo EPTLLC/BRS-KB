@@ -65,3 +65,6 @@ venv.bak/
 .env
 .envrc
 
+# Internal documentation (not for repository)
+COMMIT_GUIDELINES.md
+

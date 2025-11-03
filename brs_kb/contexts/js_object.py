@@ -13,7 +13,14 @@ Knowledge Base: JavaScript Object Context - Comprehensive Guide
 
 DETAILS = {
     "title": "Cross-Site Scripting (XSS) in JavaScript Object Context",
-    
+    # Metadata for SIEM/Triage Integration
+    "severity": "high",
+    "cvss_score": 7.8,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H",
+    "reliability": "certain",
+    "cwe": ["CWE-79"],
+    "owasp": ["A03:2021"],
+    "tags": ["xss", "javascript", "object", "property-injection", "modern-web"],
     "description": """
 User input is reflected within a JavaScript object literal without proper sanitization. This allows 
 attackers to inject additional properties, methods, or break out of the object context to execute 
@@ -45,7 +52,6 @@ SEVERITY: CRITICAL
 Can lead to prototype pollution, property injection, and arbitrary code execution.
 Modern attack vector increasingly exploited in Node.js and browser applications.
 """,
-
     "attack_vector": """
 UNQUOTED VALUE INJECTION:
 
@@ -387,7 +393,6 @@ var config = {
 console.log(config.value); // DoS
 </script>
 """,
-
     "remediation": """
 DEFENSE-IN-DEPTH STRATEGY:
 
@@ -615,5 +620,5 @@ OWASP REFERENCES:
 - OWASP Prototype Pollution
 - CWE-1321: Improperly Controlled Modification of Object Prototype
 - CWE-79: Cross-site Scripting (XSS)
-"""
+""",
 }

