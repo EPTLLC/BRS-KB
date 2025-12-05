@@ -2,7 +2,7 @@
   "info": {
     "name": "BRS-KB XSS Testing Collection",
     "description": "Comprehensive XSS testing collection using BRS-KB (BRS XSS Knowledge Base) with 27 contexts and 200+ payloads",
-    "version": "2.0.0",
+    "version": "3.0.0",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
@@ -184,7 +184,7 @@
           "// Add BRS-KB headers and validation",
           "pm.request.headers.add({",
           "    key: 'X-BRS-KB-Version',",
-          "    value: '2.0.0'",
+          "    value: '3.0.0'",
           "});",
           "",
           "// Log BRS-KB request",

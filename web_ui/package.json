@@ -1,6 +1,6 @@
 {
   "name": "brs-kb-web-ui",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "description": "Web UI for BRS-KB XSS Knowledge Base",
   "main": "src/index.js",
   "scripts": {

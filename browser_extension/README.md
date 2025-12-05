@@ -209,7 +209,7 @@ browser_extension/
 - 17 XSS contexts support
 - Real-time input analysis
 
-### v2.0.0 (Current)
+### v3.0.0 (Current)
 - Enhanced with 27 XSS contexts
 - Improved payload suggestions
 - Better UI/UX

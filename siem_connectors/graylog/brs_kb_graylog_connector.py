@@ -207,7 +207,7 @@ WAF Evasion: {vulnerability_data.get('waf_evasion', False)}
 Analysis Method: {vulnerability_data.get('analysis_method', 'unknown')}
 
 Timestamp: {datetime.now().isoformat()}
-Source: BRS-KB v2.0.0
+Source: BRS-KB v3.0.0
 """
 
     def _format_full_analysis_message(self, analysis_data: Dict[str, Any]) -> str:
@@ -233,7 +233,7 @@ Recommendations:
 {chr(10).join(f'• {rec}' for rec in analysis_data.get('recommendations', []))}
 
 Timestamp: {datetime.now().isoformat()}
-Source: BRS-KB v2.0.0
+Source: BRS-KB v3.0.0
 """
 
     def _format_full_alert_message(self, alert_data: Dict[str, Any]) -> str:
@@ -257,7 +257,7 @@ Immediate Actions Required:
 Escalation Required: {alert_data.get('escalation_required', False)}
 
 Timestamp: {datetime.now().isoformat()}
-Source: BRS-KB v2.0.0
+Source: BRS-KB v3.0.0
 Alert ID: {alert_data.get('alert_id', 'unknown')}
 """
 

@@ -154,7 +154,7 @@ class BRSKBSplunkConnector:
                 "tags": vulnerability_data.get("tags", []),
                 "metadata": {
                     "source_system": "brs_kb",
-                    "version": "2.0.0",
+                    "version": "3.0.0",
                     "analysis_method": vulnerability_data.get("analysis_method", "unknown"),
                     "browser_support": vulnerability_data.get("browser_support", []),
                     "waf_evasion": vulnerability_data.get("waf_evasion", False)
@@ -181,7 +181,7 @@ class BRSKBSplunkConnector:
                 "recommendations": analysis_data.get("recommendations", []),
                 "metadata": {
                     "source_system": "brs_kb",
-                    "version": "2.0.0",
+                    "version": "3.0.0",
                     "waf_detected": analysis_data.get("waf_detected", []),
                     "browser_parsing": analysis_data.get("browser_parsing", {})
                 }
@@ -207,7 +207,7 @@ class BRSKBSplunkConnector:
                 "immediate_actions": alert_data.get("immediate_actions", []),
                 "metadata": {
                     "source_system": "brs_kb",
-                    "version": "2.0.0",
+                    "version": "3.0.0",
                     "alert_id": alert_data.get("alert_id", ""),
                     "escalation_required": alert_data.get("escalation_required", False)
                 }

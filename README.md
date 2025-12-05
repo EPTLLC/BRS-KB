@@ -11,10 +11,11 @@ _Advanced XSS Intelligence Database for Researchers and Scanners_
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![PyPI](https://img.shields.io/pypi/v/brs-kb.svg)](https://pypi.org/project/brs-kb/)
-[![Version](https://img.shields.io/badge/version-2.0.0-green.svg)](https://github.com/EPTLLC/BRS-KB)
-[![Code Size](https://img.shields.io/badge/code-8.5k%20lines-brightgreen.svg)]()
+[![Version](https://img.shields.io/badge/version-3.0.0-green.svg)](https://github.com/EPTLLC/BRS-KB)
+[![Code Size](https://img.shields.io/badge/code-19.5k%20lines-brightgreen.svg)]()
 [![Contexts](https://img.shields.io/badge/contexts-27-orange.svg)]()
-[![Tests](https://img.shields.io/badge/tests-passing-success.svg)]()
+[![Tests](https://img.shields.io/badge/tests-334%20passing-success.svg)]()
+[![Coverage](https://img.shields.io/badge/coverage-81%25-green.svg)]()
 
 ## Table of Contents
 
@@ -24,6 +25,8 @@ _Advanced XSS Intelligence Database for Researchers and Scanners_
 - [Available Contexts](#available-contexts)
 - [Features](#features)
 - [CLI Tool](#cli-tool)
+- [REST API Server](#rest-api-server)
+- [Web UI](#web-ui)
 - [Security Scanner Plugins](#security-scanner-plugins)
 - [SIEM Integration](#siem-integration)
 - [CI/CD Pipeline](#cicd-pipeline)
@@ -34,6 +37,7 @@ _Advanced XSS Intelligence Database for Researchers and Scanners_
 - [Project Structure](#project-structure)
 - [Testing](#testing)
 - [Statistics](#statistics)
+- [Troubleshooting](#troubleshooting)
 - [License](#license)
 - [Project Info](#project-info)
 - [Related Projects](#related-projects)
@@ -53,12 +57,12 @@ Comprehensive, community-driven knowledge base for Cross-Site Scripting (XSS) vu
 | Feature | Description |
 |---------|-------------|
 | **27 Contexts** | Covering classic and modern XSS vulnerability types |
-| **Detailed Info** | Attack vectors, bypass techniques, defense strategies |
-| **Simple API** | Python library, easy to integrate |
+| **194+ Payloads** | Categorized with severity, tags, and WAF bypass info |
+| **REST API** | Built-in HTTP server for Web UI and integrations |
 | **Zero Dependencies** | Pure Python 3.8+ |
 | **SIEM Compatible** | CVSS scores, CWE/OWASP mappings, severity levels |
 | **Open Source** | MIT licensed, community contributions welcome |
-| **In Production** | Used in security scanners and tools |
+| **Production Ready** | 81% test coverage, SQLite storage, modular architecture |
 
 ## Installation
 
@@ -73,6 +77,8 @@ git clone https://github.com/EPTLLC/BRS-KB.git
 cd BRS-KB
 pip install -e .
 ```
+
+**Note:** On first run, the system will automatically migrate payloads from in-memory storage to SQLite database (`brs_kb/data/payloads.db`). You can also run `brs-kb migrate` manually.
 
 ### For Developers
 ```bash
@@ -277,6 +283,18 @@ brs-kb validate
 
 # Export data
 brs-kb export contexts --format json --output contexts.json
+
+# Set language
+brs-kb language ru
+
+# Migrate to SQLite database
+brs-kb migrate
+
+# Start API server for Web UI
+brs-kb serve
+
+# Start API server on custom port with metrics
+brs-kb serve --port 8080 --metrics
 ```
 
 **Available Commands:**
@@ -289,6 +307,9 @@ brs-kb export contexts --format json --output contexts.json
 - `generate-report` - Generate comprehensive system analysis
 - `validate` - Validate payload database integrity
 - `export <type> --format <format>` - Export data (payloads, contexts, reports)
+- `language [lang]` - Set or list supported languages (EN, RU, ZH, ES)
+- `migrate [--force]` - Migrate payloads to SQLite database
+- `serve [--port PORT] [--host HOST] [--metrics]` - Start REST API server for Web UI
 
 ## Usage
 
@@ -405,38 +426,32 @@ BRS-KB includes plugins for popular security testing tools:
 - 200+ categorized XSS payloads
 - Context-specific testing (27 XSS contexts)
 - WAF bypass technique detection
-- Modern web technology testing
 
 **Installation:** Copy templates to Nuclei templates directory
 
-### SIEM Integration
-BRS-KB integrates with enterprise SIEM systems for real-time monitoring:
+## SIEM Integration
 
-#### Splunk Integration
-- Real-time XSS vulnerability data ingestion
-- Custom dashboards for XSS context analysis
-- Alerting rules for critical vulnerabilities
-- Historical trend analysis
+BRS-KB integrates with enterprise SIEM systems for real-time XSS monitoring and alerting.
 
-**Installation:** Copy `siem_connectors/splunk/brs_kb_app.tar.gz` to Splunk apps directory
+| Platform | Features | Installation |
+|----------|----------|--------------|
+| **Splunk** | Dashboards, alerting, trend analysis | `siem_connectors/splunk/brs_kb_app.tar.gz` |
+| **Elasticsearch** | Kibana dashboards, ML anomaly detection | `siem_connectors/elastic/` |
+| **Graylog** | GELF integration, stream processing | `siem_connectors/graylog/` |
 
-#### Elasticsearch Integration
-- Logstash/Beats integration for BRS-KB data
-- Kibana dashboards for XSS analysis
-- Machine learning anomaly detection
-- Elasticsearch Watcher alerting
+### Quick Setup
+```bash
+# Splunk
+cp siem_connectors/splunk/brs_kb_app.tar.gz $SPLUNK_HOME/etc/apps/
 
-**Installation:** Deploy Logstash configuration from `siem_connectors/elastic/`
+# Elasticsearch (Logstash)
+cp siem_connectors/elastic/logstash.conf /etc/logstash/conf.d/
 
-#### Graylog Integration
-- GELF integration for real-time log ingestion
-- Custom dashboards and widgets
-- Alerting rules and notifications
-- Stream processing for XSS events
+# Graylog
+# Import content pack via Graylog UI
+```
 
-**Installation:** Import content pack from `siem_connectors/graylog/`
-
-See [siem_connectors/README.md](siem_connectors/README.md) for detailed installation and usage instructions.
+See [siem_connectors/README.md](siem_connectors/README.md) for detailed configuration.
 
 ## CI/CD Pipeline
 
@@ -475,50 +490,116 @@ See [DEVELOPMENT_PLAN.md](DEVELOPMENT_PLAN.md) for detailed CI/CD documentation.
 BRS-KB includes comprehensive documentation in multiple languages:
 
 ### Available Languages
-- ** English** - Primary documentation (this file)
-- ** Русский** - [docs/README.ru.md](docs/README.ru.md)
-- ** ** - [docs/README.zh.md](docs/README.zh.md)
-- ** Español** - [docs/README.es.md](docs/README.es.md)
+- **English (EN)** - Primary documentation (this file)
+- **Russian (RU)** - [docs/README.ru.md](docs/README.ru.md)
+- **Chinese (ZH)** - [docs/README.zh.md](docs/README.zh.md)
+- **Spanish (ES)** - [docs/README.es.md](docs/README.es.md)
 
 ### Language Switching
-Use the CLI to switch between languages:
-
 ```bash
-brs-kb language ru # Switch to Russian
-brs-kb language zh # Switch to Chinese
-brs-kb language es # Switch to Spanish
-brs-kb language en # Switch to English
-brs-kb language --list # List all supported languages
+brs-kb language ru    # Switch to Russian
+brs-kb language zh    # Switch to Chinese
+brs-kb language es    # Switch to Spanish
+brs-kb language en    # Switch to English
+brs-kb language --list  # List all supported languages
 ```
 
-All documentation includes localized examples, cultural context, and region-specific attack vectors.
-
 ### Web UI Localization
-The Web UI also supports full localization in all 4 languages with:
+The Web UI supports full localization in all 4 languages:
 - Localized interface elements
-- Context-specific examples in each language
-- Cultural adaptation for security terminology
-- Region-specific attack vector descriptions
+- Context-specific examples
+- Security terminology adaptation
+
+## REST API Server
+
+BRS-KB includes a built-in REST API server for Web UI integration and programmatic access:
+
+### Starting the Server
+```bash
+# Start API server (default: http://0.0.0.0:8080)
+brs-kb serve
+
+# Custom port and host
+brs-kb serve --port 9000 --host 127.0.0.1
+
+# With Prometheus metrics endpoint
+brs-kb serve --metrics --metrics-port 8000
+```
+
+### API Endpoints
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/info` | GET | System information |
+| `/api/health` | GET | Health check |
+| `/api/contexts` | GET | List all XSS contexts |
+| `/api/contexts/<id>` | GET | Get context details |
+| `/api/payloads` | GET | List payloads (with filters) |
+| `/api/payloads/search?q=<query>` | GET | Search payloads |
+| `/api/analyze` | GET/POST | Analyze payload |
+| `/api/defenses?context=<ctx>` | GET | Get recommended defenses |
+| `/api/stats` | GET | Platform statistics |
+| `/api/languages` | GET | Supported languages |
+| `/api/language` | POST | Set language |
+
+### Python API
+```python
+from brs_kb import start_api_server, start_metrics_server
+
+# Start API server programmatically
+server = start_api_server(port=8080, host='0.0.0.0')
+
+# Start metrics server for Prometheus
+metrics = start_metrics_server(port=8000)
+
+# Check if running
+print(server.is_running())  # True
+
+# Stop servers
+server.stop()
+metrics.stop()
+```
 
 ## Web UI
 
 BRS-KB includes a modern React-based web interface for visual exploration and testing:
 
 ### Web Interface (`web_ui/`)
-**BRSKB Web UI** - Modern React-based web interface
+**BRSKB Web UI** - Modern React-based web interface with full API integration
 
 **Features:**
 - Visual exploration of 27 XSS contexts
-- Interactive playground for payload testing
+- Interactive playground for payload analysis
 - Real-time statistics dashboard
-- Multi-language support (EN, RU, CN, ES)
+- Payloads browser with search and filtering
+- API documentation viewer
+- Multi-language support (EN, RU, ZH, ES)
 - Responsive design for all devices
+- Automatic fallback when API unavailable
+
+**Pages:**
+- **Home** - Overview and quick stats
+- **Contexts** - Browse all XSS vulnerability contexts
+- **Payloads** - Search and filter 194+ payloads
+- **Playground** - Interactive payload analyzer
+- **Dashboard** - Statistics and charts
+- **API Docs** - REST API documentation
 
 **Installation:**
 ```bash
+# Terminal 1: Start API server
+brs-kb serve --port 8080
+
+# Terminal 2: Start Web UI
 cd web_ui
 npm install
 npm start
+```
+
+**Configuration:**
+Set `REACT_APP_API_URL` environment variable to change API endpoint:
+```bash
+REACT_APP_API_URL=http://localhost:8080/api npm start
 ```
 
 **Access:** `http://localhost:3000` after starting development server
@@ -697,25 +778,67 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
 ```
 BRS-KB/
  brs_kb/ # Main package
- __init__.py # Core API
+ __init__.py # Core API with public exports
+ api_server.py # REST API server for Web UI
+ metrics_server.py # Prometheus metrics server
  schema.json # JSON Schema validation
- reverse_map.py # Reverse mapping system
+ reverse_map.py # Reverse mapping wrapper (backward compatibility)
+ reverse_map/ # Reverse mapping package (modular)
+   __init__.py
+   patterns.py # Context detection patterns
+   defenses.py # Defense strategies
+   analysis.py # Payload analysis
+   utils.py # Utility functions
  i18n.py # Internationalization system
- cli.py # Command-line interface
+ cli.py # CLI wrapper (backward compatibility)
+ cli/ # CLI package (modular)
+   __init__.py
+   __main__.py # Module execution entry point
+   cli.py # Main CLI class
+   parser.py # Argument parser
+   commands/ # Individual command modules
+     base.py # Base command class
+     list_contexts.py
+     get_context.py
+     analyze_payload.py
+     search_payloads.py
+     test_payload.py
+     generate_report.py
+     info.py
+     validate.py
+     export.py
+     language.py
+     migrate.py
+     serve.py # API server command
  payload_testing.py # Payload testing framework
- payloads_db.py # Payload database
+ payloads_db.py # Payload database wrapper (backward compatibility)
+ payloads_db/ # Payload database package (modular)
+   __init__.py
+   data.py # In-memory database
+   models.py # Data models
+   operations.py # CRUD operations
+   queries.py # Query functions
+   search.py # Search functionality
+   info.py # Database info
+   testing.py # Testing utilities
+ payloads_db_sqlite.py # SQLite database implementation
+ migrations.py # Database migrations
  contexts/ # 27 vulnerability contexts
  html_content.py
  javascript_context.py
  websocket_xss.py
  ...
  examples/ # Integration examples
- tests/ # Test suite (pytest)
+ tests/ # Test suite (pytest, 334 tests, 81% coverage)
  docs/ # Multi-language documentation
  i18n/locales/ # Translation files
  plugins/ # Security scanner plugins
  siem_connectors/ # SIEM system integrations
  web_ui/ # React-based web interface
+   src/
+     services/api.js # API client for backend
+     pages/ # Page components
+     components/ # UI components
  LICENSE # MIT License
  CONTRIBUTING.md # Contribution guide
  CHANGELOG.md # Version history
@@ -725,63 +848,104 @@ BRS-KB/
 ## Testing
 
 ```bash
-# Run all tests
+# Run all tests (334 tests)
 pytest tests/ -v
 
-# Run with coverage (requires pytest-cov)
-pytest tests/ -v --cov=brs_kb
+# Run with coverage (81% coverage)
+pytest tests/ -v --cov=brs_kb --cov-report=term-missing
 
-# Run specific test
-pytest tests/test_basic.py -v
+# Run specific test modules
+pytest tests/test_basic.py -v          # Basic functionality
+pytest tests/test_cli.py -v            # CLI commands
+pytest tests/test_sqlite.py -v         # SQLite database
+pytest tests/test_api_server.py -v     # REST API server
+pytest tests/test_metrics_server.py -v # Prometheus metrics
 ```
+
+**Test Coverage:** 81% (334 tests passing)
 
 ## Statistics
 
 | Metric | Value |
 |--------|-------|
-| Total Lines | ~16,500+ |
+| Total Lines | ~19,500+ |
 | Context Modules | 27 |
-| Payload Database | 200+ |
-| Multi-Language Support | |
-| Web UI | |
+| Payload Database | 194+ |
+| Test Coverage | 81% (334 tests) |
+| CLI Commands | 12 commands |
+| REST API Endpoints | 13 |
 | Reverse Mapping Patterns | 29 |
-| Supported Contexts | 27 |
-| Average Module Size | 418 lines |
-| Test Coverage | 33 tests |
-| CLI Commands | 9 commands |
 | Security Scanner Plugins | 3 platforms |
 | SIEM Integrations | 3 systems |
-| CI/CD Pipelines | GitLab CI, Jenkins |
-| Deployment Scripts | |
-| Docker Support | |
-| Kubernetes Support | |
-| Monitoring | |
-| Web UI | |
-| React Frontend | |
-| Responsive Design | |
-| Multi-Language Support | |
-| Russian Localization | |
-| Chinese Localization | |
-| Spanish Localization | |
-| Multi-Language Documentation | |
-| Global Accessibility | |
-| WAF Bypass | 15+ payloads |
+| Multi-Language Support | 4 languages |
 | External Dependencies | 0 |
 | Python Version | 3.8+ |
-| Code Quality | Production-ready |
-| ML Ready | |
-| Confidence Scoring | |
-| Modern XSS Support | |
-| WebSocket XSS | |
-| Service Worker XSS | |
-| WebRTC XSS | |
-| GraphQL XSS | |
-| Shadow DOM XSS | |
-| Custom Elements XSS | |
-| Payload Testing API | |
-| WAF Bypass Detection | |
-| CLI Tool | |
-| Export Capabilities | |
+
+### Features Checklist
+
+| Feature | Status |
+|---------|--------|
+| REST API Server | Supported |
+| Prometheus Metrics | Supported |
+| Web UI (React 18) | Supported |
+| SQLite Database | Supported |
+| Multi-Language Support | EN, RU, ZH, ES |
+| Docker Support | Supported |
+| Kubernetes Support | Supported |
+| CI/CD Pipelines | GitHub, GitLab, Jenkins |
+| ML-Ready Features | Supported |
+| WAF Bypass Detection | 15+ payloads |
+| Modern XSS Contexts | WebSocket, WebRTC, GraphQL, etc. |
+
+## Troubleshooting
+
+### Common Issues
+
+| Problem | Solution |
+|---------|----------|
+| `ModuleNotFoundError: No module named 'brs_kb'` | Run `pip install -e .` from project root |
+| SQLite database not created | Run `brs-kb migrate` or check write permissions to `brs_kb/data/` |
+| API server port already in use | Use `--port` flag: `brs-kb serve --port 9000` |
+| Web UI cannot connect to API | Verify API server is running, check CORS and `REACT_APP_API_URL` |
+| Tests failing on import | Ensure you're using Python 3.8+ |
+
+### Database Issues
+
+```bash
+# Force database recreation
+brs-kb migrate --force
+
+# Check database location
+python3 -c "from brs_kb.payloads_db import get_database_info; print(get_database_info())"
+
+# Verify database integrity
+brs-kb validate
+```
+
+### API Server Issues
+
+```bash
+# Check if port is available
+lsof -i :8080
+
+# Start with verbose logging
+brs-kb serve --port 8080 2>&1 | tee server.log
+
+# Test API health
+curl http://localhost:8080/api/health
+```
+
+### Web UI Issues
+
+```bash
+# Clear npm cache and reinstall
+cd web_ui
+rm -rf node_modules package-lock.json
+npm install
+
+# Check API connection
+curl http://localhost:8080/api/info
+```
 
 ## License
 
@@ -809,7 +973,7 @@ See [LICENSE](LICENSE) for full text.
 | **Repository** | [https://github.com/EPTLLC/BRS-KB](https://github.com/EPTLLC/BRS-KB) |
 | **License** | MIT |
 | **Status** | Production-Ready |
-| **Version** | 2.0.0 |
+| **Version** | 3.0.0 |
 
 ## Related Projects
 

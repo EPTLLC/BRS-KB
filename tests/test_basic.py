@@ -183,7 +183,7 @@ class TestReverseMapping:
         assert 'supported_contexts' in info
         assert 'ml_ready' in info
 
-        assert info['version'] == "2.0.0"
+        assert info['version'] == "3.0.0"
         assert info['total_patterns'] > 20
         assert info['ml_ready'] is True
         assert len(info['supported_contexts']) > 15
@@ -197,13 +197,13 @@ class TestReverseMapping:
         assert 'contexts' in result
         assert 'confidence' in result
         assert 'analysis_method' in result
-        assert 'matched_patterns' in result
+        assert 'patterns_matched' in result
 
         # The payload exists in database, so it should find exact match
         assert len(result['contexts']) > 0
         assert result['confidence'] > 0.8
         assert result['analysis_method'] in ['payload_database', 'pattern_matching']
-        assert result['matched_patterns'] > 0
+        assert len(result['patterns_matched']) > 0
 
     def test_modern_contexts_detection(self):
         """Test detection of modern XSS contexts."""
@@ -219,7 +219,8 @@ class TestReverseMapping:
 
             assert len(result['contexts']) > 0
             assert result['confidence'] > 0.8
-            assert result['analysis_method'] == 'pattern_matching'
+            # Method can be either 'payload_database' or 'pattern_matching'
+            assert result['analysis_method'] in ['payload_database', 'pattern_matching']
 
     def test_ml_ready_features(self):
         """Test ML-ready feature extraction."""

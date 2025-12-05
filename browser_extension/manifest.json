@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "BRS-KB XSS Analyzer",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "description": "Advanced XSS vulnerability detection and payload testing using BRS-KB intelligence",
   "permissions": [
     "activeTab",

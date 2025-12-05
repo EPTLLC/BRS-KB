@@ -1,11 +1,22 @@
+/**
+ * Project: BRS-KB (BRS XSS Knowledge Base)
+ * Company: EasyProTech LLC (www.easypro.tech)
+ * Dev: Brabus
+ * Date: 2025-12-04 22:53:00 UTC
+ * Status: Updated
+ * Telegram: https://t.me/easyprotech
+ *
+ * Contexts page component - Updated to use real API
+ */
+
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
+import api from '../services/api';
 
 const Contexts = ({ language }) => {
   const [contexts, setContexts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [filter, setFilter] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -14,8 +25,14 @@ const Contexts = ({ language }) => {
   }, []);
 
   const loadContexts = async () => {
+    setLoading(true);
+    setError(null);
     try {
-      // Simulate API call to get contexts
+      const data = await api.listContexts();
+      setContexts(data.contexts);
+    } catch (err) {
+      setError(err.message);
+      // Fallback to mock data if API not available
       const mockContexts = [
         {
           id: 'html_content',
@@ -228,9 +245,7 @@ const Contexts = ({ language }) => {
       ];
 
       setContexts(mockContexts);
-      setLoading(false);
-    } catch (error) {
-      console.error('Failed to load contexts:', error);
+    } finally {
       setLoading(false);
     }
   };
@@ -254,22 +269,18 @@ const Contexts = ({ language }) => {
 
   if (loading) {
     return (
-      <div>
-        <Header currentLanguage={language} darkMode={false} onLanguageChange={() => {}} onToggleDarkMode={() => {}} />
+      <div className="contexts-page">
         <div className="container">
           <div className="loading">
-            <div className="spinner"></div>
             <p>Loading XSS contexts...</p>
           </div>
         </div>
-        <Footer language={language} />
       </div>
     );
   }
 
   return (
-    <div>
-      <Header currentLanguage={language} darkMode={false} onLanguageChange={() => {}} onToggleDarkMode={() => {}} />
+    <div className="contexts-page">
 
       <div className="container">
         <div className="page-header">
@@ -365,9 +376,186 @@ const Contexts = ({ language }) => {
             </button>
           </div>
         )}
+
+        {error && (
+          <div className="error-message">
+            API Error: {error}. Showing cached data.
+          </div>
+        )}
       </div>
 
-      <Footer language={language} />
+      <style jsx>{`
+        .contexts-page {
+          padding: 40px 0;
+          min-height: 100vh;
+        }
+
+        .page-header {
+          margin-bottom: 30px;
+        }
+
+        .page-header h1 {
+          font-size: 2.5rem;
+          color: #333;
+          margin-bottom: 10px;
+        }
+
+        .page-header p {
+          color: #666;
+        }
+
+        .filters {
+          display: flex;
+          gap: 20px;
+          margin-bottom: 30px;
+          flex-wrap: wrap;
+        }
+
+        .filter-group, .search-group {
+          display: flex;
+          flex-direction: column;
+          gap: 5px;
+        }
+
+        .filter-group label, .search-group label {
+          font-size: 13px;
+          color: #666;
+        }
+
+        .filter-group select, .search-input {
+          padding: 10px 15px;
+          border: 2px solid #ddd;
+          border-radius: 8px;
+          font-size: 14px;
+        }
+
+        .search-input {
+          min-width: 300px;
+        }
+
+        .context-stats {
+          display: flex;
+          gap: 30px;
+          margin-bottom: 30px;
+        }
+
+        .stat {
+          text-align: center;
+        }
+
+        .stat-number {
+          font-size: 2rem;
+          font-weight: 700;
+          color: #d32f2f;
+        }
+
+        .stat-label {
+          color: #666;
+          font-size: 13px;
+        }
+
+        .context-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+          gap: 20px;
+        }
+
+        .context-card {
+          background: white;
+          border-radius: 12px;
+          padding: 20px;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .context-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-start;
+          margin-bottom: 15px;
+        }
+
+        .context-title {
+          font-size: 1.1rem;
+          color: #333;
+          margin: 0;
+          flex: 1;
+        }
+
+        .context-severity {
+          padding: 4px 10px;
+          border-radius: 4px;
+          font-size: 12px;
+          font-weight: 600;
+          text-transform: uppercase;
+        }
+
+        .context-description {
+          color: #666;
+          font-size: 14px;
+          margin-bottom: 15px;
+          line-height: 1.5;
+        }
+
+        .context-stats .stat-item {
+          display: inline-block;
+          margin-right: 15px;
+          font-size: 13px;
+          color: #666;
+        }
+
+        .context-actions {
+          display: flex;
+          gap: 10px;
+          margin-top: 15px;
+        }
+
+        .btn {
+          padding: 8px 16px;
+          border-radius: 6px;
+          font-size: 13px;
+          text-decoration: none;
+          cursor: pointer;
+          border: none;
+        }
+
+        .btn-primary {
+          background: #d32f2f;
+          color: white;
+        }
+
+        .btn-secondary {
+          background: #f5f5f5;
+          color: #333;
+        }
+
+        .loading, .no-results {
+          text-align: center;
+          padding: 60px;
+          color: #666;
+        }
+
+        .error-message {
+          background: #fff3cd;
+          color: #856404;
+          padding: 15px;
+          border-radius: 8px;
+          margin-top: 20px;
+        }
+
+        @media (max-width: 768px) {
+          .filters {
+            flex-direction: column;
+          }
+
+          .search-input {
+            min-width: 100%;
+          }
+
+          .context-grid {
+            grid-template-columns: 1fr;
+          }
+        }
+      `}</style>
     </div>
   );
 };

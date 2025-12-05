@@ -462,7 +462,7 @@ For BRS-KB integration:
 - Basic context browsing
 - Payload testing interface
 
-### v2.0.0 (Current)
+### v3.0.0 (Current)
 - Enhanced UI/UX design
 - Multi-language support
 - Advanced analytics

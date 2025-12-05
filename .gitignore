@@ -68,3 +68,11 @@ venv.bak/
 # Internal documentation (not for repository)
 COMMIT_GUIDELINES.md
 
+# SQLite databases
+*.db
+*.sqlite
+*.sqlite3
+
+# BRS-KB data directory
+brs_kb/data/
+

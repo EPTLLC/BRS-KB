@@ -17,9 +17,9 @@ import importlib
 from typing import Dict, Any, List
 
 # --- Version Information ---
-__version__ = "2.0.0"
-__build__ = "2025.10.25"
-__revision__ = "enhanced"
+__version__ = "3.0.0"
+__build__ = "2025.12.05"
+__revision__ = "production"
 __author__ = "Brabus / EasyProTech LLC"
 __license__ = "MIT"
 
@@ -45,6 +45,15 @@ def _initialize_knowledge_base():
         _initialized = True
         return
 
+    # Import logger for structured logging
+    try:
+        from brs_kb.logger import get_logger
+        logger = get_logger("brs_kb.init")
+    except ImportError:
+        # Fallback if logger not available
+        import logging
+        logger = logging.getLogger("brs_kb.init")
+
     for filename in os.listdir(contexts_dir):
         if filename.endswith(".py") and not filename.startswith("__"):
             module_name = filename[:-3]
@@ -53,7 +62,22 @@ def _initialize_knowledge_base():
                 module = importlib.import_module(f".contexts.{module_name}", package=__name__)
                 if hasattr(module, "DETAILS"):
                     _KNOWLEDGE_BASE[module_name] = module.DETAILS
-            except ImportError:
+                    logger.debug(
+                        f"Loaded context: {module_name}",
+                        extra={"context": module_name},
+                    )
+            except ImportError as e:
+                logger.warning(
+                    f"Failed to import context module: {module_name}",
+                    extra={"context": module_name, "error": str(e)},
+                )
+                continue
+            except Exception as e:
+                logger.error(
+                    f"Unexpected error loading context: {module_name}",
+                    extra={"context": module_name, "error": str(e)},
+                    exc_info=True,
+                )
                 continue
 
     _initialized = True
@@ -71,16 +95,35 @@ def get_vulnerability_details(context: str) -> Dict[str, Any]:
         Dictionary with vulnerability details including title, description,
         attack_vector, remediation, and metadata (severity, CVSS, CWE, etc.)
 
+    Raises:
+        ContextNotFoundError: If context not found and default is also unavailable
+
     Example:
         >>> from brs_kb import get_vulnerability_details
         >>> details = get_vulnerability_details('html_content')
         >>> print(details['title'])
         'Cross-Site Scripting (XSS) in HTML Content'
     """
+    import time
+    from brs_kb.metrics import record_context_access, record_error
+    
+    start_time = time.time()
     _initialize_knowledge_base()
 
     context = context.lower()
-    return _KNOWLEDGE_BASE.get(context, _KNOWLEDGE_BASE.get("default", {}))
+    result = _KNOWLEDGE_BASE.get(context, _KNOWLEDGE_BASE.get("default", {}))
+
+    if not result:
+        from brs_kb.exceptions import ContextNotFoundError
+
+        available = list(_KNOWLEDGE_BASE.keys())
+        duration = time.time() - start_time
+        record_error("context_not_found", context)
+        raise ContextNotFoundError(context, available_contexts=available)
+
+    duration = time.time() - start_time
+    record_context_access(context, duration)
+    return result
 
 
 def get_kb_version() -> str:
@@ -318,6 +361,42 @@ def get_available_contexts_localized() -> List[Dict[str, Any]]:
 # --- Pre-initialize on module load ---
 _initialize_knowledge_base()
 
+# --- Auto-migrate to SQLite on first import ---
+def _auto_migrate_if_needed():
+    """Automatically migrate from in-memory to SQLite database if needed"""
+    try:
+        from brs_kb.payloads_db_sqlite import get_database
+        from brs_kb.payloads_db import PAYLOAD_DATABASE
+        
+        db = get_database()
+        stats = db.get_stats()
+        
+        # If database is empty and we have in-memory payloads, migrate
+        if stats['total_payloads'] == 0 and len(PAYLOAD_DATABASE) > 0:
+            from brs_kb.logger import get_logger
+            logger = get_logger("brs_kb")
+            logger.info("Auto-migrating %d payloads to SQLite database", len(PAYLOAD_DATABASE))
+            db.migrate_from_memory(PAYLOAD_DATABASE)
+            logger.info("Auto-migration completed successfully")
+    except Exception:
+        # Silently fail if migration is not possible
+        pass
+
+_auto_migrate_if_needed()
+
+# Import API server functions
+def start_api_server(port: int = 8080, host: str = "0.0.0.0"):
+    """Start API server for Web UI integration."""
+    from brs_kb.api_server import start_api_server as _start_api_server
+    return _start_api_server(port=port, host=host)
+
+
+def start_metrics_server(port: int = 8000, host: str = "0.0.0.0"):
+    """Start Prometheus metrics server."""
+    from brs_kb.metrics_server import start_metrics_server as _start_metrics_server
+    return _start_metrics_server(port=port, host=host)
+
+
 # --- Public exports ---
 __all__ = [
     "get_vulnerability_details",
@@ -348,6 +427,9 @@ __all__ = [
     "find_best_payloads_for_context",
     # CLI functions
     "get_cli",
+    # Server functions
+    "start_api_server",
+    "start_metrics_server",
     # Localization functions
     "set_language",
     "get_current_language",

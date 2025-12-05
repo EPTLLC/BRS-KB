@@ -307,3 +307,4 @@ const Footer = ({ language }) => {
 
 export default Footer;
 
+

@@ -222,7 +222,7 @@ class BRSKBElasticConnector:
             "waf_evasion": vulnerability_data.get("waf_evasion", False),
             "metadata": {
                 "source_system": "brs_kb",
-                "version": "2.0.0",
+                "version": "3.0.0",
                 "analysis_method": vulnerability_data.get("analysis_method", "unknown")
             }
         }
@@ -243,7 +243,7 @@ class BRSKBElasticConnector:
             "waf_detected": analysis_data.get("waf_detected", []),
             "metadata": {
                 "source_system": "brs_kb",
-                "version": "2.0.0"
+                "version": "3.0.0"
             }
         }
 

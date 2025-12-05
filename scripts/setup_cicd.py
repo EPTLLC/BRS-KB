@@ -142,7 +142,7 @@ def create_docker_files():
     dockerfile_content = '''FROM python:3.10-slim
 
 LABEL maintainer="EasyProTech LLC <contact@easyprotech>"
-LABEL version="2.0.0"
+LABEL version="3.0.0"
 LABEL description="BRS-KB XSS Intelligence Platform"
 
 # Set working directory

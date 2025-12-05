@@ -105,7 +105,7 @@ def demonstrate_elasticsearch_integration():
         "tags": vulnerability["tags"],
         "metadata": {
             "source_system": "brs_kb",
-            "version": "2.0.0"
+            "version": "3.0.0"
         }
     }
 
