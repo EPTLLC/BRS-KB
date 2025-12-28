@@ -1,0 +1,260 @@
+# BRS-KB GitLab CI/CD Pipeline
+# Alternative CI/CD configuration for GitLab
+
+stages:
+  - lint
+  - test
+  - security
+  - build
+  - deploy
+
+variables:
+  PYTHON_VERSION: "3.10"
+  NODE_VERSION: "18"
+
+# Code Quality & Linting
+lint:
+  stage: lint
+  image: python:${PYTHON_VERSION}
+  before_script:
+    - python -m pip install --upgrade pip
+    - pip install flake8 black mypy
+  script:
+    - flake8 brs_kb --count --select=E9,F63,F7,F82 --show-source --statistics
+    - black --check --diff brs_kb
+    - mypy brs_kb --ignore-missing-imports
+  only:
+    - merge_requests
+    - main
+    - develop
+
+# Security Testing
+security:
+  stage: security
+  image: python:${PYTHON_VERSION}
+  before_script:
+    - python -m pip install --upgrade pip
+    - pip install -e .
+  script:
+    - python -m pytest tests/ -v --tb=short
+    - python -c "from brs_kb import validate_payload_database; print('✅ Payload database validation:', validate_payload_database())"
+  only:
+    - merge_requests
+    - main
+    - develop
+
+# Multi-Python Testing
+test:
+  stage: test
+  image: python:${PYTHON_VERSION}
+  parallel:
+    matrix:
+      - PYTHON_VERSION: ["3.8", "3.9", "3.10", "3.11", "3.12"]
+  before_script:
+    - python -m pip install --upgrade pip
+    - pip install -e ".[dev]"
+  script:
+    - python -m pytest tests/ -v --cov=brs_kb --cov-report=xml
+  coverage: '/TOTAL.*\s+(\d+%)$/'
+  artifacts:
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: coverage.xml
+    paths:
+      - coverage.xml
+  only:
+    - merge_requests
+    - main
+    - develop
+
+# Package Building
+build:
+  stage: build
+  image: python:${PYTHON_VERSION}
+  before_script:
+    - python -m pip install --upgrade pip
+    - pip install build
+  script:
+    - python -m build
+    - ls -la dist/
+  artifacts:
+    paths:
+      - dist/
+    expire_in: 1 week
+  only:
+    - main
+    - tags
+
+# PyPI Deployment
+deploy_pypi:
+  stage: deploy
+  image: python:${PYTHON_VERSION}
+  before_script:
+    - python -m pip install --upgrade pip
+    - pip install build twine
+  script:
+    - python -m build
+    - twine check dist/*
+    - echo "Publishing BRS-KB v${CI_COMMIT_TAG:-${CI_COMMIT_SHORT_SHA}} to PyPI..."
+    - twine upload --skip-existing dist/*
+  environment:
+    name: production
+    url: https://pypi.org/project/brs-kb/
+  only:
+    - tags
+    - main
+  when: manual
+  allow_failure: false
+  dependencies:
+    - test_all
+    - lint
+
+# Docker Image
+docker_build:
+  stage: build
+  image: docker:latest
+  services:
+    - docker:dind
+  before_script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+  script:
+    - docker build -t $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA .
+    - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
+    - |
+      if [ "$CI_COMMIT_BRANCH" == "main" ]; then
+        docker tag $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA $CI_REGISTRY_IMAGE:latest
+        docker push $CI_REGISTRY_IMAGE:latest
+      fi
+  only:
+    - main
+    - tags
+
+# Documentation Deployment
+pages:
+  stage: deploy
+  image: python:${PYTHON_VERSION}
+  before_script:
+    - python -m pip install --upgrade pip
+    - pip install -e .
+  script:
+    - python -c "from brs_kb import generate_payload_report; open('public/report.html', 'w').write(generate_payload_report())"
+    - mkdir -p public
+    - cp README.md public/
+    - cp CHANGELOG.md public/
+  artifacts:
+    paths:
+      - public
+  only:
+    - main
+
+# Integration Testing
+integration_test:
+  stage: test
+  image: python:${PYTHON_VERSION}
+  before_script:
+    - python -m pip install --upgrade pip
+    - pip install -e .
+  script:
+    - python examples/cli_demo.py
+    - python examples/integrated_demo.py
+    - python examples/plugin_demo.py
+    - python examples/siem_integration.py
+  only:
+    - merge_requests
+    - main
+
+# Performance Testing
+performance_test:
+  stage: test
+  image: python:${PYTHON_VERSION}
+  before_script:
+    - python -m pip install --upgrade pip
+    - pip install -e .
+  script:
+    - python -c "
+      import time
+      from brs_kb import find_contexts_for_payload
+
+      # Performance test
+      start = time.time()
+      for i in range(1000):
+          result = find_contexts_for_payload(f'<script>alert({i})</script>')
+      duration = time.time() - start
+
+      print(f'✅ Performance: 1000 payload analyses in {duration:.2f}s')
+      print(f'   Average: {duration/1000*1000:.2f}ms per analysis')
+      "
+  only:
+    - main
+    - schedule
+
+# Dependency Security Check
+dependency_check:
+  stage: security
+  image: python:${PYTHON_VERSION}
+  before_script:
+    - python -m pip install --upgrade pip
+    - pip install safety
+  script:
+    - safety check
+  only:
+    - merge_requests
+    - main
+    - schedule
+
+# Code Coverage Report
+coverage:
+  stage: test
+  image: python:${PYTHON_VERSION}
+  before_script:
+    - python -m pip install --upgrade pip
+    - pip install -e ".[dev]"
+  script:
+    - python -m pytest tests/ -v --cov=brs_kb --cov-report=html --cov-report=xml
+  artifacts:
+    paths:
+      - htmlcov/
+      - coverage.xml
+    expire_in: 1 week
+  coverage: '/TOTAL.*\s+(\d+%)$/'
+  only:
+    - merge_requests
+    - main
+
+# Release Notes Generation
+release_notes:
+  stage: deploy
+  image: python:${PYTHON_VERSION}
+  before_script:
+    - python -m pip install --upgrade pip
+    - pip install -e .
+  script:
+    - python -c "
+      from brs_kb import get_kb_info, get_database_info
+      import datetime
+
+      kb_info = get_kb_info()
+      db_info = get_database_info()
+
+      print('# Release Notes\\n')
+      print(f'## BRS-KB v{kb_info[\"version\"]} - {datetime.datetime.now().strftime(\"%Y-%m-%d\")}\\n')
+      print(f'### Statistics')
+      print(f'- XSS Contexts: {kb_info[\"total_contexts\"]}')
+      print(f'- Payload Database: {db_info[\"total_payloads\"]}')
+      print(f'- WAF Bypass: {db_info[\"waf_bypass_count\"]}')
+      print(f'- Browser Support: {len(db_info[\"browser_support\"])}')
+      print()
+      print('### Features')
+      print('- Enhanced reverse mapping system')
+      print('- CLI tool with 9 commands')
+      print('- Security scanner plugins')
+      print('- SIEM integration')
+      print('- Payload testing API')
+      print('- ML-ready architecture')
+      " > RELEASE_NOTES.md
+  artifacts:
+    paths:
+      - RELEASE_NOTES.md
+  only:
+    - main

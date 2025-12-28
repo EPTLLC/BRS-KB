@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  brs-kb:
+    build: .
+    container_name: brs-kb
+    volumes:
+      - ./data:/app/data
+    environment:
+      - BRS_KB_ENV=production
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import brs_kb; print('OK')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3

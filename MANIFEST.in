@@ -1,0 +1,74 @@
+include LICENSE
+include README.md
+include CHANGELOG.md
+include CONTRIBUTING.md
+include DEVELOPMENT_PLAN.md
+include CODE_OF_CONDUCT.md
+include SECURITY_POLICY.md
+include pyproject.toml
+include setup.py
+
+# Include all package files
+recursive-include brs_kb *.py
+recursive-include brs_kb *.json
+recursive-include brs_kb *.yaml
+recursive-include brs_kb *.txt
+
+# Include documentation
+recursive-include docs *.md
+
+# Include examples
+recursive-include examples *.py
+recursive-include examples *.md
+
+# Include tests
+recursive-include tests *.py
+
+# Include plugins
+recursive-include plugins *.py
+recursive-include plugins *.java
+recursive-include plugins *.js
+recursive-include plugins *.json
+recursive-include plugins *.yaml
+recursive-include plugins *.md
+
+# Include SIEM connectors
+recursive-include siem_connectors *.py
+recursive-include siem_connectors *.md
+
+# Include i18n files
+recursive-include i18n *.json
+
+# Include web UI (without node_modules)
+recursive-include web_ui *.js
+recursive-include web_ui *.json
+recursive-include web_ui *.html
+recursive-include web_ui *.css
+recursive-include web_ui *.md
+recursive-exclude web_ui node_modules *
+
+# Include CI/CD files
+include .gitlab-ci.yml
+include Jenkinsfile
+include docker-compose.yml
+include Dockerfile
+
+# Include security files
+recursive-include security *.md
+
+# Include monitoring
+recursive-include monitoring *.yml
+
+# Include Kubernetes manifests
+recursive-include k8s *.yaml
+
+global-exclude __pycache__
+global-exclude *.py[co]
+global-exclude .DS_Store
+global-exclude .git*
+global-exclude .pytest_cache
+global-exclude .coverage
+global-exclude *.egg-info
+global-exclude dist
+global-exclude build
+
